@@ -25,8 +25,9 @@ namespace FileCabinetApp
 
         public FileCabinetRecord[] GetRecords()
         {
-            // TODO: добавьте реализацию метода
-            return System.Array.Empty<FileCabinetRecord>();
+            FileCabinetRecord[] copyFileCabinetRecord = new FileCabinetRecord[this.list.Count];
+            this.list.CopyTo(copyFileCabinetRecord);
+            return copyFileCabinetRecord;
         }
 
         public int GetStat()

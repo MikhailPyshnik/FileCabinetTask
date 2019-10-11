@@ -21,6 +21,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("exit", Exit),
             new Tuple<string, Action<string>>("stat", Stat),
             new Tuple<string, Action<string>>("create", Create),
+            new Tuple<string, Action<string>>("list", List),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -29,6 +30,7 @@ namespace FileCabinetApp
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
             new string[] { "stat", "stat of the record", "The 'stat' command return info about the record." },
             new string[] { "create", "create a new record", "The 'create' command add info int the service." },
+            new string[] { "list", "list return a copy of record", "The 'list' command return copy all records." },
         };
 
         public static void Main(string[] args)
@@ -121,6 +123,23 @@ namespace FileCabinetApp
             string inputDateOfBirth = Console.ReadLine();
             DateTime dateOfBirth = DateTime.ParseExact(inputDateOfBirth, "dd/MM/yyyy", provider);
             Console.WriteLine($"Record #{fileCabinetService.CreateRecord(inputFirstName, inputLastName, dateOfBirth)} is created.");
+        }
+
+        private static void List(string parameters)
+        {
+            CultureInfo provider = new CultureInfo("en-US");
+            var reultList = fileCabinetService.GetRecords();
+            if (reultList.Length == 0)
+            {
+                Console.Write("The list is empty.Add new record => add command - create");
+            }
+            else
+            {
+                for (int i = 0; i < reultList.Length; i++)
+                {
+                    Console.WriteLine($"#{reultList[i].Id},{reultList[i].FirstName},{reultList[i].LastName},{reultList[i].DateOfBirth.ToString("yyyy-MMM-dd", provider)}");
+                }
+            }
         }
     }
 }
