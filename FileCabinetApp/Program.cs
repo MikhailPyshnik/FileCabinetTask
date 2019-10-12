@@ -122,7 +122,13 @@ namespace FileCabinetApp
             Console.Write("Date of birth:");
             string inputDateOfBirth = Console.ReadLine();
             DateTime dateOfBirth = DateTime.ParseExact(inputDateOfBirth, "dd/MM/yyyy", provider);
-            Console.WriteLine($"Record #{fileCabinetService.CreateRecord(inputFirstName, inputLastName, dateOfBirth)} is created.");
+            Console.Write("Person's sex:");
+            char inputSex = Convert.ToChar(Console.ReadLine(), provider);
+            Console.Write("Person's height:");
+            short inputHeight = Convert.ToInt16(Console.ReadLine(), provider);
+            Console.Write("Person's salary:");
+            decimal inputSalary = Convert.ToDecimal(Console.ReadLine(), provider);
+            Console.WriteLine($"Record #{fileCabinetService.CreateRecord(inputFirstName, inputLastName, dateOfBirth, inputHeight, inputSalary, inputSex)} is created.");
         }
 
         private static void List(string parameters)
