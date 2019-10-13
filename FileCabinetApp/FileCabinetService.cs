@@ -40,6 +40,30 @@ namespace FileCabinetApp
             return this.list.Count;
         }
 
+        public void EditRecord(int id, string firstName, string lastName, DateTime dateOfBirth, char sex, short height, decimal salary)
+        {
+            if (id > this.GetStat())
+            {
+                throw new ArgumentException("Input Id is incorrect value.");
+            }
+
+            int editId = id - 1;
+            this.ValidateExtention(firstName, lastName, dateOfBirth, sex, height, salary);
+            this.list.RemoveAt(editId);
+
+            var record = new FileCabinetRecord
+            {
+                 Id = id,
+                 FirstName = firstName,
+                 LastName = lastName,
+                 DateOfBirth = dateOfBirth,
+                 Sex = sex,
+                 Height = height,
+                 Salary = salary,
+            };
+            this.list.Insert(editId, record);
+        }
+
         private void ValidateExtention(string firstName, string lastName, DateTime dateOfBirth, char sex, short height, decimal salary)
         {
             if (firstName == null)
