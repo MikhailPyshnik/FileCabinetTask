@@ -22,6 +22,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("stat", Stat),
             new Tuple<string, Action<string>>("create", Create),
             new Tuple<string, Action<string>>("list", List),
+            new Tuple<string, Action<string>>("edit", Edit),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -31,6 +32,7 @@ namespace FileCabinetApp
             new string[] { "stat", "stat of the record", "The 'stat' command return info about the record." },
             new string[] { "create", "create a new record", "The 'create' command add info int the service." },
             new string[] { "list", "list return a copy of record", "The 'list' command return copy all records." },
+            new string[] { "edit", "edit record", "The 'edit' edit record by id." },
         };
 
         public static void Main(string[] args)
@@ -114,21 +116,45 @@ namespace FileCabinetApp
 
         private static void Create(string parameters)
         {
-            CultureInfo provider = new CultureInfo("en-US");
-            Console.Write("First name:");
-            string inputFirstName = Console.ReadLine();
-            Console.Write("Last name:");
-            string inputLastName = Console.ReadLine();
-            Console.Write("Date of birth:");
-            string inputDateOfBirth = Console.ReadLine();
-            DateTime dateOfBirth = DateTime.ParseExact(inputDateOfBirth, "dd/MM/yyyy", provider);
-            Console.Write("Person's sex:");
-            char inputSex = Convert.ToChar(Console.ReadLine(), provider);
-            Console.Write("Person's height:");
-            short inputHeight = Convert.ToInt16(Console.ReadLine(), provider);
-            Console.Write("Person's salary:");
-            decimal inputSalary = Convert.ToDecimal(Console.ReadLine(), provider);
-            Console.WriteLine($"Record #{fileCabinetService.CreateRecord(inputFirstName, inputLastName, dateOfBirth, inputHeight, inputSalary, inputSex)} is created.");
+            try
+            {
+                try
+                {
+                    CultureInfo provider = new CultureInfo("en-US");
+                    Console.Write("First name:");
+                    string inputFirstName = Console.ReadLine();
+                    Console.Write("Last name:");
+                    string inputLastName = Console.ReadLine();
+                    Console.Write("Date of birth:");
+                    string inputDateOfBirth = Console.ReadLine();
+                    DateTime dateOfBirth = DateTime.ParseExact(inputDateOfBirth, "dd/MM/yyyy", provider);
+                    Console.Write("Person's sex:");
+                    char inputSex = Convert.ToChar(Console.ReadLine(), provider);
+                    Console.Write("Person's height:");
+                    short inputHeight = Convert.ToInt16(Console.ReadLine(), provider);
+                    Console.Write("Person's salary:");
+                    decimal inputSalary = Convert.ToDecimal(Console.ReadLine(), provider);
+                    Console.WriteLine($"Record #{fileCabinetService.CreateRecord(inputFirstName, inputLastName, dateOfBirth, inputSex, inputHeight, inputSalary)} is created.");
+                }
+                catch (ArgumentNullException ex)
+                {
+                    Console.WriteLine($"{ex.Message} Enter the data again!");
+                    Create(parameters);
+                }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine($"{ex.Message} Enter the data again!");
+                    Create(parameters);
+                }
+                catch (Exception)
+                {
+                    throw new ArgumentException("Input value in Create is incorrect! Select  command again.");
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine($"{ex.Message}");
+            }
         }
 
         private static void List(string parameters)
@@ -143,8 +169,59 @@ namespace FileCabinetApp
             {
                 for (int i = 0; i < reultList.Length; i++)
                 {
-                    Console.WriteLine($"#{reultList[i].Id},{reultList[i].FirstName},{reultList[i].LastName},{reultList[i].DateOfBirth.ToString("yyyy-MMM-dd", provider)}");
+                    Console.WriteLine($"#{reultList[i].Id},{reultList[i].FirstName},{reultList[i].LastName},{reultList[i].DateOfBirth.ToString("yyyy-MMM-dd", provider)},{reultList[i].Sex},{reultList[i].Height},{reultList[i].Salary}");
                 }
+            }
+        }
+
+        private static void Edit(string parameters)
+        {
+            try
+            {
+                try
+                {
+                    CultureInfo provider = new CultureInfo("en-US");
+                    int editInputId = Convert.ToInt32(parameters, provider);
+                    if (editInputId > Program.fileCabinetService.GetStat())
+                    {
+                        Console.WriteLine($"#{editInputId} record is not found.");
+                        return;
+                    }
+
+                    Console.Write("First name:");
+                    string inputFirstName = Console.ReadLine();
+                    Console.Write("Last name:");
+                    string inputLastName = Console.ReadLine();
+                    Console.Write("Date of birth:");
+                    string inputDateOfBirth = Console.ReadLine();
+                    DateTime dateOfBirth = DateTime.ParseExact(inputDateOfBirth, "dd/MM/yyyy", provider);
+                    Console.Write("Person's sex:");
+                    char inputSex = Convert.ToChar(Console.ReadLine(), provider);
+                    Console.Write("Person's height:");
+                    short inputHeight = Convert.ToInt16(Console.ReadLine(), provider);
+                    Console.Write("Person's salary:");
+                    decimal inputSalary = Convert.ToDecimal(Console.ReadLine(), provider);
+                    fileCabinetService.EditRecord(editInputId, inputFirstName, inputLastName, dateOfBirth, inputSex, inputHeight, inputSalary);
+                    Console.WriteLine($"Record #{editInputId} is updated");
+                }
+                catch (ArgumentNullException ex)
+                {
+                    Console.WriteLine($"{ex.Message} Enter the data again!");
+                    Edit(parameters);
+                }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine($"{ex.Message} Enter the data again!");
+                    Edit(parameters);
+                }
+                catch (Exception)
+                {
+                    throw new ArgumentException("Input value in Edit is incorrect! Select  command again.");
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine($"{ex.Message}");
             }
         }
     }
