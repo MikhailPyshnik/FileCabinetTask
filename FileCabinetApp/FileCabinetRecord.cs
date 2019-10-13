@@ -12,9 +12,9 @@ public class FileCabinetRecord
 
     public DateTime DateOfBirth { get; set; }
 
+    public char Sex { get; set; }
+
     public short Height { get; set; }
 
     public decimal Salary { get; set; }
-
-    public char Sex { get; set; }
 }

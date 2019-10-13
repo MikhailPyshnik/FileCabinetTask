@@ -128,7 +128,7 @@ namespace FileCabinetApp
             short inputHeight = Convert.ToInt16(Console.ReadLine(), provider);
             Console.Write("Person's salary:");
             decimal inputSalary = Convert.ToDecimal(Console.ReadLine(), provider);
-            Console.WriteLine($"Record #{fileCabinetService.CreateRecord(inputFirstName, inputLastName, dateOfBirth, inputHeight, inputSalary, inputSex)} is created.");
+            Console.WriteLine($"Record #{fileCabinetService.CreateRecord(inputFirstName, inputLastName, dateOfBirth, inputSex, inputHeight, inputSalary)} is created.");
         }
 
         private static void List(string parameters)
