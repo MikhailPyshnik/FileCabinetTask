@@ -114,21 +114,40 @@ namespace FileCabinetApp
 
         private static void Create(string parameters)
         {
-            CultureInfo provider = new CultureInfo("en-US");
-            Console.Write("First name:");
-            string inputFirstName = Console.ReadLine();
-            Console.Write("Last name:");
-            string inputLastName = Console.ReadLine();
-            Console.Write("Date of birth:");
-            string inputDateOfBirth = Console.ReadLine();
-            DateTime dateOfBirth = DateTime.ParseExact(inputDateOfBirth, "dd/MM/yyyy", provider);
-            Console.Write("Person's sex:");
-            char inputSex = Convert.ToChar(Console.ReadLine(), provider);
-            Console.Write("Person's height:");
-            short inputHeight = Convert.ToInt16(Console.ReadLine(), provider);
-            Console.Write("Person's salary:");
-            decimal inputSalary = Convert.ToDecimal(Console.ReadLine(), provider);
-            Console.WriteLine($"Record #{fileCabinetService.CreateRecord(inputFirstName, inputLastName, dateOfBirth, inputSex, inputHeight, inputSalary)} is created.");
+            try
+            {
+                CultureInfo provider = new CultureInfo("en-US");
+                Console.Write("First name:");
+                string inputFirstName = Console.ReadLine();
+                Console.Write("Last name:");
+                string inputLastName = Console.ReadLine();
+                Console.Write("Date of birth:");
+                string inputDateOfBirth = Console.ReadLine();
+                DateTime dateOfBirth = DateTime.ParseExact(inputDateOfBirth, "dd/MM/yyyy", provider);
+                Console.Write("Person's sex:");
+                char inputSex = Convert.ToChar(Console.ReadLine(), provider);
+                Console.Write("Person's height:");
+                short inputHeight = Convert.ToInt16(Console.ReadLine(), provider);
+                Console.Write("Person's salary:");
+                decimal inputSalary = Convert.ToDecimal(Console.ReadLine(), provider);
+                Console.WriteLine($"Record #{fileCabinetService.CreateRecord(inputFirstName, inputLastName, dateOfBirth, inputSex, inputHeight, inputSalary)} is created.");
+            }
+            catch (ArgumentNullException ex)
+            {
+                Console.WriteLine($"{ex.Message} - enter the data again!");
+                Create(parameters);
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine($"{ex.Message} - enter the data again!");
+                Create(parameters);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Input value is incorrect! Enter the data again!");
+                Create(parameters);
+                throw;
+            }
         }
 
         private static void List(string parameters)
