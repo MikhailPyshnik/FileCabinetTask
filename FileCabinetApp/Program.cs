@@ -23,6 +23,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("create", Create),
             new Tuple<string, Action<string>>("list", List),
             new Tuple<string, Action<string>>("edit", Edit),
+            new Tuple<string, Action<string>>("find", Find),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -33,6 +34,7 @@ namespace FileCabinetApp
             new string[] { "create", "create a new record", "The 'create' command add info int the service." },
             new string[] { "list", "list return a copy of record", "The 'list' command return copy all records." },
             new string[] { "edit", "edit record", "The 'edit' edit record by id." },
+            new string[] { "find", "find record(s)", "The 'find' return all record by условие." },
         };
 
         public static void Main(string[] args)
@@ -214,14 +216,40 @@ namespace FileCabinetApp
                     Console.WriteLine($"{ex.Message} Enter the data again!");
                     Edit(parameters);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    throw new ArgumentException("Input value in Edit is incorrect! Select  command again.");
+                    Console.WriteLine(ex.Message);
+                    throw new ArgumentException("Input value in Edit is incorrect! Select command again.");
                 }
             }
             catch (ArgumentException ex)
             {
                 Console.WriteLine($"{ex.Message}");
+            }
+        }
+
+        private static void Find(string parameters)
+        {
+            FileCabinetRecord[] records = null;
+            CultureInfo provider = new CultureInfo("en-US");
+            var parametersArray = parameters.ToLower(provider).Split(' ', 2);
+            if (parametersArray[0] == "firstname")
+            {
+                var firstName = parametersArray[1].Trim('"');
+                records = fileCabinetService.FindByFirstName(firstName);
+            }
+
+            if (records.Length == 0)
+            {
+                Console.WriteLine($"No records are found for firstName = {parametersArray[1]}!");
+            }
+            else
+            {
+                for (int i = 0; i < records.Length; i++)
+                {
+                    var record = records[i];
+                    Console.WriteLine($"{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", provider)}, {record.Sex}, {record.Height}, {record.Salary}");
+                }
             }
         }
     }

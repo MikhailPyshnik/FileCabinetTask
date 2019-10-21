@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 namespace FileCabinetApp
@@ -7,6 +8,8 @@ namespace FileCabinetApp
     public class FileCabinetService
     {
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
+
+        private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
 
         public int CreateRecord(string firstName, string lastName, DateTime dateOfBirth, char sex, short height,  decimal salary)
         {
@@ -44,24 +47,36 @@ namespace FileCabinetApp
         {
             if (id > this.GetStat())
             {
-                throw new ArgumentException("Input Id is incorrect value.");
+                Console.Write($"#{id} record is not found.");
+            }
+            else
+            {
+                int editId = id - 1;
+                this.ValidateExtention(firstName, lastName, dateOfBirth, sex, height, salary);
+                FileCabinetRecord item = this.list[editId];
+                item.FirstName = firstName;
+                item.LastName = lastName;
+                item.DateOfBirth = dateOfBirth;
+                item.Sex = sex;
+                item.Height = height;
+                item.Salary = salary;
+            }
+        }
+
+        public FileCabinetRecord[] FindByFirstName(string firstName)
+        {
+            CultureInfo provider = new CultureInfo("en-US");
+            List<FileCabinetRecord> result = new List<FileCabinetRecord>();
+
+            foreach (var record in this.list)
+            {
+                if (record.FirstName.ToLower(provider) == firstName)
+                {
+                    result.Add(record);
+                }
             }
 
-            int editId = id - 1;
-            this.ValidateExtention(firstName, lastName, dateOfBirth, sex, height, salary);
-            this.list.RemoveAt(editId);
-
-            var record = new FileCabinetRecord
-            {
-                 Id = id,
-                 FirstName = firstName,
-                 LastName = lastName,
-                 DateOfBirth = dateOfBirth,
-                 Sex = sex,
-                 Height = height,
-                 Salary = salary,
-            };
-            this.list.Insert(editId, record);
+            return result.ToArray();
         }
 
         private void ValidateExtention(string firstName, string lastName, DateTime dateOfBirth, char sex, short height, decimal salary)
