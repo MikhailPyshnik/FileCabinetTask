@@ -95,6 +95,22 @@ namespace FileCabinetApp
             return result.ToArray();
         }
 
+        public FileCabinetRecord[] FindByDateOfBirth(string dateofbirth)
+        {
+            CultureInfo provider = new CultureInfo("en-US");
+            List<FileCabinetRecord> result = new List<FileCabinetRecord>();
+
+            foreach (var record in this.list)
+            {
+                if (record.DateOfBirth.ToString("yyyy-MMM-dd", provider).ToLower(provider) == dateofbirth)
+                {
+                    result.Add(record);
+                }
+            }
+
+            return result.ToArray();
+        }
+
         private void ValidateExtention(string firstName, string lastName, DateTime dateOfBirth, char sex, short height, decimal salary)
         {
             if (firstName == null)

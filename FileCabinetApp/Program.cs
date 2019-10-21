@@ -243,6 +243,11 @@ namespace FileCabinetApp
                 var lastName = parametersArray[1].Trim('"');
                 records = fileCabinetService.FindByLastName(lastName);
             }
+            else if (parametersArray[0] == "dateofbirth")
+            {
+                var dateofbirth = parametersArray[1].Trim('"');
+                records = fileCabinetService.FindByDateOfBirth(dateofbirth);
+            }
 
             if (records.Length == 0)
             {
