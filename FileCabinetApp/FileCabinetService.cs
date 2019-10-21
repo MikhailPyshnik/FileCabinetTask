@@ -25,8 +25,17 @@ namespace FileCabinetApp
                 Height = height,
                 Salary = salary,
             };
-
             this.list.Add(record);
+
+            if (this.firstNameDictionary.ContainsKey(firstName))
+            {
+                this.firstNameDictionary[firstName].Add(record);
+            }
+            else
+            {
+                List<FileCabinetRecord> listFirstName = this.list.FindAll(item => item.FirstName == firstName);
+                this.firstNameDictionary.Add(firstName, listFirstName);
+            }
 
             return record.Id;
         }
@@ -47,33 +56,41 @@ namespace FileCabinetApp
         {
             if (id > this.GetStat())
             {
-                Console.Write($"#{id} record is not found.");
+                throw new ArgumentException("Input Id is incorrect value.");
+            }
+
+            int editId = id - 1;
+            this.ValidateExtention(firstName, lastName, dateOfBirth, sex, height, salary);
+            FileCabinetRecord res = this.list.Find(item1 => item1.Id == id);
+            string oldFirstName = res.FirstName;
+            FileCabinetRecord item = this.list[editId];
+            item.FirstName = firstName;
+            item.LastName = lastName;
+            item.DateOfBirth = dateOfBirth;
+            item.Sex = sex;
+            item.Height = height;
+            item.Salary = salary;
+
+            if (this.firstNameDictionary.ContainsKey(firstName))
+            {
+                this.firstNameDictionary[oldFirstName].Remove(item);
+                this.firstNameDictionary[firstName].Add(item);
             }
             else
             {
-                int editId = id - 1;
-                this.ValidateExtention(firstName, lastName, dateOfBirth, sex, height, salary);
-                FileCabinetRecord item = this.list[editId];
-                item.FirstName = firstName;
-                item.LastName = lastName;
-                item.DateOfBirth = dateOfBirth;
-                item.Sex = sex;
-                item.Height = height;
-                item.Salary = salary;
+                this.firstNameDictionary[oldFirstName].Remove(item);
+                List<FileCabinetRecord> listFirstName = this.list.FindAll(item1 => item1.FirstName == firstName);
+                this.firstNameDictionary.Add(firstName, listFirstName);
             }
         }
 
         public FileCabinetRecord[] FindByFirstName(string firstName)
         {
-            CultureInfo provider = new CultureInfo("en-US");
             List<FileCabinetRecord> result = new List<FileCabinetRecord>();
 
-            foreach (var record in this.list)
+            if (this.firstNameDictionary.ContainsKey(firstName))
             {
-                if (record.FirstName.ToLower(provider) == firstName)
-                {
-                    result.Add(record);
-                }
+                result = this.firstNameDictionary[firstName];
             }
 
             return result.ToArray();
