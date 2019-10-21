@@ -9,9 +9,11 @@ namespace FileCabinetApp
     {
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
 
-        private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
+        private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>(StringComparer.OrdinalIgnoreCase);
 
-        private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
+        private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>(StringComparer.OrdinalIgnoreCase);
+
+        private readonly Dictionary<string, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<string, List<FileCabinetRecord>>(StringComparer.OrdinalIgnoreCase);
 
         public int CreateRecord(string firstName, string lastName, DateTime dateOfBirth, char sex, short height,  decimal salary)
         {
@@ -28,30 +30,7 @@ namespace FileCabinetApp
                 Salary = salary,
             };
             this.list.Add(record);
-            {
-                if (this.firstNameDictionary.ContainsKey(firstName))
-                {
-                    this.firstNameDictionary[firstName].Add(record);
-                }
-                else
-                {
-                    List<FileCabinetRecord> listFirstName = this.list.FindAll(item => item.FirstName == firstName);
-                    this.firstNameDictionary.Add(firstName, listFirstName);
-                }
-            }
-
-            {
-                if (this.lastNameDictionary.ContainsKey(lastName))
-                {
-                    this.lastNameDictionary[lastName].Add(record);
-                }
-                else
-                {
-                    List<FileCabinetRecord> listLastName = this.list.FindAll(item => item.LastName == lastName);
-                    this.lastNameDictionary.Add(lastName, listLastName);
-                }
-            }
-
+            this.AddRecordToDictionary(record, firstName, lastName, dateOfBirth);
             return record.Id;
         }
 
@@ -79,6 +58,7 @@ namespace FileCabinetApp
             FileCabinetRecord res = this.list.Find(item1 => item1.Id == id);
             string oldFirstName = res.FirstName;
             string oldLastName = res.LastName;
+            string oldDateOfBirth = res.DateOfBirth.ToString("yyyy-MMM-dd", new CultureInfo("en-US"));
             FileCabinetRecord item = this.list[editId];
             item.FirstName = firstName;
             item.LastName = lastName;
@@ -86,33 +66,7 @@ namespace FileCabinetApp
             item.Sex = sex;
             item.Height = height;
             item.Salary = salary;
-            {
-                if (this.firstNameDictionary.ContainsKey(firstName))
-                {
-                    this.firstNameDictionary[oldFirstName].Remove(item);
-                    this.firstNameDictionary[firstName].Add(item);
-                }
-                else
-                {
-                    this.firstNameDictionary[oldFirstName].Remove(item);
-                    List<FileCabinetRecord> listFirstName = this.list.FindAll(item1 => item1.FirstName == firstName);
-                    this.firstNameDictionary.Add(firstName, listFirstName);
-                }
-            }
-
-            {
-                if (this.lastNameDictionary.ContainsKey(lastName))
-                {
-                    this.lastNameDictionary[oldLastName].Remove(item);
-                    this.lastNameDictionary[lastName].Add(item);
-                }
-                else
-                {
-                    this.lastNameDictionary[oldLastName].Remove(item);
-                    List<FileCabinetRecord> listFirstName = this.list.FindAll(item1 => item1.FirstName == lastName);
-                    this.lastNameDictionary.Add(lastName, listFirstName);
-                }
-            }
+            this.ChangeRecordToDictionary(item, oldFirstName, firstName, oldLastName, lastName, oldDateOfBirth, dateOfBirth);
         }
 
         public FileCabinetRecord[] FindByFirstName(string firstName)
@@ -141,15 +95,11 @@ namespace FileCabinetApp
 
         public FileCabinetRecord[] FindByDateOfBirth(string dateofbirth)
         {
-            CultureInfo provider = new CultureInfo("en-US");
             List<FileCabinetRecord> result = new List<FileCabinetRecord>();
 
-            foreach (var record in this.list)
+            if (this.dateOfBirthDictionary.ContainsKey(dateofbirth))
             {
-                if (record.DateOfBirth.ToString("yyyy-MMM-dd", provider).ToLower(provider) == dateofbirth)
-                {
-                    result.Add(record);
-                }
+                result = this.dateOfBirthDictionary[dateofbirth];
             }
 
             return result.ToArray();
@@ -223,6 +173,106 @@ namespace FileCabinetApp
             }
 
             return result;
+        }
+
+        private void AddRecordToDictionary(FileCabinetRecord record, string firstName, string lastName, DateTime dateOfBirth)
+        {
+            this.AddRecordToFirstNameDictionary(record, firstName);
+            this.AddRecordToLastNameDictionary(record, lastName);
+            this.AddRecordToDateOfBirthDictionary(record, dateOfBirth);
+        }
+
+        private void ChangeRecordToDictionary(FileCabinetRecord item, string oldFirstName, string firstName, string oldLastName, string lastName, string oldDateOfBirth, DateTime dateOfBirth)
+        {
+            this.ChangeRecordInFirstNameDictionary(item, oldFirstName, firstName);
+            this.ChangeRecordInLastNameDictionary(item, oldLastName, lastName);
+            this.ChangeRecordInDateOfBirthDictionary(item, oldDateOfBirth, dateOfBirth);
+        }
+
+        private void AddRecordToFirstNameDictionary(FileCabinetRecord record, string firstName)
+        {
+            if (this.firstNameDictionary.ContainsKey(firstName.ToLower(new CultureInfo("en-US"))))
+            {
+                this.firstNameDictionary[firstName].Add(record);
+            }
+            else
+            {
+                List<FileCabinetRecord> listFirstName = this.list.FindAll(item => item.FirstName == firstName);
+                this.firstNameDictionary.Add(firstName, listFirstName);
+            }
+        }
+
+        private void AddRecordToLastNameDictionary(FileCabinetRecord record, string lastName)
+        {
+            if (this.lastNameDictionary.ContainsKey(lastName))
+            {
+                this.lastNameDictionary[lastName].Add(record);
+            }
+            else
+            {
+                List<FileCabinetRecord> listLastName = this.list.FindAll(item => item.LastName == lastName);
+                this.lastNameDictionary.Add(lastName, listLastName);
+            }
+        }
+
+        private void AddRecordToDateOfBirthDictionary(FileCabinetRecord record, DateTime dateOfBirth)
+        {
+            string tempDateOfBirh = dateOfBirth.ToString("yyyy-MMM-dd", new CultureInfo("en-US"));
+            if (this.dateOfBirthDictionary.ContainsKey(tempDateOfBirh))
+            {
+                this.dateOfBirthDictionary[tempDateOfBirh].Add(record);
+            }
+            else
+            {
+                List<FileCabinetRecord> listdateOfBirth = this.list.FindAll(item => item.DateOfBirth == dateOfBirth);
+                this.dateOfBirthDictionary.Add(tempDateOfBirh, listdateOfBirth);
+            }
+        }
+
+        private void ChangeRecordInFirstNameDictionary(FileCabinetRecord item, string oldFirstName, string firstName)
+        {
+            if (this.firstNameDictionary.ContainsKey(firstName))
+            {
+                this.firstNameDictionary[oldFirstName].Remove(item);
+                this.firstNameDictionary[firstName].Add(item);
+            }
+            else
+            {
+                this.firstNameDictionary[oldFirstName].Remove(item);
+                List<FileCabinetRecord> listFirstName = this.list.FindAll(item1 => item1.FirstName == firstName);
+                this.firstNameDictionary.Add(firstName, listFirstName);
+            }
+        }
+
+        private void ChangeRecordInLastNameDictionary(FileCabinetRecord item, string oldLastName, string lastName)
+        {
+            if (this.lastNameDictionary.ContainsKey(lastName))
+            {
+                this.lastNameDictionary[oldLastName].Remove(item);
+                this.lastNameDictionary[lastName].Add(item);
+            }
+            else
+            {
+                this.lastNameDictionary[oldLastName].Remove(item);
+                List<FileCabinetRecord> listFirstName = this.list.FindAll(item1 => item1.FirstName == lastName);
+                this.lastNameDictionary.Add(lastName, listFirstName);
+            }
+        }
+
+        private void ChangeRecordInDateOfBirthDictionary(FileCabinetRecord item,  string oldDateOfBirth, DateTime dateOfBirth)
+        {
+            string tempDateOfBirh = dateOfBirth.ToString("yyyy-MMM-dd", new CultureInfo("en-US"));
+            if (this.dateOfBirthDictionary.ContainsKey(tempDateOfBirh))
+            {
+                this.dateOfBirthDictionary[oldDateOfBirth].Remove(item);
+                this.dateOfBirthDictionary[tempDateOfBirh].Add(item);
+            }
+            else
+            {
+                this.dateOfBirthDictionary[oldDateOfBirth].Remove(item);
+                List<FileCabinetRecord> listDateOfBirth = this.list.FindAll(item1 => item.DateOfBirth == dateOfBirth);
+                this.dateOfBirthDictionary.Add(tempDateOfBirh, listDateOfBirth);
+            }
         }
     }
 }
