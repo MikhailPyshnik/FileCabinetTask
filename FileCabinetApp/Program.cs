@@ -238,6 +238,11 @@ namespace FileCabinetApp
                 var firstName = parametersArray[1].Trim('"');
                 records = fileCabinetService.FindByFirstName(firstName);
             }
+            else if (parametersArray[0] == "lastname")
+            {
+                var lastName = parametersArray[1].Trim('"');
+                records = fileCabinetService.FindByLastName(lastName);
+            }
 
             if (records.Length == 0)
             {
