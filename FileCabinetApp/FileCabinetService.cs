@@ -154,7 +154,7 @@ namespace FileCabinetApp
                 throw new ArgumentException("Height is incorrect value.");
             }
 
-            if (salary < 500 || height > 10000)
+            if (salary < 500 || salary > 10000)
             {
                 throw new ArgumentException("Salary is incorrect value.");
             }

@@ -233,25 +233,38 @@ namespace FileCabinetApp
             FileCabinetRecord[] records = null;
             CultureInfo provider = new CultureInfo("en-US");
             var parametersArray = parameters.ToLower(provider).Split(' ', 2);
-            if (parametersArray[0] == "firstname")
+            string searchParametr = parametersArray[0];
+            string value = parametersArray[1];
+            if (searchParametr == "firstname")
             {
                 var firstName = parametersArray[1].Trim('"');
                 records = fileCabinetService.FindByFirstName(firstName);
+                PrintRecords(records, value);
             }
-            else if (parametersArray[0] == "lastname")
+            else if (searchParametr == "lastname")
             {
                 var lastName = parametersArray[1].Trim('"');
                 records = fileCabinetService.FindByLastName(lastName);
+                PrintRecords(records, value);
             }
-            else if (parametersArray[0] == "dateofbirth")
+            else if (searchParametr == "dateofbirth")
             {
                 var dateofbirth = parametersArray[1].Trim('"');
                 records = fileCabinetService.FindByDateOfBirth(dateofbirth);
+                PrintRecords(records, value);
             }
+            else
+            {
+                Console.WriteLine($"There is no '{parametersArray[0]}' parametr.");
+            }
+        }
 
+        private static void PrintRecords(FileCabinetRecord[] records, string value)
+        {
+            CultureInfo provider = new CultureInfo("en-US");
             if (records.Length == 0)
             {
-                Console.WriteLine($"No records are found for firstName = {parametersArray[1]}!");
+                Console.WriteLine($"No records are found for firstName = {value}!");
             }
             else
             {
