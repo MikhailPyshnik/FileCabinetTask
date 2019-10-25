@@ -129,21 +129,23 @@ namespace FileCabinetApp
             {
                 try
                 {
+                    FileCabinetRecord fileCabinetRecord = new FileCabinetRecord();
                     CultureInfo provider = new CultureInfo("en-US");
                     Console.Write("First name:");
-                    string inputFirstName = Console.ReadLine();
+                    fileCabinetRecord.FirstName = Console.ReadLine();
                     Console.Write("Last name:");
-                    string inputLastName = Console.ReadLine();
+                    fileCabinetRecord.LastName = Console.ReadLine();
                     Console.Write("Date of birth:");
                     string inputDateOfBirth = Console.ReadLine();
-                    DateTime dateOfBirth = DateTime.ParseExact(inputDateOfBirth, "dd/MM/yyyy", provider);
+                    fileCabinetRecord.DateOfBirth = DateTime.ParseExact(inputDateOfBirth, "dd/MM/yyyy", provider);
                     Console.Write("Person's sex:");
-                    char inputSex = Convert.ToChar(Console.ReadLine(), provider);
+                    fileCabinetRecord.Sex = Convert.ToChar(Console.ReadLine(), provider);
                     Console.Write("Person's height:");
-                    short inputHeight = Convert.ToInt16(Console.ReadLine(), provider);
+                    fileCabinetRecord.Height = Convert.ToInt16(Console.ReadLine(), provider);
                     Console.Write("Person's salary:");
-                    decimal inputSalary = Convert.ToDecimal(Console.ReadLine(), provider);
-                    Console.WriteLine($"Record #{fileCabinetService.CreateRecord(inputFirstName, inputLastName, dateOfBirth, inputSex, inputHeight, inputSalary)} is created.");
+                    fileCabinetRecord.Salary = Convert.ToDecimal(Console.ReadLine(), provider);
+
+                    Console.WriteLine($"Record #{fileCabinetService.CreateRecord(fileCabinetRecord)} is created.");
                 }
                 catch (ArgumentNullException ex)
                 {
@@ -189,6 +191,7 @@ namespace FileCabinetApp
             {
                 try
                 {
+                    FileCabinetRecord fileCabinetRecord = new FileCabinetRecord();
                     CultureInfo provider = new CultureInfo("en-US");
                     int editInputId = Convert.ToInt32(parameters, provider);
                     if (editInputId > Program.fileCabinetService.GetStat())
@@ -197,20 +200,22 @@ namespace FileCabinetApp
                         return;
                     }
 
+                    fileCabinetRecord.Id = editInputId;
+
                     Console.Write("First name:");
-                    string inputFirstName = Console.ReadLine();
+                    fileCabinetRecord.FirstName = Console.ReadLine();
                     Console.Write("Last name:");
-                    string inputLastName = Console.ReadLine();
+                    fileCabinetRecord.LastName = Console.ReadLine();
                     Console.Write("Date of birth:");
                     string inputDateOfBirth = Console.ReadLine();
-                    DateTime dateOfBirth = DateTime.ParseExact(inputDateOfBirth, "dd/MM/yyyy", provider);
+                    fileCabinetRecord.DateOfBirth = DateTime.ParseExact(inputDateOfBirth, "dd/MM/yyyy", provider);
                     Console.Write("Person's sex:");
-                    char inputSex = Convert.ToChar(Console.ReadLine(), provider);
+                    fileCabinetRecord.Sex = Convert.ToChar(Console.ReadLine(), provider);
                     Console.Write("Person's height:");
-                    short inputHeight = Convert.ToInt16(Console.ReadLine(), provider);
+                    fileCabinetRecord.Height = Convert.ToInt16(Console.ReadLine(), provider);
                     Console.Write("Person's salary:");
-                    decimal inputSalary = Convert.ToDecimal(Console.ReadLine(), provider);
-                    fileCabinetService.EditRecord(editInputId, inputFirstName, inputLastName, dateOfBirth, inputSex, inputHeight, inputSalary);
+                    fileCabinetRecord.Salary = Convert.ToDecimal(Console.ReadLine(), provider);
+                    fileCabinetService.EditRecord(fileCabinetRecord);
                     Console.WriteLine($"Record #{editInputId} is updated");
                 }
                 catch (ArgumentNullException ex)

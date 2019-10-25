@@ -21,32 +21,22 @@ namespace FileCabinetApp
         /// <summary>
         /// Сreate new record FileCabinetRecord.
         /// </summary>
-        /// <param name="firstName">Input parametr FirstName <see cref="string"/>.</param>
-        /// <param name="lastName">Input parametr LastName <see cref="string"/>.</param>
-        /// <param name="dateOfBirth">Input parametr firstName <see cref="string"/>.</param>
-        /// <param name="sex">Input parametr Sex <see cref="char"/>.</param>
-        /// <param name="height">Input parametr Height <see cref="short"/>.</param>
-        /// <param name="salary">Input parametr Salary <see cref="decimal"/>.</param>
+        /// <param name="fileCabinetRecord">Input parametr record <see cref="FileCabinetRecord"/>.</param>
         /// <returns>Id <see cref="int"/>.</returns>
-        /// <exception cref="ArgumentNullException">Throws if <paramref name="firstName"/>,<paramref name="lastName"/> is null.</exception>
-        /// <exception cref="ArgumentException">Throws if <paramref name="firstName"/>,<paramref name="lastName"/>,<paramref name="dateOfBirth"/>,<paramref name="sex"/>,<paramref name="height"/>,<paramref name="salary"/> is(are) incorrect value.</exception>
-        public int CreateRecord(string firstName, string lastName, DateTime dateOfBirth, char sex, short height,  decimal salary)
+        /// <exception cref="ArgumentNullException">Throws if <paramref name="fileCabinetRecord"/>, <paramref name="fileCabinetRecord.FirstName"/>,<paramref name="fileCabinetRecord.LastName"/> is null.</exception>
+        /// <exception cref="ArgumentException">Throws if <paramref name="fileCabinetRecord.FirstName"/>,<paramref name="fileCabinetRecord.LastName"/>,<paramref name="fileCabinetRecord.DateOfBirth"/>,<paramref name="fileCabinetRecord.Sex"/>,<paramref name="fileCabinetRecord.Height"/>,<paramref name="fileCabinetRecord.Salary"/> is(are) incorrect value.</exception>
+        public int CreateRecord(FileCabinetRecord fileCabinetRecord)
         {
-            FileCabinetService.ValidateExtention(firstName, lastName, dateOfBirth, sex, height, salary);
-
-            var record = new FileCabinetRecord
+            if (fileCabinetRecord == null)
             {
-                Id = this.list.Count + 1,
-                FirstName = firstName,
-                LastName = lastName,
-                DateOfBirth = dateOfBirth,
-                Sex = sex,
-                Height = height,
-                Salary = salary,
-            };
-            this.list.Add(record);
-            this.AddRecordToDictionary(record, firstName, lastName, dateOfBirth);
-            return record.Id;
+                throw new ArgumentNullException($"{nameof(fileCabinetRecord)} is null!");
+            }
+
+            FileCabinetService.ValidateExtention(fileCabinetRecord);
+            fileCabinetRecord.Id = this.list.Count + 1;
+            this.list.Add(fileCabinetRecord);
+            this.AddRecordToDictionary(fileCabinetRecord);
+            return fileCabinetRecord.Id;
         }
 
         /// <summary>
@@ -72,34 +62,35 @@ namespace FileCabinetApp
         /// <summary>
         /// Edit record by id.
         /// </summary>
-        /// <param name="id">Input parametr Id record <see cref="int"/>.</param>
-        /// <param name="firstName">Input parametr FirstName <see cref="string"/>.</param>
-        /// <param name="lastName">Input parametr LastName <see cref="string"/>.</param>
-        /// <param name="dateOfBirth">Input parametr firstName <see cref="string"/>.</param>
-        /// <param name="sex">Input parametr Sex <see cref="char"/>.</param>
-        /// <param name="height">Input parametr Height <see cref="short"/>.</param>
-        /// <param name="salary">Input parametr Salary <see cref="decimal"/>.</param>
-        public void EditRecord(int id, string firstName, string lastName, DateTime dateOfBirth, char sex, short height, decimal salary)
+        /// <param name="fileCabinetRecord">Input parametr record <see cref="FileCabinetRecord"/>.</param>
+        /// <exception cref="ArgumentNullException">Throws if <paramref name="fileCabinetRecord"/>, <paramref name="fileCabinetRecord.FirstName"/>,<paramref name="fileCabinetRecord.LastName"/> is null.</exception>
+        /// <exception cref="ArgumentException">Throws if <paramref name="fileCabinetRecord.FirstName"/>,<paramref name="fileCabinetRecord.LastName"/>,<paramref name="fileCabinetRecord.DateOfBirth"/>,<paramref name="fileCabinetRecord.Sex"/>,<paramref name="fileCabinetRecord.Height"/>,<paramref name="fileCabinetRecord.Salary"/> is(are) incorrect value.</exception>
+        public void EditRecord(FileCabinetRecord fileCabinetRecord)
         {
-            if (id > this.GetStat())
+            if (fileCabinetRecord == null)
+            {
+                throw new ArgumentNullException($"{nameof(fileCabinetRecord)} is null!");
+            }
+
+            if (fileCabinetRecord.Id > this.GetStat())
             {
                 throw new ArgumentException("Input Id is incorrect value.");
             }
 
-            int editId = id - 1;
-            FileCabinetService.ValidateExtention(firstName, lastName, dateOfBirth, sex, height, salary);
-            FileCabinetRecord res = this.list.Find(item1 => item1.Id == id);
+            int editId = fileCabinetRecord.Id - 1;
+            FileCabinetService.ValidateExtention(fileCabinetRecord);
+            FileCabinetRecord res = this.list.Find(item1 => item1.Id == fileCabinetRecord.Id);
             string oldFirstName = res.FirstName;
             string oldLastName = res.LastName;
             string oldDateOfBirth = res.DateOfBirth.ToString("yyyy-MMM-dd", new CultureInfo("en-US"));
             FileCabinetRecord item = this.list[editId];
-            item.FirstName = firstName;
-            item.LastName = lastName;
-            item.DateOfBirth = dateOfBirth;
-            item.Sex = sex;
-            item.Height = height;
-            item.Salary = salary;
-            this.ChangeRecordToDictionary(item, oldFirstName, firstName, oldLastName, lastName, oldDateOfBirth, dateOfBirth);
+            item.FirstName = fileCabinetRecord.FirstName;
+            item.LastName = fileCabinetRecord.LastName;
+            item.DateOfBirth = fileCabinetRecord.DateOfBirth;
+            item.Sex = fileCabinetRecord.Sex;
+            item.Height = fileCabinetRecord.Height;
+            item.Salary = fileCabinetRecord.Salary;
+            this.ChangeRecordToDictionary(item, oldFirstName, oldLastName, oldDateOfBirth);
         }
 
         /// <summary>
@@ -168,73 +159,73 @@ namespace FileCabinetApp
             return result;
         }
 
-        private static void ValidateExtention(string firstName, string lastName, DateTime dateOfBirth, char sex, short height, decimal salary)
+        private static void ValidateExtention(FileCabinetRecord fileCabinetRecord)
         {
-            if (firstName == null)
+            if (fileCabinetRecord.FirstName == null)
             {
-                throw new ArgumentNullException($"First name {nameof(firstName)} is null.");
+                throw new ArgumentNullException($"First name {nameof(fileCabinetRecord.FirstName)} is null.");
             }
 
-            if (firstName.Length < 2 || firstName.Length > 60)
+            if (fileCabinetRecord.FirstName.Length < 2 || fileCabinetRecord.FirstName.Length > 60)
             {
                 throw new ArgumentException("First name is incorrect value.");
             }
 
-            if (FileCabinetService.WhiteSpace(firstName))
+            if (FileCabinetService.WhiteSpace(fileCabinetRecord.FirstName))
             {
                 throw new ArgumentException("First name consists of spaces.");
             }
 
-            if (lastName == null)
+            if (fileCabinetRecord.LastName == null)
             {
-                throw new ArgumentNullException($"Last name {nameof(lastName)} is null.");
+                throw new ArgumentNullException($"Last name {nameof(fileCabinetRecord.LastName)} is null.");
             }
 
-            if (lastName.Length < 2 || lastName.Length > 60)
+            if (fileCabinetRecord.LastName.Length < 2 || fileCabinetRecord.LastName.Length > 60)
             {
                 throw new ArgumentException("Last name is incorrect value.");
             }
 
-            if (FileCabinetService.WhiteSpace(lastName))
+            if (FileCabinetService.WhiteSpace(fileCabinetRecord.LastName))
             {
                 throw new ArgumentException("Last name consists of spaces.");
             }
 
             DateTime date1 = new DateTime(1950, 1, 01);
 
-            if (date1 > dateOfBirth || dateOfBirth > DateTime.Now)
+            if (date1 > fileCabinetRecord.DateOfBirth || fileCabinetRecord.DateOfBirth > DateTime.Now)
             {
                 throw new ArgumentException("Date Of Birth is incorrect value.");
             }
 
-            if (!'F'.Equals(sex) & !'f'.Equals(sex) & !'M'.Equals(sex) & !'m'.Equals(sex))
+            if (!'F'.Equals(fileCabinetRecord.Sex) & !'f'.Equals(fileCabinetRecord.Sex) & !'M'.Equals(fileCabinetRecord.Sex) & !'m'.Equals(fileCabinetRecord.Sex))
             {
                 throw new ArgumentException("Sex is incorrect value.");
             }
 
-            if (height < 60 || height > 230)
+            if (fileCabinetRecord.Height < 60 || fileCabinetRecord.Height > 230)
             {
                 throw new ArgumentException("Height is incorrect value.");
             }
 
-            if (salary < 500 || salary > 10000)
+            if (fileCabinetRecord.Salary < 500 || fileCabinetRecord.Salary > 10000)
             {
                 throw new ArgumentException("Salary is incorrect value.");
             }
         }
 
-        private void AddRecordToDictionary(FileCabinetRecord record, string firstName, string lastName, DateTime dateOfBirth)
+        private void AddRecordToDictionary(FileCabinetRecord record)
         {
-            this.AddRecordToFirstNameDictionary(record, firstName);
-            this.AddRecordToLastNameDictionary(record, lastName);
-            this.AddRecordToDateOfBirthDictionary(record, dateOfBirth);
+            this.AddRecordToFirstNameDictionary(record, record.FirstName);
+            this.AddRecordToLastNameDictionary(record, record.LastName);
+            this.AddRecordToDateOfBirthDictionary(record, record.DateOfBirth);
         }
 
-        private void ChangeRecordToDictionary(FileCabinetRecord item, string oldFirstName, string firstName, string oldLastName, string lastName, string oldDateOfBirth, DateTime dateOfBirth)
+        private void ChangeRecordToDictionary(FileCabinetRecord item, string oldFirstName,  string oldLastName,  string oldDateOfBirth)
         {
-            this.ChangeRecordInFirstNameDictionary(item, oldFirstName, firstName);
-            this.ChangeRecordInLastNameDictionary(item, oldLastName, lastName);
-            this.ChangeRecordInDateOfBirthDictionary(item, oldDateOfBirth, dateOfBirth);
+            this.ChangeRecordInFirstNameDictionary(item, oldFirstName, item.FirstName);
+            this.ChangeRecordInLastNameDictionary(item, oldLastName, item.LastName);
+            this.ChangeRecordInDateOfBirthDictionary(item, oldDateOfBirth, item.DateOfBirth);
         }
 
         private void AddRecordToFirstNameDictionary(FileCabinetRecord record, string firstName)

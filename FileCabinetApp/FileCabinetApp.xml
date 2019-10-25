@@ -56,19 +56,14 @@
             Work with records. Save and change record(s).
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetService.CreateRecord(System.String,System.String,System.DateTime,System.Char,System.Int16,System.Decimal)">
+        <member name="M:FileCabinetApp.FileCabinetService.CreateRecord(FileCabinetRecord)">
             <summary>
             Сreate new record FileCabinetRecord.
             </summary>
-            <param name="firstName">Input parametr FirstName <see cref="T:System.String"/>.</param>
-            <param name="lastName">Input parametr LastName <see cref="T:System.String"/>.</param>
-            <param name="dateOfBirth">Input parametr firstName <see cref="T:System.String"/>.</param>
-            <param name="sex">Input parametr Sex <see cref="T:System.Char"/>.</param>
-            <param name="height">Input parametr Height <see cref="T:System.Int16"/>.</param>
-            <param name="salary">Input parametr Salary <see cref="T:System.Decimal"/>.</param>
+            <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
             <returns>Id <see cref="T:System.Int32"/>.</returns>
-            <exception cref="T:System.ArgumentNullException">Throws if <paramref name="firstName"/>,<paramref name="lastName"/> is null.</exception>
-            <exception cref="T:System.ArgumentException">Throws if <paramref name="firstName"/>,<paramref name="lastName"/>,<paramref name="dateOfBirth"/>,<paramref name="sex"/>,<paramref name="height"/>,<paramref name="salary"/> is(are) incorrect value.</exception>
+            <exception cref="T:System.ArgumentNullException">Throws if <paramref name="fileCabinetRecord"/>, <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/> is null.</exception>
+            <exception cref="T:System.ArgumentException">Throws if <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/>,<paramref name="fileCabinetRecord.DateOfBirth.DateOfBirth"/>,<paramref name="fileCabinetRecord.Sex.Sex"/>,<paramref name="fileCabinetRecord.Height.Height"/>,<paramref name="fileCabinetRecord.Salary.Salary"/> is(are) incorrect value.</exception>
         </member>
         <member name="M:FileCabinetApp.FileCabinetService.GetRecords">
             <summary>
@@ -82,17 +77,13 @@
             </summary>
             <returns>Count records <see cref="T:System.Int32"/>.</returns>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetService.EditRecord(System.Int32,System.String,System.String,System.DateTime,System.Char,System.Int16,System.Decimal)">
+        <member name="M:FileCabinetApp.FileCabinetService.EditRecord(FileCabinetRecord)">
             <summary>
             Edit record by id.
             </summary>
-            <param name="id">Input parametr Id record <see cref="T:System.Int32"/>.</param>
-            <param name="firstName">Input parametr FirstName <see cref="T:System.String"/>.</param>
-            <param name="lastName">Input parametr LastName <see cref="T:System.String"/>.</param>
-            <param name="dateOfBirth">Input parametr firstName <see cref="T:System.String"/>.</param>
-            <param name="sex">Input parametr Sex <see cref="T:System.Char"/>.</param>
-            <param name="height">Input parametr Height <see cref="T:System.Int16"/>.</param>
-            <param name="salary">Input parametr Salary <see cref="T:System.Decimal"/>.</param>
+            <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
+            <exception cref="T:System.ArgumentNullException">Throws if <paramref name="fileCabinetRecord"/>, <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/> is null.</exception>
+            <exception cref="T:System.ArgumentException">Throws if <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/>,<paramref name="fileCabinetRecord.DateOfBirth.DateOfBirth"/>,<paramref name="fileCabinetRecord.Sex.Sex"/>,<paramref name="fileCabinetRecord.Height.Height"/>,<paramref name="fileCabinetRecord.Salary.Salary"/> is(are) incorrect value.</exception>
         </member>
         <member name="M:FileCabinetApp.FileCabinetService.FindByFirstName(System.String)">
             <summary>
