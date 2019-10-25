@@ -4,6 +4,9 @@ using System.Threading;
 
 namespace FileCabinetApp
 {
+    /// <summary>
+    /// Class of console application.
+    /// </summary>
     public static class Program
     {
         private const string DeveloperName = "Mikhail Pyshnik";
@@ -37,6 +40,10 @@ namespace FileCabinetApp
             new string[] { "find", "find record(s)", "The 'find' return all record by условие." },
         };
 
+        /// <summary>
+        ///  Method Main of console application.The poin of enter application.
+        /// </summary>
+        /// <param name="args">Input parametr args[] <see cref="string"/>.</param>
         public static void Main(string[] args)
         {
             Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}");

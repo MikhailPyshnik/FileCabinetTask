@@ -4,5 +4,127 @@
         <name>FileCabinetApp</name>
     </assembly>
     <members>
+        <member name="T:FileCabinetRecord">
+            <summary>
+            Work FileCabinetRecord.
+            </summary>
+        </member>
+        <member name="P:FileCabinetRecord.Id">
+            <summary>
+            Gets or sets the Id of the record.
+            </summary>
+            <value>The Id of the record.</value>
+        </member>
+        <member name="P:FileCabinetRecord.FirstName">
+            <summary>
+            Gets or sets the FirstName of the record.
+            </summary>
+            <value>The FirstName of the record.</value>
+        </member>
+        <member name="P:FileCabinetRecord.LastName">
+            <summary>
+            Gets or sets the LastName of the record.
+            </summary>
+            <value>The LastName of the record.</value>
+        </member>
+        <member name="P:FileCabinetRecord.DateOfBirth">
+            <summary>
+            Gets or sets the DateOfBirth of the record.
+            </summary>
+            <value>The DateOfBirth of the record.</value>
+        </member>
+        <member name="P:FileCabinetRecord.Sex">
+            <summary>
+            Gets or sets the Sex of the record.
+            </summary>
+            <value>The Sex of the record.</value>
+        </member>
+        <member name="P:FileCabinetRecord.Height">
+            <summary>
+            Gets or sets the Height of the record.
+            </summary>
+            <value>The Height of the record.</value>
+        </member>
+        <member name="P:FileCabinetRecord.Salary">
+            <summary>
+            Gets or sets the Salary of the record.
+            </summary>
+            <value>The Salary of the record.</value>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetService">
+            <summary>
+            Work with records. Save and change record(s).
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.CreateRecord(System.String,System.String,System.DateTime,System.Char,System.Int16,System.Decimal)">
+            <summary>
+            Сreate new record FileCabinetRecord.
+            </summary>
+            <param name="firstName">Input parametr FirstName <see cref="T:System.String"/>.</param>
+            <param name="lastName">Input parametr LastName <see cref="T:System.String"/>.</param>
+            <param name="dateOfBirth">Input parametr firstName <see cref="T:System.String"/>.</param>
+            <param name="sex">Input parametr Sex <see cref="T:System.Char"/>.</param>
+            <param name="height">Input parametr Height <see cref="T:System.Int16"/>.</param>
+            <param name="salary">Input parametr Salary <see cref="T:System.Decimal"/>.</param>
+            <returns>Id <see cref="T:System.Int32"/>.</returns>
+            <exception cref="T:System.ArgumentNullException">Throws if <paramref name="firstName"/>,<paramref name="lastName"/> is null.</exception>
+            <exception cref="T:System.ArgumentException">Throws if <paramref name="firstName"/>,<paramref name="lastName"/>,<paramref name="dateOfBirth"/>,<paramref name="sex"/>,<paramref name="height"/>,<paramref name="salary"/> is(are) incorrect value.</exception>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.GetRecords">
+            <summary>
+            Get all record FileCabinetRecord.
+            </summary>
+            <returns>Rerords <see cref="T:FileCabinetRecord"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.GetStat">
+            <summary>
+            Get count of record FileCabinetRecord.
+            </summary>
+            <returns>Count records <see cref="T:System.Int32"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.EditRecord(System.Int32,System.String,System.String,System.DateTime,System.Char,System.Int16,System.Decimal)">
+            <summary>
+            Edit record by id.
+            </summary>
+            <param name="id">Input parametr Id record <see cref="T:System.Int32"/>.</param>
+            <param name="firstName">Input parametr FirstName <see cref="T:System.String"/>.</param>
+            <param name="lastName">Input parametr LastName <see cref="T:System.String"/>.</param>
+            <param name="dateOfBirth">Input parametr firstName <see cref="T:System.String"/>.</param>
+            <param name="sex">Input parametr Sex <see cref="T:System.Char"/>.</param>
+            <param name="height">Input parametr Height <see cref="T:System.Int16"/>.</param>
+            <param name="salary">Input parametr Salary <see cref="T:System.Decimal"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.FindByFirstName(System.String)">
+            <summary>
+            Return records by first name.
+            </summary>
+            <param name="firstName">Input parametr FirstName <see cref="T:System.String"/>.</param>
+            <returns>Rerords by firstName <see cref="T:FileCabinetRecord"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.FindByLastName(System.String)">
+            <summary>
+            Return records by last name.
+            </summary>
+            <param name="lastName">Input parametr FirstName <see cref="T:System.String"/>.</param>
+            <returns>Rerords by lastName <see cref="T:FileCabinetRecord"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.FindByDateOfBirth(System.String)">
+            <summary>
+            Return records by date of birth.
+            </summary>
+            <param name="dateofbirth">Input parametr FirstName <see cref="T:System.String"/>.</param>
+            <returns>Rerords by dateofbirth <see cref="T:FileCabinetRecord"/>.</returns>
+        </member>
+        <member name="T:FileCabinetApp.Program">
+            <summary>
+            Class of console application.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Program.Main(System.String[])">
+            <summary>
+             Method Main of console application.The poin of enter application.
+            </summary>
+            <param name="args">Input parametr args[] <see cref="T:System.String"/>.</param>
+        </member>
     </members>
 </doc>

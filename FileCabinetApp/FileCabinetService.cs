@@ -5,6 +5,9 @@ using System.Text;
 
 namespace FileCabinetApp
 {
+    /// <summary>
+    /// Work with records. Save and change record(s).
+    /// </summary>
     public class FileCabinetService
     {
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
@@ -15,9 +18,21 @@ namespace FileCabinetApp
 
         private readonly Dictionary<string, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<string, List<FileCabinetRecord>>(StringComparer.OrdinalIgnoreCase);
 
+        /// <summary>
+        /// Сreate new record FileCabinetRecord.
+        /// </summary>
+        /// <param name="firstName">Input parametr FirstName <see cref="string"/>.</param>
+        /// <param name="lastName">Input parametr LastName <see cref="string"/>.</param>
+        /// <param name="dateOfBirth">Input parametr firstName <see cref="string"/>.</param>
+        /// <param name="sex">Input parametr Sex <see cref="char"/>.</param>
+        /// <param name="height">Input parametr Height <see cref="short"/>.</param>
+        /// <param name="salary">Input parametr Salary <see cref="decimal"/>.</param>
+        /// <returns>Id <see cref="int"/>.</returns>
+        /// <exception cref="ArgumentNullException">Throws if <paramref name="firstName"/>,<paramref name="lastName"/> is null.</exception>
+        /// <exception cref="ArgumentException">Throws if <paramref name="firstName"/>,<paramref name="lastName"/>,<paramref name="dateOfBirth"/>,<paramref name="sex"/>,<paramref name="height"/>,<paramref name="salary"/> is(are) incorrect value.</exception>
         public int CreateRecord(string firstName, string lastName, DateTime dateOfBirth, char sex, short height,  decimal salary)
         {
-            this.ValidateExtention(firstName, lastName, dateOfBirth, sex, height, salary);
+            FileCabinetService.ValidateExtention(firstName, lastName, dateOfBirth, sex, height, salary);
 
             var record = new FileCabinetRecord
             {
@@ -34,6 +49,10 @@ namespace FileCabinetApp
             return record.Id;
         }
 
+        /// <summary>
+        /// Get all record FileCabinetRecord.
+        /// </summary>
+        /// <returns>Rerords <see cref="FileCabinetRecord"/>.</returns>
         public FileCabinetRecord[] GetRecords()
         {
             FileCabinetRecord[] copyFileCabinetRecord = new FileCabinetRecord[this.list.Count];
@@ -41,11 +60,25 @@ namespace FileCabinetApp
             return copyFileCabinetRecord;
         }
 
+        /// <summary>
+        /// Get count of record FileCabinetRecord.
+        /// </summary>
+        /// <returns>Count records <see cref="int"/>.</returns>
         public int GetStat()
         {
             return this.list.Count;
         }
 
+        /// <summary>
+        /// Edit record by id.
+        /// </summary>
+        /// <param name="id">Input parametr Id record <see cref="int"/>.</param>
+        /// <param name="firstName">Input parametr FirstName <see cref="string"/>.</param>
+        /// <param name="lastName">Input parametr LastName <see cref="string"/>.</param>
+        /// <param name="dateOfBirth">Input parametr firstName <see cref="string"/>.</param>
+        /// <param name="sex">Input parametr Sex <see cref="char"/>.</param>
+        /// <param name="height">Input parametr Height <see cref="short"/>.</param>
+        /// <param name="salary">Input parametr Salary <see cref="decimal"/>.</param>
         public void EditRecord(int id, string firstName, string lastName, DateTime dateOfBirth, char sex, short height, decimal salary)
         {
             if (id > this.GetStat())
@@ -54,7 +87,7 @@ namespace FileCabinetApp
             }
 
             int editId = id - 1;
-            this.ValidateExtention(firstName, lastName, dateOfBirth, sex, height, salary);
+            FileCabinetService.ValidateExtention(firstName, lastName, dateOfBirth, sex, height, salary);
             FileCabinetRecord res = this.list.Find(item1 => item1.Id == id);
             string oldFirstName = res.FirstName;
             string oldLastName = res.LastName;
@@ -69,6 +102,11 @@ namespace FileCabinetApp
             this.ChangeRecordToDictionary(item, oldFirstName, firstName, oldLastName, lastName, oldDateOfBirth, dateOfBirth);
         }
 
+        /// <summary>
+        /// Return records by first name.
+        /// </summary>
+        /// <param name="firstName">Input parametr FirstName <see cref="string"/>.</param>
+        /// <returns>Rerords by firstName <see cref="FileCabinetRecord"/>.</returns>
         public FileCabinetRecord[] FindByFirstName(string firstName)
         {
             List<FileCabinetRecord> result = new List<FileCabinetRecord>();
@@ -81,6 +119,11 @@ namespace FileCabinetApp
             return result.ToArray();
         }
 
+        /// <summary>
+        /// Return records by last name.
+        /// </summary>
+        /// <param name="lastName">Input parametr FirstName <see cref="string"/>.</param>
+        /// <returns>Rerords by lastName <see cref="FileCabinetRecord"/>.</returns>
         public FileCabinetRecord[] FindByLastName(string lastName)
         {
             List<FileCabinetRecord> result = new List<FileCabinetRecord>();
@@ -93,6 +136,11 @@ namespace FileCabinetApp
             return result.ToArray();
         }
 
+        /// <summary>
+        /// Return records by date of birth.
+        /// </summary>
+        /// <param name="dateofbirth">Input parametr FirstName <see cref="string"/>.</param>
+        /// <returns>Rerords by dateofbirth <see cref="FileCabinetRecord"/>.</returns>
         public FileCabinetRecord[] FindByDateOfBirth(string dateofbirth)
         {
             List<FileCabinetRecord> result = new List<FileCabinetRecord>();
@@ -105,7 +153,22 @@ namespace FileCabinetApp
             return result.ToArray();
         }
 
-        private void ValidateExtention(string firstName, string lastName, DateTime dateOfBirth, char sex, short height, decimal salary)
+        private static bool WhiteSpace(string value)
+        {
+            bool result = true;
+            for (int i = 0; i < value.Length; i++)
+            {
+                if (!char.IsWhiteSpace(value[i]))
+                {
+                    result = false;
+                    return result;
+                }
+            }
+
+            return result;
+        }
+
+        private static void ValidateExtention(string firstName, string lastName, DateTime dateOfBirth, char sex, short height, decimal salary)
         {
             if (firstName == null)
             {
@@ -117,7 +180,7 @@ namespace FileCabinetApp
                 throw new ArgumentException("First name is incorrect value.");
             }
 
-            if (this.WhiteSpace(firstName))
+            if (FileCabinetService.WhiteSpace(firstName))
             {
                 throw new ArgumentException("First name consists of spaces.");
             }
@@ -132,7 +195,7 @@ namespace FileCabinetApp
                 throw new ArgumentException("Last name is incorrect value.");
             }
 
-            if (this.WhiteSpace(lastName))
+            if (FileCabinetService.WhiteSpace(lastName))
             {
                 throw new ArgumentException("Last name consists of spaces.");
             }
@@ -158,21 +221,6 @@ namespace FileCabinetApp
             {
                 throw new ArgumentException("Salary is incorrect value.");
             }
-        }
-
-        private bool WhiteSpace(string value)
-        {
-            bool result = true;
-            for (int i = 0; i < value.Length; i++)
-            {
-                if (!char.IsWhiteSpace(value[i]))
-                {
-                    result = false;
-                    return result;
-                }
-            }
-
-            return result;
         }
 
         private void AddRecordToDictionary(FileCabinetRecord record, string firstName, string lastName, DateTime dateOfBirth)
