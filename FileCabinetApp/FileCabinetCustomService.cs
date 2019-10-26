@@ -69,7 +69,7 @@ namespace FileCabinetApp
                 throw new ArgumentException("Height is incorrect value.");
             }
 
-            if (fileCabinetRecord.Salary < 500 || fileCabinetRecord.Salary > 10000)
+            if (fileCabinetRecord.Salary < 500 || fileCabinetRecord.Salary > 5000)
             {
                 throw new ArgumentException("Salary is incorrect value.");
             }

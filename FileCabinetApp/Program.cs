@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using System.Threading;
+using CommandLine;
 
 namespace FileCabinetApp
 {
@@ -14,7 +14,8 @@ namespace FileCabinetApp
         private const int CommandHelpIndex = 0;
         private const int DescriptionHelpIndex = 1;
         private const int ExplanationHelpIndex = 2;
-        private static FileCabinetService fileCabinetService = new FileCabinetCustomService();
+        private static FileCabinetService fileCabinetService;
+        private static string validationRules = "default";
 
         private static bool isRunning = true;
 
@@ -46,7 +47,35 @@ namespace FileCabinetApp
         /// <param name="args">Input parametr args[] <see cref="string"/>.</param>
         public static void Main(string[] args)
         {
+            var options = new Options();
+            Parser.Default.ParseArguments<Options>(args)
+                .WithParsed<Options>(o =>
+                {
+                    if (args == null || args.Length == 0)
+                    {
+                       fileCabinetService = new FileCabinetCustomService();
+                    }
+                    else
+                    {
+                        string compare = o.InputFile.ToLower(new CultureInfo("en-US"));
+                        if (compare == "default")
+                        {
+                           fileCabinetService = new FileCabinetDefaultService();
+                        }
+                        else if (compare == "custom")
+                        {
+                           fileCabinetService = new FileCabinetCustomService();
+                           validationRules = "custom";
+                        }
+                        else
+                        {
+                            fileCabinetService = new FileCabinetCustomService();
+                        }
+                    }
+                });
+
             Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}");
+            Console.WriteLine($"Using {validationRules} validation rules.");
             Console.WriteLine(Program.HintMessage);
             Console.WriteLine();
 
@@ -286,6 +315,12 @@ namespace FileCabinetApp
                     Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", provider)}, {record.Sex}, {record.Height}, {record.Salary}");
                 }
             }
+        }
+
+        private class Options
+        {
+            [Option('v', "validation-rules", Separator = '=', HelpText = "Set output to verbose messages.")]
+            public string InputFile { get; set; }
         }
     }
 }
