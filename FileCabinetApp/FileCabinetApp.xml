@@ -4,52 +4,31 @@
         <name>FileCabinetApp</name>
     </assembly>
     <members>
-        <member name="T:FileCabinetRecord">
+        <member name="T:FileCabinetApp.FileCabinetCustomService">
             <summary>
-            Work FileCabinetRecord.
+            Work with records. Save and change record(s).
             </summary>
         </member>
-        <member name="P:FileCabinetRecord.Id">
+        <member name="M:FileCabinetApp.FileCabinetCustomService.ValidateExtention(FileCabinetRecord)">
             <summary>
-            Gets or sets the Id of the record.
+            Сreate new record FileCabinetRecord.
             </summary>
-            <value>The Id of the record.</value>
+            <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
+            <exception cref="T:System.ArgumentNullException">Throws if <paramref name="fileCabinetRecord"/>, <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/> is null.</exception>
+            <exception cref="T:System.ArgumentException">Throws if <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/>,<paramref name="fileCabinetRecord.DateOfBirth.DateOfBirth"/>,<paramref name="fileCabinetRecord.Sex.Sex"/>,<paramref name="fileCabinetRecord.Height.Height"/>,<paramref name="fileCabinetRecord.Salary.Salary"/> is(are) incorrect value.</exception>
         </member>
-        <member name="P:FileCabinetRecord.FirstName">
+        <member name="T:FileCabinetApp.FileCabinetDefaultService">
             <summary>
-            Gets or sets the FirstName of the record.
+            Work with records. Save and change record(s).DefaultService.
             </summary>
-            <value>The FirstName of the record.</value>
         </member>
-        <member name="P:FileCabinetRecord.LastName">
+        <member name="M:FileCabinetApp.FileCabinetDefaultService.ValidateExtention(FileCabinetRecord)">
             <summary>
-            Gets or sets the LastName of the record.
+            Сreate new record FileCabinetRecord.
             </summary>
-            <value>The LastName of the record.</value>
-        </member>
-        <member name="P:FileCabinetRecord.DateOfBirth">
-            <summary>
-            Gets or sets the DateOfBirth of the record.
-            </summary>
-            <value>The DateOfBirth of the record.</value>
-        </member>
-        <member name="P:FileCabinetRecord.Sex">
-            <summary>
-            Gets or sets the Sex of the record.
-            </summary>
-            <value>The Sex of the record.</value>
-        </member>
-        <member name="P:FileCabinetRecord.Height">
-            <summary>
-            Gets or sets the Height of the record.
-            </summary>
-            <value>The Height of the record.</value>
-        </member>
-        <member name="P:FileCabinetRecord.Salary">
-            <summary>
-            Gets or sets the Salary of the record.
-            </summary>
-            <value>The Salary of the record.</value>
+            <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
+            <exception cref="T:System.ArgumentNullException">Throws if <paramref name="fileCabinetRecord"/>, <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/> is null.</exception>
+            <exception cref="T:System.ArgumentException">Throws if <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/>,<paramref name="fileCabinetRecord.DateOfBirth.DateOfBirth"/>,<paramref name="fileCabinetRecord.Sex.Sex"/>,<paramref name="fileCabinetRecord.Height.Height"/>,<paramref name="fileCabinetRecord.Salary.Salary"/> is(are) incorrect value.</exception>
         </member>
         <member name="T:FileCabinetApp.FileCabinetService">
             <summary>
@@ -106,6 +85,12 @@
             <param name="dateofbirth">Input parametr FirstName <see cref="T:System.String"/>.</param>
             <returns>Rerords by dateofbirth <see cref="T:FileCabinetRecord"/>.</returns>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetService.ValidateExtention(FileCabinetRecord)">
+            <summary>
+            Сreate new record FileCabinetRecord.
+            </summary>
+            <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
+        </member>
         <member name="T:FileCabinetApp.Program">
             <summary>
             Class of console application.
@@ -116,6 +101,53 @@
              Method Main of console application.The poin of enter application.
             </summary>
             <param name="args">Input parametr args[] <see cref="T:System.String"/>.</param>
+        </member>
+        <member name="T:FileCabinetRecord">
+            <summary>
+            Work FileCabinetRecord.
+            </summary>
+        </member>
+        <member name="P:FileCabinetRecord.Id">
+            <summary>
+            Gets or sets the Id of the record.
+            </summary>
+            <value>The Id of the record.</value>
+        </member>
+        <member name="P:FileCabinetRecord.FirstName">
+            <summary>
+            Gets or sets the FirstName of the record.
+            </summary>
+            <value>The FirstName of the record.</value>
+        </member>
+        <member name="P:FileCabinetRecord.LastName">
+            <summary>
+            Gets or sets the LastName of the record.
+            </summary>
+            <value>The LastName of the record.</value>
+        </member>
+        <member name="P:FileCabinetRecord.DateOfBirth">
+            <summary>
+            Gets or sets the DateOfBirth of the record.
+            </summary>
+            <value>The DateOfBirth of the record.</value>
+        </member>
+        <member name="P:FileCabinetRecord.Sex">
+            <summary>
+            Gets or sets the Sex of the record.
+            </summary>
+            <value>The Sex of the record.</value>
+        </member>
+        <member name="P:FileCabinetRecord.Height">
+            <summary>
+            Gets or sets the Height of the record.
+            </summary>
+            <value>The Height of the record.</value>
+        </member>
+        <member name="P:FileCabinetRecord.Salary">
+            <summary>
+            Gets or sets the Salary of the record.
+            </summary>
+            <value>The Salary of the record.</value>
         </member>
     </members>
 </doc>

@@ -8,7 +8,7 @@ namespace FileCabinetApp
     /// <summary>
     /// Work with records. Save and change record(s).
     /// </summary>
-    public class FileCabinetService
+    public abstract class FileCabinetService
     {
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
 
@@ -32,7 +32,7 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{nameof(fileCabinetRecord)} is null!");
             }
 
-            FileCabinetService.ValidateExtention(fileCabinetRecord);
+            this.ValidateExtention(fileCabinetRecord);
             fileCabinetRecord.Id = this.list.Count + 1;
             this.list.Add(fileCabinetRecord);
             this.AddRecordToDictionary(fileCabinetRecord);
@@ -78,7 +78,7 @@ namespace FileCabinetApp
             }
 
             int editId = fileCabinetRecord.Id - 1;
-            FileCabinetService.ValidateExtention(fileCabinetRecord);
+            this.ValidateExtention(fileCabinetRecord);
             FileCabinetRecord res = this.list.Find(item1 => item1.Id == fileCabinetRecord.Id);
             string oldFirstName = res.FirstName;
             string oldLastName = res.LastName;
@@ -144,75 +144,11 @@ namespace FileCabinetApp
             return result.ToArray();
         }
 
-        private static bool WhiteSpace(string value)
-        {
-            bool result = true;
-            for (int i = 0; i < value.Length; i++)
-            {
-                if (!char.IsWhiteSpace(value[i]))
-                {
-                    result = false;
-                    return result;
-                }
-            }
-
-            return result;
-        }
-
-        private static void ValidateExtention(FileCabinetRecord fileCabinetRecord)
-        {
-            if (fileCabinetRecord.FirstName == null)
-            {
-                throw new ArgumentNullException($"First name {nameof(fileCabinetRecord.FirstName)} is null.");
-            }
-
-            if (fileCabinetRecord.FirstName.Length < 2 || fileCabinetRecord.FirstName.Length > 60)
-            {
-                throw new ArgumentException("First name is incorrect value.");
-            }
-
-            if (FileCabinetService.WhiteSpace(fileCabinetRecord.FirstName))
-            {
-                throw new ArgumentException("First name consists of spaces.");
-            }
-
-            if (fileCabinetRecord.LastName == null)
-            {
-                throw new ArgumentNullException($"Last name {nameof(fileCabinetRecord.LastName)} is null.");
-            }
-
-            if (fileCabinetRecord.LastName.Length < 2 || fileCabinetRecord.LastName.Length > 60)
-            {
-                throw new ArgumentException("Last name is incorrect value.");
-            }
-
-            if (FileCabinetService.WhiteSpace(fileCabinetRecord.LastName))
-            {
-                throw new ArgumentException("Last name consists of spaces.");
-            }
-
-            DateTime date1 = new DateTime(1950, 1, 01);
-
-            if (date1 > fileCabinetRecord.DateOfBirth || fileCabinetRecord.DateOfBirth > DateTime.Now)
-            {
-                throw new ArgumentException("Date Of Birth is incorrect value.");
-            }
-
-            if (!'F'.Equals(fileCabinetRecord.Sex) & !'f'.Equals(fileCabinetRecord.Sex) & !'M'.Equals(fileCabinetRecord.Sex) & !'m'.Equals(fileCabinetRecord.Sex))
-            {
-                throw new ArgumentException("Sex is incorrect value.");
-            }
-
-            if (fileCabinetRecord.Height < 60 || fileCabinetRecord.Height > 230)
-            {
-                throw new ArgumentException("Height is incorrect value.");
-            }
-
-            if (fileCabinetRecord.Salary < 500 || fileCabinetRecord.Salary > 10000)
-            {
-                throw new ArgumentException("Salary is incorrect value.");
-            }
-        }
+        /// <summary>
+        /// Сreate new record FileCabinetRecord.
+        /// </summary>
+        /// <param name="fileCabinetRecord">Input parametr record <see cref="FileCabinetRecord"/>.</param>
+        public abstract void ValidateExtention(FileCabinetRecord fileCabinetRecord);
 
         private void AddRecordToDictionary(FileCabinetRecord record)
         {
