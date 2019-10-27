@@ -21,6 +21,12 @@ namespace FileCabinetApp
         /// <summary>
         /// Сreate new record FileCabinetRecord.
         /// </summary>
+        /// <returns>Id <see cref="IRecordValidator"/>.</returns>
+        public abstract IRecordValidator CreateValidator();
+
+        /// <summary>
+        /// Сreate new record FileCabinetRecord.
+        /// </summary>
         /// <param name="fileCabinetRecord">Input parametr record <see cref="FileCabinetRecord"/>.</param>
         /// <returns>Id <see cref="int"/>.</returns>
         /// <exception cref="ArgumentNullException">Throws if <paramref name="fileCabinetRecord"/>, <paramref name="fileCabinetRecord.FirstName"/>,<paramref name="fileCabinetRecord.LastName"/> is null.</exception>
@@ -32,7 +38,8 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{nameof(fileCabinetRecord)} is null!");
             }
 
-            this.ValidateExtention(fileCabinetRecord);
+            this.CreateValidator().ValidateParametrs(fileCabinetRecord);
+
             fileCabinetRecord.Id = this.list.Count + 1;
             this.list.Add(fileCabinetRecord);
             this.AddRecordToDictionary(fileCabinetRecord);
@@ -78,7 +85,6 @@ namespace FileCabinetApp
             }
 
             int editId = fileCabinetRecord.Id - 1;
-            this.ValidateExtention(fileCabinetRecord);
             FileCabinetRecord res = this.list.Find(item1 => item1.Id == fileCabinetRecord.Id);
             string oldFirstName = res.FirstName;
             string oldLastName = res.LastName;
@@ -143,12 +149,6 @@ namespace FileCabinetApp
 
             return result.ToArray();
         }
-
-        /// <summary>
-        /// Сreate new record FileCabinetRecord.
-        /// </summary>
-        /// <param name="fileCabinetRecord">Input parametr record <see cref="FileCabinetRecord"/>.</param>
-        public abstract void ValidateExtention(FileCabinetRecord fileCabinetRecord);
 
         private void AddRecordToDictionary(FileCabinetRecord record)
         {

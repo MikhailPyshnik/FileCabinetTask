@@ -4,36 +4,64 @@
         <name>FileCabinetApp</name>
     </assembly>
     <members>
-        <member name="T:FileCabinetApp.FileCabinetCustomService">
+        <member name="T:FileCabinetApp.CustomValidator">
             <summary>
-            Work with records. Save and change record(s).
+            Class of console application.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetCustomService.ValidateExtention(FileCabinetRecord)">
+        <member name="M:FileCabinetApp.CustomValidator.ValidateParametrs(FileCabinetRecord)">
             <summary>
             Сreate new record FileCabinetRecord.
             </summary>
             <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
             <exception cref="T:System.ArgumentNullException">Throws if <paramref name="fileCabinetRecord"/>, <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/> is null.</exception>
             <exception cref="T:System.ArgumentException">Throws if <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/>,<paramref name="fileCabinetRecord.DateOfBirth.DateOfBirth"/>,<paramref name="fileCabinetRecord.Sex.Sex"/>,<paramref name="fileCabinetRecord.Height.Height"/>,<paramref name="fileCabinetRecord.Salary.Salary"/> is(are) incorrect value.</exception>
+        </member>
+        <member name="T:FileCabinetApp.DefaultValidator">
+            <summary>
+            Class of console application.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.ValidateParametrs(FileCabinetRecord)">
+            <summary>
+            Сreate new record FileCabinetRecord.
+            </summary>
+            <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
+            <exception cref="T:System.ArgumentNullException">Throws if <paramref name="fileCabinetRecord"/>, <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/> is null.</exception>
+            <exception cref="T:System.ArgumentException">Throws if <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/>,<paramref name="fileCabinetRecord.DateOfBirth.DateOfBirth"/>,<paramref name="fileCabinetRecord.Sex.Sex"/>,<paramref name="fileCabinetRecord.Height.Height"/>,<paramref name="fileCabinetRecord.Salary.Salary"/> is(are) incorrect value.</exception>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetCustomService">
+            <summary>
+            Work with records. Save and change record(s).
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetCustomService.CreateValidator">
+            <summary>
+            Сreate custom implementation of validator.
+            </summary>
+            <returns>Id <see cref="T:FileCabinetApp.IRecordValidator"/>.</returns>
         </member>
         <member name="T:FileCabinetApp.FileCabinetDefaultService">
             <summary>
             Work with records. Save and change record(s).DefaultService.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetDefaultService.ValidateExtention(FileCabinetRecord)">
+        <member name="M:FileCabinetApp.FileCabinetDefaultService.CreateValidator">
             <summary>
-            Сreate new record FileCabinetRecord.
+            Сreate default implementation of validator.
             </summary>
-            <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
-            <exception cref="T:System.ArgumentNullException">Throws if <paramref name="fileCabinetRecord"/>, <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/> is null.</exception>
-            <exception cref="T:System.ArgumentException">Throws if <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/>,<paramref name="fileCabinetRecord.DateOfBirth.DateOfBirth"/>,<paramref name="fileCabinetRecord.Sex.Sex"/>,<paramref name="fileCabinetRecord.Height.Height"/>,<paramref name="fileCabinetRecord.Salary.Salary"/> is(are) incorrect value.</exception>
+            <returns>Id <see cref="T:FileCabinetApp.IRecordValidator"/>.</returns>
         </member>
         <member name="T:FileCabinetApp.FileCabinetService">
             <summary>
             Work with records. Save and change record(s).
             </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.CreateValidator">
+            <summary>
+            Сreate new record FileCabinetRecord.
+            </summary>
+            <returns>Id <see cref="T:FileCabinetApp.IRecordValidator"/>.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetService.CreateRecord(FileCabinetRecord)">
             <summary>
@@ -85,9 +113,14 @@
             <param name="dateofbirth">Input parametr FirstName <see cref="T:System.String"/>.</param>
             <returns>Rerords by dateofbirth <see cref="T:FileCabinetRecord"/>.</returns>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetService.ValidateExtention(FileCabinetRecord)">
+        <member name="T:FileCabinetApp.IRecordValidator">
             <summary>
-            Сreate new record FileCabinetRecord.
+             Exposes an validateParametrs, which supports validate values ​​by criterion.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.IRecordValidator.ValidateParametrs(FileCabinetRecord)">
+            <summary>
+             Defines a rule for checking values.
             </summary>
             <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
         </member>
