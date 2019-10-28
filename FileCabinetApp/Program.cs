@@ -53,23 +53,23 @@ namespace FileCabinetApp
                 {
                     if (args == null || args.Length == 0)
                     {
-                       fileCabinetService = new FileCabinetCustomService();
+                       fileCabinetService = new FileCabinetService(new DefaultValidator());
                     }
                     else
                     {
                         string compare = o.InputFile.ToLower(new CultureInfo("en-US"));
                         if (compare == "default")
                         {
-                           fileCabinetService = new FileCabinetDefaultService();
+                           fileCabinetService = new FileCabinetService(new DefaultValidator());
                         }
                         else if (compare == "custom")
                         {
-                           fileCabinetService = new FileCabinetCustomService();
+                           fileCabinetService = new FileCabinetService(new CustomValidator());
                            validationRules = "custom";
                         }
                         else
                         {
-                            fileCabinetService = new FileCabinetCustomService();
+                            fileCabinetService = new FileCabinetService(new DefaultValidator());
                         }
                     }
                 });

@@ -30,26 +30,6 @@
             <exception cref="T:System.ArgumentNullException">Throws if <paramref name="fileCabinetRecord"/>, <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/> is null.</exception>
             <exception cref="T:System.ArgumentException">Throws if <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/>,<paramref name="fileCabinetRecord.DateOfBirth.DateOfBirth"/>,<paramref name="fileCabinetRecord.Sex.Sex"/>,<paramref name="fileCabinetRecord.Height.Height"/>,<paramref name="fileCabinetRecord.Salary.Salary"/> is(are) incorrect value.</exception>
         </member>
-        <member name="T:FileCabinetApp.FileCabinetCustomService">
-            <summary>
-            Work with records. Save and change record(s).
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetCustomService.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetCustomService"/> class.
-            </summary>
-        </member>
-        <member name="T:FileCabinetApp.FileCabinetDefaultService">
-            <summary>
-            Work with records. Save and change record(s).DefaultService.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetDefaultService.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetDefaultService"/> class.
-            </summary>
-        </member>
         <member name="T:FileCabinetApp.FileCabinetService">
             <summary>
             Work with records. Save and change record(s).
