@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Text;
 
@@ -55,11 +56,9 @@ namespace FileCabinetApp
         /// Get all record FileCabinetRecord.
         /// </summary>
         /// <returns>Rerords <see cref="FileCabinetRecord"/>.</returns>
-        public FileCabinetRecord[] GetRecords()
+        public ReadOnlyCollection<FileCabinetRecord> GetRecords()
         {
-            FileCabinetRecord[] copyFileCabinetRecord = new FileCabinetRecord[this.list.Count];
-            this.list.CopyTo(copyFileCabinetRecord);
-            return copyFileCabinetRecord;
+            return new ReadOnlyCollection<FileCabinetRecord>(this.list);
         }
 
         /// <summary>
@@ -111,16 +110,15 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="firstName">Input parametr FirstName <see cref="string"/>.</param>
         /// <returns>Rerords by firstName <see cref="FileCabinetRecord"/>.</returns>
-        public FileCabinetRecord[] FindByFirstName(string firstName)
+        public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
         {
             List<FileCabinetRecord> result = new List<FileCabinetRecord>();
-
             if (this.firstNameDictionary.ContainsKey(firstName))
             {
                 result = this.firstNameDictionary[firstName];
             }
 
-            return result.ToArray();
+            return new ReadOnlyCollection<FileCabinetRecord>(result);
         }
 
         /// <summary>
@@ -128,7 +126,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="lastName">Input parametr FirstName <see cref="string"/>.</param>
         /// <returns>Rerords by lastName <see cref="FileCabinetRecord"/>.</returns>
-        public FileCabinetRecord[] FindByLastName(string lastName)
+        public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
         {
             List<FileCabinetRecord> result = new List<FileCabinetRecord>();
 
@@ -137,7 +135,7 @@ namespace FileCabinetApp
                 result = this.lastNameDictionary[lastName];
             }
 
-            return result.ToArray();
+            return new ReadOnlyCollection<FileCabinetRecord>(result);
         }
 
         /// <summary>
@@ -145,7 +143,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="dateofbirth">Input parametr FirstName <see cref="string"/>.</param>
         /// <returns>Rerords by dateofbirth <see cref="FileCabinetRecord"/>.</returns>
-        public FileCabinetRecord[] FindByDateOfBirth(string dateofbirth)
+        public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(string dateofbirth)
         {
             List<FileCabinetRecord> result = new List<FileCabinetRecord>();
 
@@ -154,7 +152,7 @@ namespace FileCabinetApp
                 result = this.dateOfBirthDictionary[dateofbirth];
             }
 
-            return result.ToArray();
+            return new ReadOnlyCollection<FileCabinetRecord>(result);
         }
 
         private void AddRecordToDictionary(FileCabinetRecord record)

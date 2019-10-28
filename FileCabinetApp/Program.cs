@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using CommandLine;
 
@@ -201,13 +202,13 @@ namespace FileCabinetApp
         {
             CultureInfo provider = new CultureInfo("en-US");
             var reultList = fileCabinetService.GetRecords();
-            if (reultList.Length == 0)
+            if (reultList.Count == 0)
             {
                 Console.Write("The list is empty.Add new record => add command - create");
             }
             else
             {
-                for (int i = 0; i < reultList.Length; i++)
+                for (int i = 0; i < reultList.Count; i++)
                 {
                     Console.WriteLine($"#{reultList[i].Id},{reultList[i].FirstName},{reultList[i].LastName},{reultList[i].DateOfBirth.ToString("yyyy-MMM-dd", provider)},{reultList[i].Sex},{reultList[i].Height},{reultList[i].Salary}");
                 }
@@ -271,7 +272,6 @@ namespace FileCabinetApp
 
         private static void Find(string parameters)
         {
-            FileCabinetRecord[] records = null;
             CultureInfo provider = new CultureInfo("en-US");
             var parametersArray = parameters.ToLower(provider).Split(' ', 2);
             string searchParametr = parametersArray[0];
@@ -279,19 +279,19 @@ namespace FileCabinetApp
             if (searchParametr == "firstname")
             {
                 var firstName = parametersArray[1].Trim('"');
-                records = fileCabinetService.FindByFirstName(firstName);
+                var records = fileCabinetService.FindByFirstName(firstName);
                 PrintRecords(records, value);
             }
             else if (searchParametr == "lastname")
             {
                 var lastName = parametersArray[1].Trim('"');
-                records = fileCabinetService.FindByLastName(lastName);
+                var records = fileCabinetService.FindByLastName(lastName);
                 PrintRecords(records, value);
             }
             else if (searchParametr == "dateofbirth")
             {
                 var dateofbirth = parametersArray[1].Trim('"');
-                records = fileCabinetService.FindByDateOfBirth(dateofbirth);
+                var records = fileCabinetService.FindByDateOfBirth(dateofbirth);
                 PrintRecords(records, value);
             }
             else
@@ -300,18 +300,17 @@ namespace FileCabinetApp
             }
         }
 
-        private static void PrintRecords(FileCabinetRecord[] records, string value)
+        private static void PrintRecords(ReadOnlyCollection<FileCabinetRecord> records, string value)
         {
             CultureInfo provider = new CultureInfo("en-US");
-            if (records.Length == 0)
+            if (records.Count == 0)
             {
                 Console.WriteLine($"No records are found for firstName = {value}!");
             }
             else
             {
-                for (int i = 0; i < records.Length; i++)
+                foreach (var record in records)
                 {
-                    var record = records[i];
                     Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", provider)}, {record.Sex}, {record.Height}, {record.Salary}");
                 }
             }
