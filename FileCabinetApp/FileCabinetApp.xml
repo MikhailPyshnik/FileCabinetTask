@@ -11,7 +11,7 @@
         </member>
         <member name="M:FileCabinetApp.CustomValidator.ValidateParametrs(FileCabinetRecord)">
             <summary>
-            Сreate new record FileCabinetRecord.
+            Set validate parametrs for FileCabinetRecord.
             </summary>
             <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
             <exception cref="T:System.ArgumentNullException">Throws if <paramref name="fileCabinetRecord"/>, <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/> is null.</exception>
@@ -24,7 +24,7 @@
         </member>
         <member name="M:FileCabinetApp.DefaultValidator.ValidateParametrs(FileCabinetRecord)">
             <summary>
-            Сreate new record FileCabinetRecord.
+            Set validate parametrs for FileCabinetRecord.
             </summary>
             <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
             <exception cref="T:System.ArgumentNullException">Throws if <paramref name="fileCabinetRecord"/>, <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/> is null.</exception>
@@ -35,33 +35,31 @@
             Work with records. Save and change record(s).
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetCustomService.CreateValidator">
+        <member name="M:FileCabinetApp.FileCabinetCustomService.#ctor">
             <summary>
-            Сreate custom implementation of validator.
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetCustomService"/> class.
             </summary>
-            <returns>Id <see cref="T:FileCabinetApp.IRecordValidator"/>.</returns>
         </member>
         <member name="T:FileCabinetApp.FileCabinetDefaultService">
             <summary>
             Work with records. Save and change record(s).DefaultService.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetDefaultService.CreateValidator">
+        <member name="M:FileCabinetApp.FileCabinetDefaultService.#ctor">
             <summary>
-            Сreate default implementation of validator.
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetDefaultService"/> class.
             </summary>
-            <returns>Id <see cref="T:FileCabinetApp.IRecordValidator"/>.</returns>
         </member>
         <member name="T:FileCabinetApp.FileCabinetService">
             <summary>
             Work with records. Save and change record(s).
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetService.CreateValidator">
+        <member name="M:FileCabinetApp.FileCabinetService.#ctor(FileCabinetApp.IRecordValidator)">
             <summary>
-            Сreate new record FileCabinetRecord.
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetService"/> class.
             </summary>
-            <returns>Id <see cref="T:FileCabinetApp.IRecordValidator"/>.</returns>
+            <param name="recordValidator">Input parametr in constructor <see cref="T:FileCabinetApp.IRecordValidator"/>.</param>
         </member>
         <member name="M:FileCabinetApp.FileCabinetService.CreateRecord(FileCabinetRecord)">
             <summary>

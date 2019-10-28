@@ -10,7 +10,7 @@ namespace FileCabinetApp
     public class DefaultValidator : IRecordValidator
     {
         /// <summary>
-        /// Сreate new record FileCabinetRecord.
+        /// Set validate parametrs for FileCabinetRecord.
         /// </summary>
         /// <param name="fileCabinetRecord">Input parametr record <see cref="FileCabinetRecord"/>.</param>
         /// <exception cref="ArgumentNullException">Throws if <paramref name="fileCabinetRecord"/>, <paramref name="fileCabinetRecord.FirstName"/>,<paramref name="fileCabinetRecord.LastName"/> is null.</exception>

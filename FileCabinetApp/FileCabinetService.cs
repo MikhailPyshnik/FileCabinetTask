@@ -8,7 +8,7 @@ namespace FileCabinetApp
     /// <summary>
     /// Work with records. Save and change record(s).
     /// </summary>
-    public abstract class FileCabinetService
+    public class FileCabinetService
     {
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
 
@@ -18,11 +18,16 @@ namespace FileCabinetApp
 
         private readonly Dictionary<string, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<string, List<FileCabinetRecord>>(StringComparer.OrdinalIgnoreCase);
 
+        private readonly IRecordValidator validator;
+
         /// <summary>
-        /// Сreate new record FileCabinetRecord.
+        /// Initializes a new instance of the <see cref="FileCabinetService"/> class.
         /// </summary>
-        /// <returns>Id <see cref="IRecordValidator"/>.</returns>
-        public abstract IRecordValidator CreateValidator();
+        /// <param name="recordValidator">Input parametr in constructor <see cref="IRecordValidator"/>.</param>
+        public FileCabinetService(IRecordValidator recordValidator)
+        {
+            this.validator = recordValidator;
+        }
 
         /// <summary>
         /// Сreate new record FileCabinetRecord.
@@ -38,7 +43,7 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{nameof(fileCabinetRecord)} is null!");
             }
 
-            this.CreateValidator().ValidateParametrs(fileCabinetRecord);
+            this.validator.ValidateParametrs(fileCabinetRecord);
 
             fileCabinetRecord.Id = this.list.Count + 1;
             this.list.Add(fileCabinetRecord);
@@ -83,6 +88,8 @@ namespace FileCabinetApp
             {
                 throw new ArgumentException("Input Id is incorrect value.");
             }
+
+            this.validator.ValidateParametrs(fileCabinetRecord);
 
             int editId = fileCabinetRecord.Id - 1;
             FileCabinetRecord res = this.list.Find(item1 => item1.Id == fileCabinetRecord.Id);
