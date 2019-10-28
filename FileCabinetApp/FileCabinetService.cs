@@ -9,7 +9,7 @@ namespace FileCabinetApp
     /// <summary>
     /// Work with records. Save and change record(s).
     /// </summary>
-    public class FileCabinetService
+    public class FileCabinetService : IFileCabinetService
     {
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
 
@@ -31,7 +31,7 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Сreate new record FileCabinetRecord.
+        /// Implementation IFileCabinetService СreateRecod.
         /// </summary>
         /// <param name="fileCabinetRecord">Input parametr record <see cref="FileCabinetRecord"/>.</param>
         /// <returns>Id <see cref="int"/>.</returns>
@@ -53,7 +53,7 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Get all record FileCabinetRecord.
+        /// Implementation IFileCabinetService GetRecords.
         /// </summary>
         /// <returns>Rerords <see cref="FileCabinetRecord"/>.</returns>
         public ReadOnlyCollection<FileCabinetRecord> GetRecords()
@@ -62,7 +62,7 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Get count of record FileCabinetRecord.
+        /// Implementation IFileCabinetService GetStat.
         /// </summary>
         /// <returns>Count records <see cref="int"/>.</returns>
         public int GetStat()
@@ -71,7 +71,7 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Edit record by id.
+        /// Implementation IFileCabinetService EditRecord.
         /// </summary>
         /// <param name="fileCabinetRecord">Input parametr record <see cref="FileCabinetRecord"/>.</param>
         /// <exception cref="ArgumentNullException">Throws if <paramref name="fileCabinetRecord"/>, <paramref name="fileCabinetRecord.FirstName"/>,<paramref name="fileCabinetRecord.LastName"/> is null.</exception>
@@ -106,7 +106,7 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Return records by first name.
+        /// Implementation IFileCabinetService FindByFirstName.
         /// </summary>
         /// <param name="firstName">Input parametr FirstName <see cref="string"/>.</param>
         /// <returns>Rerords by firstName <see cref="FileCabinetRecord"/>.</returns>
@@ -122,7 +122,7 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Return records by last name.
+        /// Implementation IFileCabinetService FindByLastName.
         /// </summary>
         /// <param name="lastName">Input parametr FirstName <see cref="string"/>.</param>
         /// <returns>Rerords by lastName <see cref="FileCabinetRecord"/>.</returns>
@@ -139,7 +139,7 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Return records by date of birth.
+        /// Implementation IFileCabinetService FindByDateOfBirth.
         /// </summary>
         /// <param name="dateofbirth">Input parametr FirstName <see cref="string"/>.</param>
         /// <returns>Rerords by dateofbirth <see cref="FileCabinetRecord"/>.</returns>
