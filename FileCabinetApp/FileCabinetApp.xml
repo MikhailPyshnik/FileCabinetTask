@@ -17,6 +17,99 @@
             <exception cref="T:System.ArgumentNullException">Throws if <paramref name="fileCabinetRecord"/>, <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/> is null.</exception>
             <exception cref="T:System.ArgumentException">Throws if <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/>,<paramref name="fileCabinetRecord.DateOfBirth.DateOfBirth"/>,<paramref name="fileCabinetRecord.Sex.Sex"/>,<paramref name="fileCabinetRecord.Height.Height"/>,<paramref name="fileCabinetRecord.Salary.Salary"/> is(are) incorrect value.</exception>
         </member>
+        <member name="M:FileCabinetApp.CustomValidator.ReadInput``1(System.Func{System.String,System.Tuple{System.Boolean,System.String,``0}},System.Func{``0,System.Tuple{System.Boolean,System.String}})">
+            <summary>
+            Implement the method ReadInput.
+            </summary>
+            <typeparam name="T">Type of parametr.</typeparam>
+            <param name="converter">The converter.</param>
+            <param name="validator">The validator.</param>
+            <returns>Validate parametr.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CustomValidator.FirstNameConverter(System.String)">
+            <summary>
+            Implements the method FirstNameConverter.
+            </summary>
+            <param name="value">The converter.</param>
+            <returns>The correct value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CustomValidator.LastNameConverter(System.String)">
+            <summary>
+            Implements the method LastNameConverter.
+            </summary>
+            <param name="value">The converter.</param>
+            <returns>The correct value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CustomValidator.DayOfBirthConverter(System.String)">
+            <summary>
+            Implements the method DayOfBirthConverter.
+            </summary>
+            <param name="value">The converter.</param>
+            <returns>The correct value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CustomValidator.SexConverter(System.String)">
+            <summary>
+            Implements the method SexConverter.
+            </summary>
+            <param name="value">The converter.</param>
+            <returns>The correct value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CustomValidator.HeightConverter(System.String)">
+            <summary>
+            Implements the method HeightConverter.
+            </summary>
+            <param name="value">The converter.</param>
+            <returns>The correct value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CustomValidator.SalaryConverter(System.String)">
+            <summary>
+            Implements the method SalaryConverter.
+            </summary>
+            <param name="value">The converter.</param>
+            <returns>The correct value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CustomValidator.FirstNameValidator(System.String)">
+            <summary>
+            Validate the method FirstNameValidator.
+            </summary>
+            <param name="value">The validator.</param>
+            <returns>The correct value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CustomValidator.LastNameValidator(System.String)">
+            <summary>
+            Validate the method LastNameValidator.
+            </summary>
+            <param name="value">The validator.</param>
+            <returns>The correct value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CustomValidator.DayOfBirthValidator(System.DateTime)">
+            <summary>
+            Validate the method DayOfBirthValidator.
+            </summary>
+            <param name="value">The validator.</param>
+            <returns>The correct value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CustomValidator.SexValidator(System.Char)">
+            <summary>
+            Validate the method SexValidator.
+            </summary>
+            <param name="value">The validator.</param>
+            <returns>The correct value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CustomValidator.HeightValidator(System.Int16)">
+            <summary>
+            Validate the method HeightValidator.
+            </summary>
+            <param name="value">The validator.</param>
+            <returns>The correct value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CustomValidator.SalaryValidator(System.Decimal)">
+            <summary>
+            Validate the method SalaryValidatorsalary.
+            </summary>
+            <param name="value">The validator.</param>
+            <returns>The correct value.</returns>
+        </member>
         <member name="T:FileCabinetApp.DefaultValidator">
             <summary>
             Class of console application.
@@ -29,6 +122,99 @@
             <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
             <exception cref="T:System.ArgumentNullException">Throws if <paramref name="fileCabinetRecord"/>, <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/> is null.</exception>
             <exception cref="T:System.ArgumentException">Throws if <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/>,<paramref name="fileCabinetRecord.DateOfBirth.DateOfBirth"/>,<paramref name="fileCabinetRecord.Sex.Sex"/>,<paramref name="fileCabinetRecord.Height.Height"/>,<paramref name="fileCabinetRecord.Salary.Salary"/> is(are) incorrect value.</exception>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.ReadInput``1(System.Func{System.String,System.Tuple{System.Boolean,System.String,``0}},System.Func{``0,System.Tuple{System.Boolean,System.String}})">
+            <summary>
+            Implement the method ReadInput.
+            </summary>
+            <typeparam name="T">Type of parametr.</typeparam>
+            <param name="converter">The converter.</param>
+            <param name="validator">The validator.</param>
+            <returns>Validate parametr.</returns>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.FirstNameConverter(System.String)">
+            <summary>
+            Implements the method FirstNameConverter.
+            </summary>
+            <param name="value">The converter.</param>
+            <returns>The correct value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.LastNameConverter(System.String)">
+            <summary>
+            Implements the method LastNameConverter.
+            </summary>
+            <param name="value">The converter.</param>
+            <returns>The correct value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.DayOfBirthConverter(System.String)">
+            <summary>
+            Implements the method DayOfBirthConverter.
+            </summary>
+            <param name="value">The converter.</param>
+            <returns>The correct value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.SexConverter(System.String)">
+            <summary>
+            Implements the method SexConverter.
+            </summary>
+            <param name="value">The converter.</param>
+            <returns>The correct value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.HeightConverter(System.String)">
+            <summary>
+            Implements the method HeightConverter.
+            </summary>
+            <param name="value">The converter.</param>
+            <returns>The correct value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.SalaryConverter(System.String)">
+            <summary>
+            Implements the method SalaryConverter.
+            </summary>
+            <param name="value">The converter.</param>
+            <returns>The correct value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.FirstNameValidator(System.String)">
+            <summary>
+            Validate the method FirstNameValidator.
+            </summary>
+            <param name="value">The validator.</param>
+            <returns>The correct value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.LastNameValidator(System.String)">
+            <summary>
+            Validate the method LastNameValidator.
+            </summary>
+            <param name="value">The validator.</param>
+            <returns>The correct value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.DayOfBirthValidator(System.DateTime)">
+            <summary>
+            Validate the method DayOfBirthValidator.
+            </summary>
+            <param name="value">The validator.</param>
+            <returns>The correct value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.SexValidator(System.Char)">
+            <summary>
+            Validate the method SexValidator.
+            </summary>
+            <param name="value">The validator.</param>
+            <returns>The correct value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.HeightValidator(System.Int16)">
+            <summary>
+            Validate the method HeightValidator.
+            </summary>
+            <param name="value">The validator.</param>
+            <returns>The correct value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.SalaryValidator(System.Decimal)">
+            <summary>
+            Validate the method SalaryValidatorsalary.
+            </summary>
+            <param name="value">The validator.</param>
+            <returns>The correct value.</returns>
         </member>
         <member name="T:FileCabinetApp.FileCabinetService">
             <summary>
@@ -152,6 +338,104 @@
              Defines a rule for checking values.
             </summary>
             <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
+        </member>
+        <member name="T:FileCabinetApp.IValidatorOfParemetrs">
+            <summary>
+             Exposes an validateParametrs, which supports validate values ​​by criterion.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.IValidatorOfParemetrs.ReadInput``1(System.Func{System.String,System.Tuple{System.Boolean,System.String,``0}},System.Func{``0,System.Tuple{System.Boolean,System.String}})">
+            <summary>
+            Defines a rule for checking values.
+            </summary>
+            <typeparam name="T">Type of parametr.</typeparam>
+            <param name="converter">The converter.</param>
+            <param name="validator">The validator.</param>
+            <returns>Validate parametr.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IValidatorOfParemetrs.FirstNameConverter(System.String)">
+            <summary>
+            Convert the first name to string.
+            </summary>
+            <param name="value">The converter.</param>
+            <returns>The correct value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IValidatorOfParemetrs.LastNameConverter(System.String)">
+            <summary>
+            Convert the last name to string.
+            </summary>
+            <param name="value">The converter.</param>
+            <returns>The correct value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IValidatorOfParemetrs.DayOfBirthConverter(System.String)">
+            <summary>
+            Convert the day of birth to string.
+            </summary>
+            <param name="value">The converter.</param>
+            <returns>The correct value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IValidatorOfParemetrs.SexConverter(System.String)">
+            <summary>
+            Convert the sex to string.
+            </summary>
+            <param name="value">The converter.</param>
+            <returns>The correct value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IValidatorOfParemetrs.HeightConverter(System.String)">
+            <summary>
+            Convert the height to string.
+            </summary>
+            <param name="value">The converter.</param>
+            <returns>The correct value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IValidatorOfParemetrs.SalaryConverter(System.String)">
+            <summary>
+            Convert the salary to string.
+            </summary>
+            <param name="value">The converter.</param>
+            <returns>The correct value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IValidatorOfParemetrs.FirstNameValidator(System.String)">
+            <summary>
+            Validate the first name.
+            </summary>
+            <param name="value">The validator.</param>
+            <returns>The correct value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IValidatorOfParemetrs.LastNameValidator(System.String)">
+            <summary>
+            Validate the last name.
+            </summary>
+            <param name="value">The validator.</param>
+            <returns>The correct value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IValidatorOfParemetrs.DayOfBirthValidator(System.DateTime)">
+            <summary>
+            Validate the day of birth.
+            </summary>
+            <param name="value">The validator.</param>
+            <returns>The correct value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IValidatorOfParemetrs.SexValidator(System.Char)">
+            <summary>
+            Validate the sex.
+            </summary>
+            <param name="value">The validator.</param>
+            <returns>The correct value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IValidatorOfParemetrs.HeightValidator(System.Int16)">
+            <summary>
+            Validate the height.
+            </summary>
+            <param name="value">The validator.</param>
+            <returns>The correct value.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IValidatorOfParemetrs.SalaryValidator(System.Decimal)">
+            <summary>
+            Validate the salary.
+            </summary>
+            <param name="value">The validator.</param>
+            <returns>The correct value.</returns>
         </member>
         <member name="T:FileCabinetApp.Program">
             <summary>

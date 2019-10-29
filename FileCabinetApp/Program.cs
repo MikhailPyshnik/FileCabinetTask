@@ -16,6 +16,7 @@ namespace FileCabinetApp
         private const int DescriptionHelpIndex = 1;
         private const int ExplanationHelpIndex = 2;
         private static IFileCabinetService fileCabinetService;
+        private static IValidatorOfParemetrs recordValidator;
 
         private static string validationRules = "default";
 
@@ -56,6 +57,7 @@ namespace FileCabinetApp
                     if (args == null || args.Length == 0)
                     {
                        fileCabinetService = new FileCabinetService(new DefaultValidator());
+                       recordValidator = new DefaultValidator();
                     }
                     else
                     {
@@ -63,15 +65,18 @@ namespace FileCabinetApp
                         if (compare == "default")
                         {
                            fileCabinetService = new FileCabinetService(new DefaultValidator());
+                           recordValidator = new DefaultValidator();
                         }
                         else if (compare == "custom")
                         {
                            fileCabinetService = new FileCabinetService(new CustomValidator());
+                           recordValidator = new CustomValidator();
                            validationRules = "custom";
                         }
                         else
                         {
                             fileCabinetService = new FileCabinetService(new DefaultValidator());
+                            recordValidator = new DefaultValidator();
                         }
                     }
                 });
@@ -163,19 +168,17 @@ namespace FileCabinetApp
                     FileCabinetRecord fileCabinetRecord = new FileCabinetRecord();
                     CultureInfo provider = new CultureInfo("en-US");
                     Console.Write("First name:");
-                    fileCabinetRecord.FirstName = Console.ReadLine();
+                    fileCabinetRecord.FirstName = recordValidator.ReadInput(recordValidator.FirstNameConverter, recordValidator.FirstNameValidator);
                     Console.Write("Last name:");
-                    fileCabinetRecord.LastName = Console.ReadLine();
+                    fileCabinetRecord.LastName = recordValidator.ReadInput(recordValidator.LastNameConverter, recordValidator.LastNameValidator);
                     Console.Write("Date of birth:");
-                    string inputDateOfBirth = Console.ReadLine();
-                    fileCabinetRecord.DateOfBirth = DateTime.ParseExact(inputDateOfBirth, "dd/MM/yyyy", provider);
+                    fileCabinetRecord.DateOfBirth = recordValidator.ReadInput(recordValidator.DayOfBirthConverter, recordValidator.DayOfBirthValidator);
                     Console.Write("Person's sex:");
-                    fileCabinetRecord.Sex = Convert.ToChar(Console.ReadLine(), provider);
+                    fileCabinetRecord.Sex = recordValidator.ReadInput(recordValidator.SexConverter, recordValidator.SexValidator);
                     Console.Write("Person's height:");
-                    fileCabinetRecord.Height = Convert.ToInt16(Console.ReadLine(), provider);
+                    fileCabinetRecord.Height = recordValidator.ReadInput(recordValidator.HeightConverter, recordValidator.HeightValidator);
                     Console.Write("Person's salary:");
-                    fileCabinetRecord.Salary = Convert.ToDecimal(Console.ReadLine(), provider);
-
+                    fileCabinetRecord.Salary = recordValidator.ReadInput(recordValidator.SalaryConverter, recordValidator.SalaryValidator);
                     Console.WriteLine($"Record #{fileCabinetService.CreateRecord(fileCabinetRecord)} is created.");
                 }
                 catch (ArgumentNullException ex)
@@ -234,18 +237,17 @@ namespace FileCabinetApp
                     fileCabinetRecord.Id = editInputId;
 
                     Console.Write("First name:");
-                    fileCabinetRecord.FirstName = Console.ReadLine();
+                    fileCabinetRecord.FirstName = recordValidator.ReadInput(recordValidator.FirstNameConverter, recordValidator.FirstNameValidator);
                     Console.Write("Last name:");
-                    fileCabinetRecord.LastName = Console.ReadLine();
+                    fileCabinetRecord.LastName = recordValidator.ReadInput(recordValidator.LastNameConverter, recordValidator.LastNameValidator);
                     Console.Write("Date of birth:");
-                    string inputDateOfBirth = Console.ReadLine();
-                    fileCabinetRecord.DateOfBirth = DateTime.ParseExact(inputDateOfBirth, "dd/MM/yyyy", provider);
+                    fileCabinetRecord.DateOfBirth = recordValidator.ReadInput(recordValidator.DayOfBirthConverter, recordValidator.DayOfBirthValidator);
                     Console.Write("Person's sex:");
-                    fileCabinetRecord.Sex = Convert.ToChar(Console.ReadLine(), provider);
+                    fileCabinetRecord.Sex = recordValidator.ReadInput(recordValidator.SexConverter, recordValidator.SexValidator);
                     Console.Write("Person's height:");
-                    fileCabinetRecord.Height = Convert.ToInt16(Console.ReadLine(), provider);
+                    fileCabinetRecord.Height = recordValidator.ReadInput(recordValidator.HeightConverter, recordValidator.HeightValidator);
                     Console.Write("Person's salary:");
-                    fileCabinetRecord.Salary = Convert.ToDecimal(Console.ReadLine(), provider);
+                    fileCabinetRecord.Salary = recordValidator.ReadInput(recordValidator.SalaryConverter, recordValidator.SalaryValidator);
                     fileCabinetService.EditRecord(fileCabinetRecord);
                     Console.WriteLine($"Record #{editInputId} is updated");
                 }

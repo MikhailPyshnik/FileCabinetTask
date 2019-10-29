@@ -44,8 +44,7 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{nameof(fileCabinetRecord)} is null!");
             }
 
-            this.validator.ValidateParametrs(fileCabinetRecord);
-
+            // this.validator.ValidateParametrs(fileCabinetRecord);
             fileCabinetRecord.Id = this.list.Count + 1;
             this.list.Add(fileCabinetRecord);
             this.AddRecordToDictionary(fileCabinetRecord);
@@ -88,8 +87,7 @@ namespace FileCabinetApp
                 throw new ArgumentException("Input Id is incorrect value.");
             }
 
-            this.validator.ValidateParametrs(fileCabinetRecord);
-
+            // this.validator.ValidateParametrs(fileCabinetRecord);
             int editId = fileCabinetRecord.Id - 1;
             FileCabinetRecord res = this.list.Find(item1 => item1.Id == fileCabinetRecord.Id);
             string oldFirstName = res.FirstName;
