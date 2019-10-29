@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Threading;
+using CommandLine;
 
 namespace FileCabinetApp
 {
+    /// <summary>
+    /// Class of console application.
+    /// </summary>
     public static class Program
     {
         private const string DeveloperName = "Mikhail Pyshnik";
@@ -11,7 +15,10 @@ namespace FileCabinetApp
         private const int CommandHelpIndex = 0;
         private const int DescriptionHelpIndex = 1;
         private const int ExplanationHelpIndex = 2;
-        private static FileCabinetService fileCabinetService = new FileCabinetService();
+        private static IFileCabinetService fileCabinetService;
+        private static IValidatorOfParemetrs recordValidator;
+
+        private static string validationRules = "default";
 
         private static bool isRunning = true;
 
@@ -37,9 +44,45 @@ namespace FileCabinetApp
             new string[] { "find", "find record(s)", "The 'find' return all record by условие." },
         };
 
+        /// <summary>
+        ///  Method Main of console application.The poin of enter application.
+        /// </summary>
+        /// <param name="args">Input parametr args[] <see cref="string"/>.</param>
         public static void Main(string[] args)
         {
+            var options = new Options();
+            Parser.Default.ParseArguments<Options>(args)
+                .WithParsed<Options>(o =>
+                {
+                    if (args == null || args.Length == 0)
+                    {
+                       fileCabinetService = new FileCabinetService(new DefaultValidator());
+                       recordValidator = new DefaultValidator();
+                    }
+                    else
+                    {
+                        string compare = o.InputFile.ToLower(new CultureInfo("en-US"));
+                        if (compare == "default")
+                        {
+                           fileCabinetService = new FileCabinetService(new DefaultValidator());
+                           recordValidator = new DefaultValidator();
+                        }
+                        else if (compare == "custom")
+                        {
+                           fileCabinetService = new FileCabinetService(new CustomValidator());
+                           recordValidator = new CustomValidator();
+                           validationRules = "custom";
+                        }
+                        else
+                        {
+                            fileCabinetService = new FileCabinetService(new DefaultValidator());
+                            recordValidator = new DefaultValidator();
+                        }
+                    }
+                });
+
             Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}");
+            Console.WriteLine($"Using {validationRules} validation rules.");
             Console.WriteLine(Program.HintMessage);
             Console.WriteLine();
 
@@ -122,21 +165,21 @@ namespace FileCabinetApp
             {
                 try
                 {
+                    FileCabinetRecord fileCabinetRecord = new FileCabinetRecord();
                     CultureInfo provider = new CultureInfo("en-US");
                     Console.Write("First name:");
-                    string inputFirstName = Console.ReadLine();
+                    fileCabinetRecord.FirstName = recordValidator.ReadInput(recordValidator.FirstNameConverter, recordValidator.FirstNameValidator);
                     Console.Write("Last name:");
-                    string inputLastName = Console.ReadLine();
+                    fileCabinetRecord.LastName = recordValidator.ReadInput(recordValidator.LastNameConverter, recordValidator.LastNameValidator);
                     Console.Write("Date of birth:");
-                    string inputDateOfBirth = Console.ReadLine();
-                    DateTime dateOfBirth = DateTime.ParseExact(inputDateOfBirth, "dd/MM/yyyy", provider);
+                    fileCabinetRecord.DateOfBirth = recordValidator.ReadInput(recordValidator.DayOfBirthConverter, recordValidator.DayOfBirthValidator);
                     Console.Write("Person's sex:");
-                    char inputSex = Convert.ToChar(Console.ReadLine(), provider);
+                    fileCabinetRecord.Sex = recordValidator.ReadInput(recordValidator.SexConverter, recordValidator.SexValidator);
                     Console.Write("Person's height:");
-                    short inputHeight = Convert.ToInt16(Console.ReadLine(), provider);
+                    fileCabinetRecord.Height = recordValidator.ReadInput(recordValidator.HeightConverter, recordValidator.HeightValidator);
                     Console.Write("Person's salary:");
-                    decimal inputSalary = Convert.ToDecimal(Console.ReadLine(), provider);
-                    Console.WriteLine($"Record #{fileCabinetService.CreateRecord(inputFirstName, inputLastName, dateOfBirth, inputSex, inputHeight, inputSalary)} is created.");
+                    fileCabinetRecord.Salary = recordValidator.ReadInput(recordValidator.SalaryConverter, recordValidator.SalaryValidator);
+                    Console.WriteLine($"Record #{fileCabinetService.CreateRecord(fileCabinetRecord)} is created.");
                 }
                 catch (ArgumentNullException ex)
                 {
@@ -163,13 +206,13 @@ namespace FileCabinetApp
         {
             CultureInfo provider = new CultureInfo("en-US");
             var reultList = fileCabinetService.GetRecords();
-            if (reultList.Length == 0)
+            if (reultList.Count == 0)
             {
                 Console.Write("The list is empty.Add new record => add command - create");
             }
             else
             {
-                for (int i = 0; i < reultList.Length; i++)
+                for (int i = 0; i < reultList.Count; i++)
                 {
                     Console.WriteLine($"#{reultList[i].Id},{reultList[i].FirstName},{reultList[i].LastName},{reultList[i].DateOfBirth.ToString("yyyy-MMM-dd", provider)},{reultList[i].Sex},{reultList[i].Height},{reultList[i].Salary}");
                 }
@@ -182,6 +225,7 @@ namespace FileCabinetApp
             {
                 try
                 {
+                    FileCabinetRecord fileCabinetRecord = new FileCabinetRecord();
                     CultureInfo provider = new CultureInfo("en-US");
                     int editInputId = Convert.ToInt32(parameters, provider);
                     if (editInputId > Program.fileCabinetService.GetStat())
@@ -190,20 +234,21 @@ namespace FileCabinetApp
                         return;
                     }
 
+                    fileCabinetRecord.Id = editInputId;
+
                     Console.Write("First name:");
-                    string inputFirstName = Console.ReadLine();
+                    fileCabinetRecord.FirstName = recordValidator.ReadInput(recordValidator.FirstNameConverter, recordValidator.FirstNameValidator);
                     Console.Write("Last name:");
-                    string inputLastName = Console.ReadLine();
+                    fileCabinetRecord.LastName = recordValidator.ReadInput(recordValidator.LastNameConverter, recordValidator.LastNameValidator);
                     Console.Write("Date of birth:");
-                    string inputDateOfBirth = Console.ReadLine();
-                    DateTime dateOfBirth = DateTime.ParseExact(inputDateOfBirth, "dd/MM/yyyy", provider);
+                    fileCabinetRecord.DateOfBirth = recordValidator.ReadInput(recordValidator.DayOfBirthConverter, recordValidator.DayOfBirthValidator);
                     Console.Write("Person's sex:");
-                    char inputSex = Convert.ToChar(Console.ReadLine(), provider);
+                    fileCabinetRecord.Sex = recordValidator.ReadInput(recordValidator.SexConverter, recordValidator.SexValidator);
                     Console.Write("Person's height:");
-                    short inputHeight = Convert.ToInt16(Console.ReadLine(), provider);
+                    fileCabinetRecord.Height = recordValidator.ReadInput(recordValidator.HeightConverter, recordValidator.HeightValidator);
                     Console.Write("Person's salary:");
-                    decimal inputSalary = Convert.ToDecimal(Console.ReadLine(), provider);
-                    fileCabinetService.EditRecord(editInputId, inputFirstName, inputLastName, dateOfBirth, inputSex, inputHeight, inputSalary);
+                    fileCabinetRecord.Salary = recordValidator.ReadInput(recordValidator.SalaryConverter, recordValidator.SalaryValidator);
+                    fileCabinetService.EditRecord(fileCabinetRecord);
                     Console.WriteLine($"Record #{editInputId} is updated");
                 }
                 catch (ArgumentNullException ex)
@@ -230,37 +275,54 @@ namespace FileCabinetApp
 
         private static void Find(string parameters)
         {
-            FileCabinetRecord[] records = null;
             CultureInfo provider = new CultureInfo("en-US");
             var parametersArray = parameters.ToLower(provider).Split(' ', 2);
-            if (parametersArray[0] == "firstname")
+            string searchParametr = parametersArray[0];
+            string value = parametersArray[1];
+            if (searchParametr == "firstname")
             {
                 var firstName = parametersArray[1].Trim('"');
-                records = fileCabinetService.FindByFirstName(firstName);
+                var records = fileCabinetService.FindByFirstName(firstName);
+                PrintRecords(records, value);
             }
-            else if (parametersArray[0] == "lastname")
+            else if (searchParametr == "lastname")
             {
                 var lastName = parametersArray[1].Trim('"');
-                records = fileCabinetService.FindByLastName(lastName);
+                var records = fileCabinetService.FindByLastName(lastName);
+                PrintRecords(records, value);
             }
-            else if (parametersArray[0] == "dateofbirth")
+            else if (searchParametr == "dateofbirth")
             {
                 var dateofbirth = parametersArray[1].Trim('"');
-                records = fileCabinetService.FindByDateOfBirth(dateofbirth);
-            }
-
-            if (records.Length == 0)
-            {
-                Console.WriteLine($"No records are found for firstName = {parametersArray[1]}!");
+                var records = fileCabinetService.FindByDateOfBirth(dateofbirth);
+                PrintRecords(records, value);
             }
             else
             {
-                for (int i = 0; i < records.Length; i++)
+                Console.WriteLine($"There is no '{parametersArray[0]}' parametr.");
+            }
+        }
+
+        private static void PrintRecords(ReadOnlyCollection<FileCabinetRecord> records, string value)
+        {
+            CultureInfo provider = new CultureInfo("en-US");
+            if (records.Count == 0)
+            {
+                Console.WriteLine($"No records are found for firstName = {value}!");
+            }
+            else
+            {
+                foreach (var record in records)
                 {
-                    var record = records[i];
                     Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", provider)}, {record.Sex}, {record.Height}, {record.Salary}");
                 }
             }
+        }
+
+        private class Options
+        {
+            [Option('v', "validation-rules", Separator = '=', HelpText = "Set output to verbose messages.")]
+            public string InputFile { get; set; }
         }
     }
 }
