@@ -55,5 +55,11 @@ namespace FileCabinetApp
         /// <param name="dateofbirth">Input parametr FirstName <see cref="string"/>.</param>
         /// <returns>Rerords by dateofbirth <see cref="FileCabinetRecord"/>.</returns>
         ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(string dateofbirth);
+
+        /// <summary>
+        /// Return make snapshot.
+        /// </summary>
+        /// <returns>Rerords by dateofbirth <see cref=" FileCabinetServiceSnapshot"/>.</returns>
+        FileCabinetServiceSnapshot MakeSnapshot();
     }
 }

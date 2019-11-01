@@ -153,6 +153,17 @@ namespace FileCabinetApp
             return new ReadOnlyCollection<FileCabinetRecord>(result);
         }
 
+        /// <summary>
+        /// Implementation IFileCabinetService FindByDateOfBirth.
+        /// </summary>
+        /// <returns>Rerords by dateofbirth <see cref="FileCabinetServiceSnapshot"/>.</returns>
+        public FileCabinetServiceSnapshot MakeSnapshot()
+        {
+            FileCabinetServiceSnapshot fileCabinetServiceSnapshot = new FileCabinetServiceSnapshot(this.list.ToArray());
+
+            return fileCabinetServiceSnapshot;
+        }
+
         private void AddRecordToDictionary(FileCabinetRecord record)
         {
             this.AddRecordToFirstNameDictionary(record, record.FirstName);

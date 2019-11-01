@@ -216,6 +216,40 @@
             <param name="value">The validator.</param>
             <returns>The correct value.</returns>
         </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordCsvWriter">
+            <summary>
+            Write to CSV file.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.#ctor(System.IO.StreamWriter)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordCsvWriter"/> class.
+            </summary>
+            <param name="writer">Input parametr in constructor <see cref="T:System.IO.StreamWriter"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.Write(FileCabinetRecord[])">
+            <summary>
+            Write records to csv file.
+            </summary>
+            <param name="records">Input parametr array of record <see cref="T:FileCabinetRecord"/>.</param>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordXmlWriter">
+            <summary>
+            Write to XML file.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.#ctor(System.IO.StreamWriter)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordXmlWriter"/> class.
+            </summary>
+            <param name="writer">Input parametr in constructor <see cref="T:System.IO.StreamWriter"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.Write(FileCabinetRecord[])">
+            <summary>
+            Write records to xml file.
+            </summary>
+            <param name="records">Input parametr array of record <see cref="T:FileCabinetRecord"/>.</param>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetService">
             <summary>
             Work with records. Save and change record(s).
@@ -277,6 +311,41 @@
             <param name="dateofbirth">Input parametr FirstName <see cref="T:System.String"/>.</param>
             <returns>Rerords by dateofbirth <see cref="T:FileCabinetRecord"/>.</returns>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetService.MakeSnapshot">
+            <summary>
+            Implementation IFileCabinetService FindByDateOfBirth.
+            </summary>
+            <returns>Rerords by dateofbirth <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/>.</returns>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetServiceSnapshot">
+            <summary>
+            Implementation pattern Memento.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.#ctor(FileCabinetRecord[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/> class.
+            </summary>
+            <param name="records">Input parametr in constructor <see cref="T:FileCabinetRecord"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.MakeSnapshot">
+            <summary>
+            Set snapshot of FileCabinetServiceSnapshot.
+            </summary>
+            <returns>Value <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.SaveToCsv(System.IO.StreamWriter)">
+            <summary>
+            Save the records to csv.
+            </summary>
+            <param name="streamWriter">Input parametr record <see cref="T:System.IO.StreamWriter"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.SaveToXml(System.IO.StreamWriter)">
+            <summary>
+            Set validate parametrs for FileCabinetRecord.
+            </summary>
+            <param name="streamWriter">Input parametr record <see cref="T:System.IO.StreamWriter"/>.</param>
+        </member>
         <member name="T:FileCabinetApp.IFileCabinetService">
             <summary>
              Exposes an validateParametrs, which supports validate values ​​by criterion.
@@ -327,6 +396,12 @@
             </summary>
             <param name="dateofbirth">Input parametr FirstName <see cref="T:System.String"/>.</param>
             <returns>Rerords by dateofbirth <see cref="T:FileCabinetRecord"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.MakeSnapshot">
+            <summary>
+            Return make snapshot.
+            </summary>
+            <returns>Rerords by dateofbirth <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/>.</returns>
         </member>
         <member name="T:FileCabinetApp.IRecordValidator">
             <summary>
