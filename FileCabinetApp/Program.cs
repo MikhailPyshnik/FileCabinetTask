@@ -321,9 +321,9 @@ namespace FileCabinetApp
             string thePathToTheFile = parametersArray[1];
             var extension = Path.GetExtension(thePathToTheFile);
             extension = extension.Remove(0, 1);
-            if (searchParametr == "csv")
+            if (searchParametr == "csv" || searchParametr == "xml")
             {
-                if (searchParametr == "csv" && extension == "csv")
+                if ((searchParametr == "csv" && extension == "csv") || (searchParametr == "xml" && extension == "xml"))
                 {
                     bool containsFile = File.Exists(thePathToTheFile);
                     if (containsFile)
@@ -340,7 +340,7 @@ namespace FileCabinetApp
 
                         if (!charComnandBool)
                         {
-                            Console.WriteLine($"Incorrcect command [Y / n] : inputs not char - {inputs}");
+                            Console.WriteLine($"Incorrcect command [Y / n] : inputs not char - {inputs}.Exit export.");
                             return;
                         }
 
@@ -350,14 +350,14 @@ namespace FileCabinetApp
                             return;
                         }
 
-                        StreamWriterRecocdFileToCSV(thePathToTheFile);
+                        StreamWriterRecocdFileCvsOrXml(searchParametr, thePathToTheFile);
                     }
                     else
                     {
                         var inputDirectoryName = Path.GetDirectoryName(thePathToTheFile);
                         if (inputDirectoryName.Length == 0)
                         {
-                            StreamWriterRecocdFileToCSV(thePathToTheFile);
+                            StreamWriterRecocdFileCvsOrXml(searchParametr, thePathToTheFile);
                             return;
                         }
 
@@ -368,17 +368,29 @@ namespace FileCabinetApp
                             return;
                         }
 
-                        StreamWriterRecocdFileToCSV(thePathToTheFile);
+                        StreamWriterRecocdFileCvsOrXml(searchParametr, thePathToTheFile);
                     }
                 }
                 else
                 {
-                    Console.WriteLine($"The type of file {extension} does not match export type : {searchParametr}.");
+                    Console.WriteLine($"The type of file {extension} does not match export type : {searchParametr}.Exit export.");
                 }
             }
             else
             {
-                Console.WriteLine($"Incorrect  (is not csv or xml) type of file - {searchParametr}.");
+                Console.WriteLine($"Incorrect (is not csv or xml) type of file - {searchParametr}.Exit export.");
+            }
+        }
+
+        private static void StreamWriterRecocdFileCvsOrXml(string searchParametr, string thePathToTheFile)
+        {
+            if (searchParametr == "csv")
+            {
+                StreamWriterRecocdFileToCSV(thePathToTheFile);
+            }
+            else if (searchParametr == "xml")
+            {
+                StreamWriterRecocdFileToXML(thePathToTheFile);
             }
         }
 
@@ -404,6 +416,31 @@ namespace FileCabinetApp
                     streamWriterToCsv.Close();
                 }
             }
+        }
+
+        private static void StreamWriterRecocdFileToXML(string thePathToTheFile)
+        {
+            StreamWriter streamWriterToCsv = null;
+            try
+            {
+                streamWriterToCsv = new StreamWriter(thePathToTheFile, false, System.Text.Encoding.Default);
+                var snapshotFileCabinetService = fileCabinetService.MakeSnapshot();
+                snapshotFileCabinetService.SaveToXml(streamWriterToCsv);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                if (streamWriterToCsv != null)
+                {
+                    streamWriterToCsv.Close();
+                }
+            }
+
+            Console.WriteLine($"All records are exported to file {thePathToTheFile}.");
         }
 
         private static void PrintRecords(ReadOnlyCollection<FileCabinetRecord> records, string value)

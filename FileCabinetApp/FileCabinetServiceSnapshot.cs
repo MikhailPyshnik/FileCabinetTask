@@ -40,5 +40,15 @@ namespace FileCabinetApp
             FileCabinetRecordCsvWriter fileCabinetRecordCsvWriter = new FileCabinetRecordCsvWriter(streamWriter);
             fileCabinetRecordCsvWriter.Write(this.MakeSnapshot().records);
         }
+
+        /// <summary>
+        /// Set validate parametrs for FileCabinetRecord.
+        /// </summary>
+        /// <param name="streamWriter">Input parametr record <see cref="StreamWriter"/>.</param>
+        public void SaveToXml(StreamWriter streamWriter)
+        {
+            FileCabinetRecordXmlWriter fileCabinetRecordXmlWriter = new FileCabinetRecordXmlWriter(streamWriter);
+            fileCabinetRecordXmlWriter.Write(this.MakeSnapshot().records);
+        }
     }
 }

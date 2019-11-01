@@ -23,7 +23,7 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Implementation IFileCabinetService EditRecord.
+        /// Write records to the csv file.
         /// </summary>
         /// <param name="records">Input parametr array of record <see cref="FileCabinetRecord"/>.</param>
         public void Write(FileCabinetRecord[] records)

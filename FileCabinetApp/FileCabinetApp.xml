@@ -229,7 +229,24 @@
         </member>
         <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.Write(FileCabinetRecord[])">
             <summary>
-            Implementation IFileCabinetService EditRecord.
+            Write records to the csv file.
+            </summary>
+            <param name="records">Input parametr array of record <see cref="T:FileCabinetRecord"/>.</param>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordXmlWriter">
+            <summary>
+            Write to XML file.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.#ctor(System.IO.StreamWriter)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordXmlWriter"/> class.
+            </summary>
+            <param name="writer">Input parametr in constructor <see cref="T:System.IO.StreamWriter"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.Write(FileCabinetRecord[])">
+            <summary>
+            Write records to the xml file.
             </summary>
             <param name="records">Input parametr array of record <see cref="T:FileCabinetRecord"/>.</param>
         </member>
@@ -320,6 +337,12 @@
         <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.SaveToCsv(System.IO.StreamWriter)">
             <summary>
             Save the records to csv.
+            </summary>
+            <param name="streamWriter">Input parametr record <see cref="T:System.IO.StreamWriter"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.SaveToXml(System.IO.StreamWriter)">
+            <summary>
+            Set validate parametrs for FileCabinetRecord.
             </summary>
             <param name="streamWriter">Input parametr record <see cref="T:System.IO.StreamWriter"/>.</param>
         </member>
