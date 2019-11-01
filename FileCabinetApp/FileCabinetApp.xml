@@ -216,6 +216,136 @@
             <param name="value">The validator.</param>
             <returns>The correct value.</returns>
         </member>
+        <member name="T:FileCabinetApp.FileCabinetFilesystemService">
+            <summary>
+            Work with db.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.#ctor(System.IO.FileStream)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetFilesystemService"/> class.
+            </summary>
+            <param name="fileStream">Input parametr in constructor <see cref="T:System.IO.FileStream"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.CreateRecord(FileCabinetRecord)">
+            <summary>
+            Implementation IFileCabinetService СreateRecod.
+            </summary>
+            <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
+            <returns>Id <see cref="T:System.Int32"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.EditRecord(FileCabinetRecord)">
+            <summary>
+            Implementation IFileCabinetService EditRecord.
+            </summary>
+            <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByDateOfBirth(System.String)">
+            <summary>
+            Implementation IFileCabinetService FindByDateOfBirth.
+            </summary>
+            <param name="dateofbirth">Input parametr FirstName <see cref="T:System.String"/>.</param>
+            <returns>Rerords by dateofbirth <see cref="T:FileCabinetRecord"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByFirstName(System.String)">
+            <summary>
+            Implementation IFileCabinetService FindByFirstName.
+            </summary>
+            <param name="firstName">Input parametr FirstName <see cref="T:System.String"/>.</param>
+            <returns>Rerords by firstName <see cref="T:FileCabinetRecord"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByLastName(System.String)">
+            <summary>
+            Implementation IFileCabinetService FindByLastName.
+            </summary>
+            <param name="lastName">Input parametr FirstName <see cref="T:System.String"/>.</param>
+            <returns>Rerords by lastName <see cref="T:FileCabinetRecord"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.GetRecords">
+            <summary>
+            Implementation IFileCabinetService GetRecords.
+            </summary>
+            <returns>Rerords <see cref="T:FileCabinetRecord"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.GetStat">
+            <summary>
+            Implementation IFileCabinetService GetStat.
+            </summary>
+            <returns>Count records <see cref="T:System.Int32"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.MakeSnapshot">
+            <summary>
+            Implementation IFileCabinetService FindByDateOfBirth.
+            </summary>
+            <returns>Rerords by dateofbirth <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/>.</returns>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetMemoryService">
+            <summary>
+            Work with records. Save and change record(s).
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.#ctor(FileCabinetApp.IRecordValidator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetMemoryService"/> class.
+            </summary>
+            <param name="recordValidator">Input parametr in constructor <see cref="T:FileCabinetApp.IRecordValidator"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.CreateRecord(FileCabinetRecord)">
+            <summary>
+            Implementation IFileCabinetService СreateRecod.
+            </summary>
+            <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
+            <returns>Id <see cref="T:System.Int32"/>.</returns>
+            <exception cref="T:System.ArgumentNullException">Throws if <paramref name="fileCabinetRecord"/>, <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/> is null.</exception>
+            <exception cref="T:System.ArgumentException">Throws if <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/>,<paramref name="fileCabinetRecord.DateOfBirth.DateOfBirth"/>,<paramref name="fileCabinetRecord.Sex.Sex"/>,<paramref name="fileCabinetRecord.Height.Height"/>,<paramref name="fileCabinetRecord.Salary.Salary"/> is(are) incorrect value.</exception>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.GetRecords">
+            <summary>
+            Implementation IFileCabinetService GetRecords.
+            </summary>
+            <returns>Rerords <see cref="T:FileCabinetRecord"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.GetStat">
+            <summary>
+            Implementation IFileCabinetService GetStat.
+            </summary>
+            <returns>Count records <see cref="T:System.Int32"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.EditRecord(FileCabinetRecord)">
+            <summary>
+            Implementation IFileCabinetService EditRecord.
+            </summary>
+            <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
+            <exception cref="T:System.ArgumentNullException">Throws if <paramref name="fileCabinetRecord"/>, <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/> is null.</exception>
+            <exception cref="T:System.ArgumentException">Throws if <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/>,<paramref name="fileCabinetRecord.DateOfBirth.DateOfBirth"/>,<paramref name="fileCabinetRecord.Sex.Sex"/>,<paramref name="fileCabinetRecord.Height.Height"/>,<paramref name="fileCabinetRecord.Salary.Salary"/> is(are) incorrect value.</exception>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByFirstName(System.String)">
+            <summary>
+            Implementation IFileCabinetService FindByFirstName.
+            </summary>
+            <param name="firstName">Input parametr FirstName <see cref="T:System.String"/>.</param>
+            <returns>Rerords by firstName <see cref="T:FileCabinetRecord"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByLastName(System.String)">
+            <summary>
+            Implementation IFileCabinetService FindByLastName.
+            </summary>
+            <param name="lastName">Input parametr FirstName <see cref="T:System.String"/>.</param>
+            <returns>Rerords by lastName <see cref="T:FileCabinetRecord"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByDateOfBirth(System.String)">
+            <summary>
+            Implementation IFileCabinetService FindByDateOfBirth.
+            </summary>
+            <param name="dateofbirth">Input parametr FirstName <see cref="T:System.String"/>.</param>
+            <returns>Rerords by dateofbirth <see cref="T:FileCabinetRecord"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.MakeSnapshot">
+            <summary>
+            Implementation IFileCabinetService FindByDateOfBirth.
+            </summary>
+            <returns>Rerords by dateofbirth <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/>.</returns>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetRecordCsvWriter">
             <summary>
             Write to CSV file.
@@ -249,73 +379,6 @@
             Write records to xml file.
             </summary>
             <param name="records">Input parametr array of record <see cref="T:FileCabinetRecord"/>.</param>
-        </member>
-        <member name="T:FileCabinetApp.FileCabinetService">
-            <summary>
-            Work with records. Save and change record(s).
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.#ctor(FileCabinetApp.IRecordValidator)">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetService"/> class.
-            </summary>
-            <param name="recordValidator">Input parametr in constructor <see cref="T:FileCabinetApp.IRecordValidator"/>.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.CreateRecord(FileCabinetRecord)">
-            <summary>
-            Implementation IFileCabinetService СreateRecod.
-            </summary>
-            <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
-            <returns>Id <see cref="T:System.Int32"/>.</returns>
-            <exception cref="T:System.ArgumentNullException">Throws if <paramref name="fileCabinetRecord"/>, <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/> is null.</exception>
-            <exception cref="T:System.ArgumentException">Throws if <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/>,<paramref name="fileCabinetRecord.DateOfBirth.DateOfBirth"/>,<paramref name="fileCabinetRecord.Sex.Sex"/>,<paramref name="fileCabinetRecord.Height.Height"/>,<paramref name="fileCabinetRecord.Salary.Salary"/> is(are) incorrect value.</exception>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.GetRecords">
-            <summary>
-            Implementation IFileCabinetService GetRecords.
-            </summary>
-            <returns>Rerords <see cref="T:FileCabinetRecord"/>.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.GetStat">
-            <summary>
-            Implementation IFileCabinetService GetStat.
-            </summary>
-            <returns>Count records <see cref="T:System.Int32"/>.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.EditRecord(FileCabinetRecord)">
-            <summary>
-            Implementation IFileCabinetService EditRecord.
-            </summary>
-            <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
-            <exception cref="T:System.ArgumentNullException">Throws if <paramref name="fileCabinetRecord"/>, <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/> is null.</exception>
-            <exception cref="T:System.ArgumentException">Throws if <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/>,<paramref name="fileCabinetRecord.DateOfBirth.DateOfBirth"/>,<paramref name="fileCabinetRecord.Sex.Sex"/>,<paramref name="fileCabinetRecord.Height.Height"/>,<paramref name="fileCabinetRecord.Salary.Salary"/> is(are) incorrect value.</exception>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.FindByFirstName(System.String)">
-            <summary>
-            Implementation IFileCabinetService FindByFirstName.
-            </summary>
-            <param name="firstName">Input parametr FirstName <see cref="T:System.String"/>.</param>
-            <returns>Rerords by firstName <see cref="T:FileCabinetRecord"/>.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.FindByLastName(System.String)">
-            <summary>
-            Implementation IFileCabinetService FindByLastName.
-            </summary>
-            <param name="lastName">Input parametr FirstName <see cref="T:System.String"/>.</param>
-            <returns>Rerords by lastName <see cref="T:FileCabinetRecord"/>.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.FindByDateOfBirth(System.String)">
-            <summary>
-            Implementation IFileCabinetService FindByDateOfBirth.
-            </summary>
-            <param name="dateofbirth">Input parametr FirstName <see cref="T:System.String"/>.</param>
-            <returns>Rerords by dateofbirth <see cref="T:FileCabinetRecord"/>.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.MakeSnapshot">
-            <summary>
-            Implementation IFileCabinetService FindByDateOfBirth.
-            </summary>
-            <returns>Rerords by dateofbirth <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/>.</returns>
         </member>
         <member name="T:FileCabinetApp.FileCabinetServiceSnapshot">
             <summary>

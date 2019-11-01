@@ -59,7 +59,7 @@ namespace FileCabinetApp
                 {
                     if (args == null || args.Length == 0)
                     {
-                       fileCabinetService = new FileCabinetService(new DefaultValidator());
+                       fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
                        recordValidator = new DefaultValidator();
                     }
                     else
@@ -67,18 +67,18 @@ namespace FileCabinetApp
                         string compare = o.InputFile.ToLower(new CultureInfo("en-US"));
                         if (compare == "default")
                         {
-                           fileCabinetService = new FileCabinetService(new DefaultValidator());
+                           fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
                            recordValidator = new DefaultValidator();
                         }
                         else if (compare == "custom")
                         {
-                           fileCabinetService = new FileCabinetService(new CustomValidator());
+                           fileCabinetService = new FileCabinetMemoryService(new CustomValidator());
                            recordValidator = new CustomValidator();
                            validationRules = "custom";
                         }
                         else
                         {
-                            fileCabinetService = new FileCabinetService(new DefaultValidator());
+                            fileCabinetService = new FileCabinetMemoryService(new DefaultValidator());
                             recordValidator = new DefaultValidator();
                         }
                     }
