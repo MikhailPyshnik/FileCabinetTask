@@ -9,14 +9,6 @@
             Class of console application.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.CustomValidator.ValidateParametrs(FileCabinetRecord)">
-            <summary>
-            Set validate parametrs for FileCabinetRecord.
-            </summary>
-            <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
-            <exception cref="T:System.ArgumentNullException">Throws if <paramref name="fileCabinetRecord"/>, <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/> is null.</exception>
-            <exception cref="T:System.ArgumentException">Throws if <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/>,<paramref name="fileCabinetRecord.DateOfBirth.DateOfBirth"/>,<paramref name="fileCabinetRecord.Sex.Sex"/>,<paramref name="fileCabinetRecord.Height.Height"/>,<paramref name="fileCabinetRecord.Salary.Salary"/> is(are) incorrect value.</exception>
-        </member>
         <member name="M:FileCabinetApp.CustomValidator.ReadInput``1(System.Func{System.String,System.Tuple{System.Boolean,System.String,``0}},System.Func{``0,System.Tuple{System.Boolean,System.String}})">
             <summary>
             Implement the method ReadInput.
@@ -114,14 +106,6 @@
             <summary>
             Class of console application.
             </summary>
-        </member>
-        <member name="M:FileCabinetApp.DefaultValidator.ValidateParametrs(FileCabinetRecord)">
-            <summary>
-            Set validate parametrs for FileCabinetRecord.
-            </summary>
-            <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
-            <exception cref="T:System.ArgumentNullException">Throws if <paramref name="fileCabinetRecord"/>, <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/> is null.</exception>
-            <exception cref="T:System.ArgumentException">Throws if <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/>,<paramref name="fileCabinetRecord.DateOfBirth.DateOfBirth"/>,<paramref name="fileCabinetRecord.Sex.Sex"/>,<paramref name="fileCabinetRecord.Height.Height"/>,<paramref name="fileCabinetRecord.Salary.Salary"/> is(are) incorrect value.</exception>
         </member>
         <member name="M:FileCabinetApp.DefaultValidator.ReadInput``1(System.Func{System.String,System.Tuple{System.Boolean,System.String,``0}},System.Func{``0,System.Tuple{System.Boolean,System.String}})">
             <summary>
@@ -221,10 +205,11 @@
             Work with db.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.#ctor(System.IO.FileStream)">
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.#ctor(FileCabinetApp.IValidatorOfParemetrs,System.IO.FileStream)">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetFilesystemService"/> class.
             </summary>
+            <param name="validator">Input parametr in constructor <see cref="T:FileCabinetApp.IValidatorOfParemetrs"/>.</param>
             <param name="fileStream">Input parametr in constructor <see cref="T:System.IO.FileStream"/>.</param>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.CreateRecord(FileCabinetRecord)">
@@ -284,11 +269,16 @@
             Work with records. Save and change record(s).
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.#ctor(FileCabinetApp.IRecordValidator)">
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetMemoryService"/> class.
             </summary>
-            <param name="recordValidator">Input parametr in constructor <see cref="T:FileCabinetApp.IRecordValidator"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.#ctor(FileCabinetApp.IValidatorOfParemetrs)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetMemoryService"/> class.
+            </summary>
+            <param name="recordValidator">Input parametr in constructor <see cref="T:FileCabinetApp.IValidatorOfParemetrs"/>.</param>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.CreateRecord(FileCabinetRecord)">
             <summary>

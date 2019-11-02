@@ -19,13 +19,20 @@ namespace FileCabinetApp
 
         private readonly Dictionary<string, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<string, List<FileCabinetRecord>>(StringComparer.OrdinalIgnoreCase);
 
-        private readonly IRecordValidator validator;
+        private readonly IValidatorOfParemetrs validator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetMemoryService"/> class.
         /// </summary>
-        /// <param name="recordValidator">Input parametr in constructor <see cref="IRecordValidator"/>.</param>
-        public FileCabinetMemoryService(IRecordValidator recordValidator)
+        public FileCabinetMemoryService()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileCabinetMemoryService"/> class.
+        /// </summary>
+        /// <param name="recordValidator">Input parametr in constructor <see cref="IValidatorOfParemetrs"/>.</param>
+        public FileCabinetMemoryService(IValidatorOfParemetrs recordValidator)
         {
             this.validator = recordValidator;
         }

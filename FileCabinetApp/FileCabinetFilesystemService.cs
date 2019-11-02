@@ -9,14 +9,17 @@ namespace FileCabinetApp
     /// </summary>
     public class FileCabinetFilesystemService : IFileCabinetService
     {
+        private readonly IValidatorOfParemetrs validator;
         private readonly FileStream fileStream;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetFilesystemService"/> class.
         /// </summary>
+        /// <param name="validator">Input parametr in constructor <see cref="IValidatorOfParemetrs"/>.</param>
         /// <param name="fileStream">Input parametr in constructor <see cref="FileStream"/>.</param>
-        public FileCabinetFilesystemService(FileStream fileStream)
+        public FileCabinetFilesystemService(IValidatorOfParemetrs validator, FileStream fileStream)
         {
+            this.validator = validator;
             this.fileStream = fileStream;
         }
 
