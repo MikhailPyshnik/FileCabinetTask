@@ -202,14 +202,13 @@
         </member>
         <member name="T:FileCabinetApp.FileCabinetFilesystemService">
             <summary>
-            Work with db.
+            Work with file format db.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.#ctor(FileCabinetApp.IValidatorOfParemetrs,System.IO.FileStream)">
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.#ctor(System.IO.FileStream)">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetFilesystemService"/> class.
             </summary>
-            <param name="validator">Input parametr in constructor <see cref="T:FileCabinetApp.IValidatorOfParemetrs"/>.</param>
             <param name="fileStream">Input parametr in constructor <see cref="T:System.IO.FileStream"/>.</param>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.CreateRecord(FileCabinetRecord)">
@@ -273,12 +272,6 @@
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetMemoryService"/> class.
             </summary>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.#ctor(FileCabinetApp.IValidatorOfParemetrs)">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetMemoryService"/> class.
-            </summary>
-            <param name="recordValidator">Input parametr in constructor <see cref="T:FileCabinetApp.IValidatorOfParemetrs"/>.</param>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.CreateRecord(FileCabinetRecord)">
             <summary>

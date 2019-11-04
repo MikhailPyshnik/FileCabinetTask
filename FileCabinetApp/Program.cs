@@ -16,6 +16,7 @@ namespace FileCabinetApp
         private const int CommandHelpIndex = 0;
         private const int DescriptionHelpIndex = 1;
         private const int ExplanationHelpIndex = 2;
+        private static FileStream filestream;
         private static IFileCabinetService fileCabinetService;
         private static IValidatorOfParemetrs recordValidator;
 
@@ -62,7 +63,8 @@ namespace FileCabinetApp
             if (result.Tag == ParserResultType.NotParsed)
             {
                 Console.WriteLine($"Not parsed command!");
-                SetInputCommandDefault();
+                recordValidator = new DefaultValidator();
+                fileCabinetService = new FileCabinetMemoryService();
             }
             else
             {
@@ -86,7 +88,7 @@ namespace FileCabinetApp
 
                 if (options.InputStorage == null)
                 {
-                    fileCabinetService = new FileCabinetMemoryService(recordValidator);
+                    fileCabinetService = new FileCabinetMemoryService();
                 }
                 else
                 {
@@ -94,13 +96,13 @@ namespace FileCabinetApp
 
                     if (comandStorage == "file")
                     {
-                        FileStream filestream = new FileStream("cabinet-records.db", FileMode.OpenOrCreate);
+                        filestream = File.Open("cabinet-records.db", FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
                         storageRules = "file";
-                        fileCabinetService = new FileCabinetFilesystemService(recordValidator, filestream);
+                        fileCabinetService = new FileCabinetFilesystemService(filestream);
                     }
                     else
                     {
-                        fileCabinetService = new FileCabinetMemoryService(recordValidator);
+                        fileCabinetService = new FileCabinetMemoryService();
                     }
                 }
 
@@ -139,18 +141,6 @@ namespace FileCabinetApp
             }
         }
 
-        private static void SetInputCommandDefault()
-            {
-                recordValidator = new DefaultValidator();
-                fileCabinetService = new FileCabinetMemoryService(recordValidator);
-            }
-
-        private static void SetStorageCommandDefault()
-        {
-            recordValidator = new DefaultValidator();
-            fileCabinetService = new FileCabinetMemoryService(recordValidator);
-        }
-
         private static void PrintMissedCommandInfo(string command)
         {
             Console.WriteLine($"There is no '{command}' command.");
@@ -186,6 +176,7 @@ namespace FileCabinetApp
 
         private static void Exit(string parameters)
         {
+            filestream.Close();
             Console.WriteLine("Exiting an application...");
             isRunning = false;
         }
@@ -228,8 +219,9 @@ namespace FileCabinetApp
                     Console.WriteLine($"{ex.Message} Enter the data again!");
                     Create(parameters);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    Console.WriteLine(ex.Message);
                     throw new ArgumentException("Input value in Create is incorrect! Select  command again.");
                 }
             }

@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-  /// <summary>
-  /// Work FileCabinetRecord.
-  /// </summary>
+/// <summary>
+/// Work FileCabinetRecord.
+/// </summary>
+// [Serializable]
 public class FileCabinetRecord
 {
     /// <summary>

@@ -19,22 +19,11 @@ namespace FileCabinetApp
 
         private readonly Dictionary<string, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<string, List<FileCabinetRecord>>(StringComparer.OrdinalIgnoreCase);
 
-        private readonly IValidatorOfParemetrs validator;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetMemoryService"/> class.
         /// </summary>
         public FileCabinetMemoryService()
         {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FileCabinetMemoryService"/> class.
-        /// </summary>
-        /// <param name="recordValidator">Input parametr in constructor <see cref="IValidatorOfParemetrs"/>.</param>
-        public FileCabinetMemoryService(IValidatorOfParemetrs recordValidator)
-        {
-            this.validator = recordValidator;
         }
 
         /// <summary>
@@ -51,7 +40,6 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{nameof(fileCabinetRecord)} is null!");
             }
 
-            // this.validator.ValidateParametrs(fileCabinetRecord);
             fileCabinetRecord.Id = this.list.Count + 1;
             this.list.Add(fileCabinetRecord);
             this.AddRecordToDictionary(fileCabinetRecord);
@@ -94,7 +82,6 @@ namespace FileCabinetApp
                 throw new ArgumentException("Input Id is incorrect value.");
             }
 
-            // this.validator.ValidateParametrs(fileCabinetRecord);
             int editId = fileCabinetRecord.Id - 1;
             FileCabinetRecord res = this.list.Find(item1 => item1.Id == fileCabinetRecord.Id);
             string oldFirstName = res.FirstName;
