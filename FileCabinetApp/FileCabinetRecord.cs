@@ -2,11 +2,18 @@
 using System.Collections.Generic;
 using System.Text;
 
-  /// <summary>
-  /// Work FileCabinetRecord.
-  /// </summary>
+/// <summary>
+/// Work FileCabinetRecord.
+/// </summary>
+// [Serializable]
 public class FileCabinetRecord
 {
+    /// <summary>
+    /// Gets or sets the Status of the record.
+    /// </summary>
+    /// <value>The Status of the record.</value>
+    public short Status { get; set; }
+
     /// <summary>
     /// Gets or sets the Id of the record.
     /// </summary>

@@ -16,10 +16,13 @@ namespace FileCabinetApp
         private const int CommandHelpIndex = 0;
         private const int DescriptionHelpIndex = 1;
         private const int ExplanationHelpIndex = 2;
+        private static FileStream filestream;
         private static IFileCabinetService fileCabinetService;
         private static IValidatorOfParemetrs recordValidator;
 
         private static string validationRules = "default";
+
+        private static string storageRules = "memory";
 
         private static bool isRunning = true;
 
@@ -54,67 +57,88 @@ namespace FileCabinetApp
         public static void Main(string[] args)
         {
             var options = new Options();
-            Parser.Default.ParseArguments<Options>(args)
-                .WithParsed<Options>(o =>
-                {
-                    if (args == null || args.Length == 0)
-                    {
-                       fileCabinetService = new FileCabinetService(new DefaultValidator());
-                       recordValidator = new DefaultValidator();
-                    }
-                    else
-                    {
-                        string compare = o.InputFile.ToLower(new CultureInfo("en-US"));
-                        if (compare == "default")
-                        {
-                           fileCabinetService = new FileCabinetService(new DefaultValidator());
-                           recordValidator = new DefaultValidator();
-                        }
-                        else if (compare == "custom")
-                        {
-                           fileCabinetService = new FileCabinetService(new CustomValidator());
-                           recordValidator = new CustomValidator();
-                           validationRules = "custom";
-                        }
-                        else
-                        {
-                            fileCabinetService = new FileCabinetService(new DefaultValidator());
-                            recordValidator = new DefaultValidator();
-                        }
-                    }
-                });
-
-            Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}");
-            Console.WriteLine($"Using {validationRules} validation rules.");
-            Console.WriteLine(Program.HintMessage);
-            Console.WriteLine();
-
-            do
+            var result = Parser.Default
+                               .ParseArguments<Options>(args)
+                               .WithParsed(parsed => options = parsed);
+            if (result.Tag == ParserResultType.NotParsed)
             {
-                Console.Write("> ");
-                var inputs = Console.ReadLine().Split(' ', 2);
-                const int commandIndex = 0;
-                var command = inputs[commandIndex];
-
-                if (string.IsNullOrEmpty(command))
+                Console.WriteLine($"Not parsed command!");
+                recordValidator = new DefaultValidator();
+                fileCabinetService = new FileCabinetMemoryService();
+            }
+            else
+            {
+                if (options.InputFile == null)
                 {
-                    Console.WriteLine(Program.HintMessage);
-                    continue;
-                }
-
-                var index = Array.FindIndex(commands, 0, commands.Length, i => i.Item1.Equals(command, StringComparison.InvariantCultureIgnoreCase));
-                if (index >= 0)
-                {
-                    const int parametersIndex = 1;
-                    var parameters = inputs.Length > 1 ? inputs[parametersIndex] : string.Empty;
-                    commands[index].Item2(parameters);
+                    recordValidator = new DefaultValidator();
                 }
                 else
                 {
-                    PrintMissedCommandInfo(command);
+                    string compareInputFile = options.InputFile.ToLower(new CultureInfo("en-US"));
+                    if (compareInputFile == "custom")
+                    {
+                        recordValidator = new CustomValidator();
+                        validationRules = "custom";
+                    }
+                    else
+                    {
+                        recordValidator = new DefaultValidator();
+                    }
                 }
+
+                if (options.InputStorage == null)
+                {
+                    fileCabinetService = new FileCabinetMemoryService();
+                }
+                else
+                {
+                    string comandStorage = options.InputStorage.ToLower(new CultureInfo("en-US"));
+
+                    if (comandStorage == "file")
+                    {
+                        filestream = File.Open("cabinet-records.db", FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+                        storageRules = "file";
+                        fileCabinetService = new FileCabinetFilesystemService(filestream);
+                    }
+                    else
+                    {
+                        fileCabinetService = new FileCabinetMemoryService();
+                    }
+                }
+
+                Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}");
+                Console.WriteLine($"Using {validationRules} validation rules.");
+                Console.WriteLine($"Using {storageRules} storage rules.");
+                Console.WriteLine(Program.HintMessage);
+                Console.WriteLine();
+
+                do
+                {
+                    Console.Write("> ");
+                    var inputs = Console.ReadLine().Split(' ', 2);
+                    const int commandIndex = 0;
+                    var command = inputs[commandIndex];
+
+                    if (string.IsNullOrEmpty(command))
+                    {
+                        Console.WriteLine(Program.HintMessage);
+                        continue;
+                    }
+
+                    var index = Array.FindIndex(commands, 0, commands.Length, i => i.Item1.Equals(command, StringComparison.InvariantCultureIgnoreCase));
+                    if (index >= 0)
+                    {
+                        const int parametersIndex = 1;
+                        var parameters = inputs.Length > 1 ? inputs[parametersIndex] : string.Empty;
+                        commands[index].Item2(parameters);
+                    }
+                    else
+                    {
+                        PrintMissedCommandInfo(command);
+                    }
+                }
+                while (isRunning);
             }
-            while (isRunning);
         }
 
         private static void PrintMissedCommandInfo(string command)
@@ -152,6 +176,7 @@ namespace FileCabinetApp
 
         private static void Exit(string parameters)
         {
+            filestream.Close();
             Console.WriteLine("Exiting an application...");
             isRunning = false;
         }
@@ -182,7 +207,11 @@ namespace FileCabinetApp
                     fileCabinetRecord.Height = recordValidator.ReadInput(recordValidator.HeightConverter, recordValidator.HeightValidator);
                     Console.Write("Person's salary:");
                     fileCabinetRecord.Salary = recordValidator.ReadInput(recordValidator.SalaryConverter, recordValidator.SalaryValidator);
-                    Console.WriteLine($"Record #{fileCabinetService.CreateRecord(fileCabinetRecord)} is created.");
+                    int res = fileCabinetService.CreateRecord(fileCabinetRecord);
+                    if (res > 0)
+                    {
+                        Console.WriteLine($"Record #{res} is created.");
+                    }
                 }
                 catch (ArgumentNullException ex)
                 {
@@ -194,8 +223,9 @@ namespace FileCabinetApp
                     Console.WriteLine($"{ex.Message} Enter the data again!");
                     Create(parameters);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    Console.WriteLine(ex.Message);
                     throw new ArgumentException("Input value in Create is incorrect! Select  command again.");
                 }
             }
@@ -228,7 +258,6 @@ namespace FileCabinetApp
             {
                 try
                 {
-                    FileCabinetRecord fileCabinetRecord = new FileCabinetRecord();
                     CultureInfo provider = new CultureInfo("en-US");
                     int editInputId = Convert.ToInt32(parameters, provider);
                     if (editInputId > Program.fileCabinetService.GetStat())
@@ -237,8 +266,9 @@ namespace FileCabinetApp
                         return;
                     }
 
-                    fileCabinetRecord.Id = editInputId;
+                    FileCabinetRecord fileCabinetRecord = new FileCabinetRecord();
 
+                    fileCabinetRecord.Id = editInputId;
                     Console.Write("First name:");
                     fileCabinetRecord.FirstName = recordValidator.ReadInput(recordValidator.FirstNameConverter, recordValidator.FirstNameValidator);
                     Console.Write("Last name:");
@@ -286,19 +316,19 @@ namespace FileCabinetApp
             {
                 var firstName = parametersArray[1].Trim('"');
                 var records = fileCabinetService.FindByFirstName(firstName);
-                PrintRecords(records, value);
+                PrintRecords(records, searchParametr, value);
             }
             else if (searchParametr == "lastname")
             {
                 var lastName = parametersArray[1].Trim('"');
                 var records = fileCabinetService.FindByLastName(lastName);
-                PrintRecords(records, value);
+                PrintRecords(records, searchParametr, value);
             }
             else if (searchParametr == "dateofbirth")
             {
                 var dateofbirth = parametersArray[1].Trim('"');
                 var records = fileCabinetService.FindByDateOfBirth(dateofbirth);
-                PrintRecords(records, value);
+                PrintRecords(records, searchParametr, value);
             }
             else
             {
@@ -306,12 +336,12 @@ namespace FileCabinetApp
             }
         }
 
-        private static void PrintRecords(ReadOnlyCollection<FileCabinetRecord> records, string value)
+        private static void PrintRecords(ReadOnlyCollection<FileCabinetRecord> records, string searchparametr, string value)
         {
             CultureInfo provider = new CultureInfo("en-US");
             if (records.Count == 0)
             {
-                Console.WriteLine($"No records are found for firstName = {value}!");
+                Console.WriteLine($"No records are found for {searchparametr} = {value}!");
             }
             else
             {
@@ -463,6 +493,9 @@ namespace FileCabinetApp
         {
             [Option('v', "validation-rules", Separator = '=', HelpText = "Set output to verbose messages.")]
             public string InputFile { get; set; }
+
+            [Option('s', "storage", Separator = ' ', HelpText = "Set output to verbose messages.")]
+            public string InputStorage { get; set; }
         }
     }
 }
