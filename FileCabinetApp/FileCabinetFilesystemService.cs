@@ -85,7 +85,40 @@ namespace FileCabinetApp
         /// <param name="fileCabinetRecord">Input parametr record <see cref="FileCabinetRecord"/>.</param>
         public void EditRecord(FileCabinetRecord fileCabinetRecord)
         {
-            throw new NotImplementedException();
+            if (fileCabinetRecord == null)
+            {
+                throw new ArgumentNullException($"{nameof(fileCabinetRecord)} is null!");
+            }
+
+            if (fileCabinetRecord.Id > this.GetStat())
+            {
+                throw new ArgumentException("Input Id is incorrect value.Id less than count of record in file.");
+            }
+
+            int editIdReord = fileCabinetRecord.Id;
+            var recordBuffer = new byte[RecordSize];
+            int counteRecordInFile = this.GetStat();
+            this.fileStream.Seek(0, SeekOrigin.Begin);
+            for (int i = 0; i < counteRecordInFile; i++)
+            {
+                this.fileStream.Read(recordBuffer, 0, RecordSize);
+                var bytesToRecord = BytesToFileCabinetRecord(recordBuffer);
+                if (bytesToRecord.Id == editIdReord)
+                {
+                    this.fileStream.Seek(i * 278, SeekOrigin.Begin);
+                    bytesToRecord.FirstName = fileCabinetRecord.FirstName;
+                    bytesToRecord.LastName = fileCabinetRecord.LastName;
+                    bytesToRecord.DateOfBirth = fileCabinetRecord.DateOfBirth;
+                    bytesToRecord.Sex = fileCabinetRecord.Sex;
+                    bytesToRecord.Height = fileCabinetRecord.Height;
+                    bytesToRecord.Salary = fileCabinetRecord.Salary;
+                    this.fileStream.Seek(0, SeekOrigin.Current);
+                    var recordToBytes = FileCabinetRecordToBytes(bytesToRecord);
+                    this.fileStream.Write(recordToBytes, 0, recordToBytes.Length);
+                    this.fileStream.Flush();
+                    return;
+                }
+            }
         }
 
         /// <summary>
