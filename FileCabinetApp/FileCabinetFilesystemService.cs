@@ -128,7 +128,17 @@ namespace FileCabinetApp
         /// <returns>Rerords by firstName <see cref="FileCabinetRecord"/>.</returns>
         public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
         {
-            throw new NotImplementedException();
+            List<FileCabinetRecord> firstNameList = new List<FileCabinetRecord>();
+            ReadOnlyCollection<FileCabinetRecord> list = this.GetRecords();
+            foreach (var item in list)
+            {
+                if (item.FirstName.ToLower(new CultureInfo("en-US")) == firstName.ToLower(new CultureInfo("en-US")))
+                {
+                    firstNameList.Add(item);
+                }
+            }
+
+            return new ReadOnlyCollection<FileCabinetRecord>(firstNameList);
         }
 
         /// <summary>
@@ -138,7 +148,17 @@ namespace FileCabinetApp
         /// <returns>Rerords by lastName <see cref="FileCabinetRecord"/>.</returns>
         public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
         {
-            throw new NotImplementedException();
+            List<FileCabinetRecord> lastNameList = new List<FileCabinetRecord>();
+            ReadOnlyCollection<FileCabinetRecord> list = this.GetRecords();
+            foreach (var item in list)
+            {
+                if (item.LastName.ToLower(new CultureInfo("en-US")) == lastName.ToLower(new CultureInfo("en-US")))
+                {
+                    lastNameList.Add(item);
+                }
+            }
+
+            return new ReadOnlyCollection<FileCabinetRecord>(lastNameList);
         }
 
         /// <summary>
@@ -148,7 +168,18 @@ namespace FileCabinetApp
         /// <returns>Rerords by dateofbirth <see cref="FileCabinetRecord"/>.</returns>
         public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(string dateofbirth)
         {
-            throw new NotImplementedException();
+            List<FileCabinetRecord> dayOfBirthList = new List<FileCabinetRecord>();
+            ReadOnlyCollection<FileCabinetRecord> list = this.GetRecords();
+            foreach (var item in list)
+            {
+                string temp = item.DateOfBirth.ToString("yyyy-MMM-dd", new CultureInfo("en-US"));
+                if (temp.ToLower(new CultureInfo("en-US")) == dateofbirth.ToLower(new CultureInfo("en-US")))
+                {
+                    dayOfBirthList.Add(item);
+                }
+            }
+
+            return new ReadOnlyCollection<FileCabinetRecord>(dayOfBirthList);
         }
 
         /// <summary>
