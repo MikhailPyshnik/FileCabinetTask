@@ -195,7 +195,6 @@ namespace FileCabinetApp
                 {
                     FileCabinetRecord fileCabinetRecord = new FileCabinetRecord();
                     CultureInfo provider = new CultureInfo("en-US");
-                    FileCabinetFilesystemService emp = fileCabinetService as FileCabinetFilesystemService;
                     Console.Write("First name:");
                     fileCabinetRecord.FirstName = recordValidator.ReadInput(recordValidator.FirstNameConverter, recordValidator.FirstNameValidator);
                     Console.Write("Last name:");

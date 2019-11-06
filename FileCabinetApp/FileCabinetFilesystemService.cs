@@ -32,7 +32,9 @@ namespace FileCabinetApp
         /// <returns>Count records <see cref="int"/>.</returns>
         public int GetStat()
         {
-            throw new NotImplementedException();
+            long length = new FileInfo(this.fileStream.Name).Length;
+            int countRecordInFile = (int)length / 278;
+            return countRecordInFile;
         }
 
         /// <summary>
@@ -65,8 +67,7 @@ namespace FileCabinetApp
         {
             List<FileCabinetRecord> listRecord = new List<FileCabinetRecord>();
             var recordBuffer = new byte[RecordSize];
-            long length = new FileInfo(this.fileStream.Name).Length;
-            int counteRecordInFile = (int)length / 278;
+            int counteRecordInFile = this.GetStat();
             this.fileStream.Seek(0, SeekOrigin.Begin);
             for (int i = 1; i <= counteRecordInFile; i++)
             {
