@@ -211,6 +211,12 @@
             </summary>
             <param name="fileStream">Input parametr in constructor <see cref="T:System.IO.FileStream"/>.</param>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.GetStat">
+            <summary>
+            Implementation IFileCabinetService GetStat.
+            </summary>
+            <returns>Count records <see cref="T:System.Int32"/>.</returns>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.CreateRecord(FileCabinetRecord)">
             <summary>
             Implementation IFileCabinetService СreateRecod.
@@ -218,18 +224,17 @@
             <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
             <returns>Id <see cref="T:System.Int32"/>.</returns>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.GetRecords">
+            <summary>
+            Implementation IFileCabinetService GetRecords.
+            </summary>
+            <returns>Rerords <see cref="T:FileCabinetRecord"/>.</returns>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.EditRecord(FileCabinetRecord)">
             <summary>
             Implementation IFileCabinetService EditRecord.
             </summary>
             <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByDateOfBirth(System.String)">
-            <summary>
-            Implementation IFileCabinetService FindByDateOfBirth.
-            </summary>
-            <param name="dateofbirth">Input parametr FirstName <see cref="T:System.String"/>.</param>
-            <returns>Rerords by dateofbirth <see cref="T:FileCabinetRecord"/>.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByFirstName(System.String)">
             <summary>
@@ -245,17 +250,12 @@
             <param name="lastName">Input parametr FirstName <see cref="T:System.String"/>.</param>
             <returns>Rerords by lastName <see cref="T:FileCabinetRecord"/>.</returns>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.GetRecords">
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByDateOfBirth(System.String)">
             <summary>
-            Implementation IFileCabinetService GetRecords.
+            Implementation IFileCabinetService FindByDateOfBirth.
             </summary>
-            <returns>Rerords <see cref="T:FileCabinetRecord"/>.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.GetStat">
-            <summary>
-            Implementation IFileCabinetService GetStat.
-            </summary>
-            <returns>Count records <see cref="T:System.Int32"/>.</returns>
+            <param name="dateofbirth">Input parametr FirstName <see cref="T:System.String"/>.</param>
+            <returns>Rerords by dateofbirth <see cref="T:FileCabinetRecord"/>.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.MakeSnapshot">
             <summary>
@@ -573,6 +573,12 @@
             <summary>
             Work FileCabinetRecord.
             </summary>
+        </member>
+        <member name="P:FileCabinetRecord.Status">
+            <summary>
+            Gets or sets the Status of the record.
+            </summary>
+            <value>The Status of the record.</value>
         </member>
         <member name="P:FileCabinetRecord.Id">
             <summary>

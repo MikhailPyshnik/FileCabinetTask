@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
@@ -11,11 +13,8 @@ namespace FileCabinetApp
     /// </summary>
     public class FileCabinetFilesystemService : IFileCabinetService
     {
-        private const int FirstNameLength = 120;
-        private const int MaxNameLength = 120;
-        private const int LastNameLength = 120;
-        private const int RecordSize = sizeof(short) + sizeof(int) + FirstNameLength + LastNameLength + sizeof(int) + sizeof(int) + sizeof(int) + sizeof(char) + sizeof(short) + sizeof(decimal);
-        private static int recordId = 1;
+        private const int MaxStringLength = 120;
+        private const int RecordSize = 278;
         private FileStream fileStream;
 
         /// <summary>
@@ -25,6 +24,15 @@ namespace FileCabinetApp
         public FileCabinetFilesystemService(FileStream fileStream)
         {
             this.fileStream = fileStream;
+        }
+
+        /// <summary>
+        /// Implementation IFileCabinetService GetStat.
+        /// </summary>
+        /// <returns>Count records <see cref="int"/>.</returns>
+        public int GetStat()
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -39,11 +47,35 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{nameof(fileCabinetRecord)} is null!");
             }
 
+            fileCabinetRecord.Id = this.GetStat() + 1;
+            var recordBuffer = new byte[RecordSize];
             this.fileStream.Seek(0, SeekOrigin.End);
             var b1 = FileCabinetRecordToBytes(fileCabinetRecord);
             this.fileStream.Write(b1, 0, b1.Length);
             this.fileStream.Flush();
+
             return fileCabinetRecord.Id;
+        }
+
+        /// <summary>
+        /// Implementation IFileCabinetService GetRecords.
+        /// </summary>
+        /// <returns>Rerords <see cref="FileCabinetRecord"/>.</returns>
+        public ReadOnlyCollection<FileCabinetRecord> GetRecords()
+        {
+            List<FileCabinetRecord> listRecord = new List<FileCabinetRecord>();
+            var recordBuffer = new byte[RecordSize];
+            long length = new FileInfo(this.fileStream.Name).Length;
+            int counteRecordInFile = (int)length / 278;
+            this.fileStream.Seek(0, SeekOrigin.Begin);
+            for (int i = 1; i <= counteRecordInFile; i++)
+            {
+                this.fileStream.Read(recordBuffer, 0, RecordSize);
+                var record = BytesToFileCabinetRecord(recordBuffer);
+                listRecord.Add(record);
+            }
+
+            return new ReadOnlyCollection<FileCabinetRecord>(listRecord);
         }
 
         /// <summary>
@@ -51,16 +83,6 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="fileCabinetRecord">Input parametr record <see cref="FileCabinetRecord"/>.</param>
         public void EditRecord(FileCabinetRecord fileCabinetRecord)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Implementation IFileCabinetService FindByDateOfBirth.
-        /// </summary>
-        /// <param name="dateofbirth">Input parametr FirstName <see cref="string"/>.</param>
-        /// <returns>Rerords by dateofbirth <see cref="FileCabinetRecord"/>.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(string dateofbirth)
         {
             throw new NotImplementedException();
         }
@@ -86,19 +108,11 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Implementation IFileCabinetService GetRecords.
+        /// Implementation IFileCabinetService FindByDateOfBirth.
         /// </summary>
-        /// <returns>Rerords <see cref="FileCabinetRecord"/>.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> GetRecords()
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Implementation IFileCabinetService GetStat.
-        /// </summary>
-        /// <returns>Count records <see cref="int"/>.</returns>
-        public int GetStat()
+        /// <param name="dateofbirth">Input parametr FirstName <see cref="string"/>.</param>
+        /// <returns>Rerords by dateofbirth <see cref="FileCabinetRecord"/>.</returns>
+        public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(string dateofbirth)
         {
             throw new NotImplementedException();
         }
@@ -119,19 +133,17 @@ namespace FileCabinetApp
                 throw new ArgumentNullException(nameof(fileCabinetRecord));
             }
 
-            fileCabinetRecord.Id = recordId;
             var bytes = new byte[RecordSize];
             using (var memoryStream = new MemoryStream(bytes))
             using (var binaryWriter = new BinaryWriter(memoryStream))
             {
-                short status = 0;
-                binaryWriter.Write(status);
+                binaryWriter.Write(fileCabinetRecord.Status);
                 binaryWriter.Write(fileCabinetRecord.Id);
                 Encoding unicode = Encoding.Unicode;
                 var firstnameBytes = unicode.GetBytes(fileCabinetRecord.FirstName);
-                var nameBuffer = new byte[MaxNameLength];
+                var nameBuffer = new byte[MaxStringLength];
                 var lastnameBytes = unicode.GetBytes(fileCabinetRecord.LastName);
-                var lastnameBuffer = new byte[MaxNameLength];
+                var lastnameBuffer = new byte[MaxStringLength];
 
                 int nameLength = firstnameBytes.Length;
                 int lastnameLength = lastnameBytes.Length;
@@ -152,8 +164,45 @@ namespace FileCabinetApp
                 binaryWriter.Write(fileCabinetRecord.Salary);
             }
 
-            ++recordId;
             return bytes;
+        }
+
+        private static FileCabinetRecord BytesToFileCabinetRecord(byte[] bytes)
+        {
+            if (bytes == null)
+            {
+                throw new ArgumentNullException(nameof(bytes));
+            }
+
+            var fileCabinetRecord = new FileCabinetRecord();
+
+            using (var memoryStream = new MemoryStream(bytes))
+            using (var binaryReader = new BinaryReader(memoryStream))
+            {
+                Encoding unicode = Encoding.Unicode;
+                fileCabinetRecord.Status = binaryReader.ReadInt16();
+                fileCabinetRecord.Id = binaryReader.ReadInt32();
+
+                var nameBuffer = binaryReader.ReadBytes(MaxStringLength);
+                string first = unicode.GetString(nameBuffer, 0, MaxStringLength);
+                fileCabinetRecord.FirstName = first.Trim('\u0000');
+
+                var lastnameBuffer = binaryReader.ReadBytes(MaxStringLength);
+                string second = unicode.GetString(lastnameBuffer, 0, MaxStringLength);
+                fileCabinetRecord.LastName = second.Trim('\u0000');
+
+                int year = binaryReader.ReadInt32();
+                int month = binaryReader.ReadInt32();
+                int day = binaryReader.ReadInt32();
+                DateTime someDate = new DateTime(year, month, day);
+                fileCabinetRecord.DateOfBirth = someDate;
+
+                fileCabinetRecord.Sex = binaryReader.ReadChar();
+                fileCabinetRecord.Height = binaryReader.ReadInt16();
+                fileCabinetRecord.Salary = binaryReader.ReadDecimal();
+            }
+
+            return fileCabinetRecord;
         }
     }
 }

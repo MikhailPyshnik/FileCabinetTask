@@ -96,7 +96,7 @@ namespace FileCabinetApp
 
                     if (comandStorage == "file")
                     {
-                        filestream = File.Open("cabinet-records.db", FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
+                        filestream = File.Open("cabinet-records.db", FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
                         storageRules = "file";
                         fileCabinetService = new FileCabinetFilesystemService(filestream);
                     }
@@ -195,6 +195,7 @@ namespace FileCabinetApp
                 {
                     FileCabinetRecord fileCabinetRecord = new FileCabinetRecord();
                     CultureInfo provider = new CultureInfo("en-US");
+                    FileCabinetFilesystemService emp = fileCabinetService as FileCabinetFilesystemService;
                     Console.Write("First name:");
                     fileCabinetRecord.FirstName = recordValidator.ReadInput(recordValidator.FirstNameConverter, recordValidator.FirstNameValidator);
                     Console.Write("Last name:");
@@ -207,7 +208,11 @@ namespace FileCabinetApp
                     fileCabinetRecord.Height = recordValidator.ReadInput(recordValidator.HeightConverter, recordValidator.HeightValidator);
                     Console.Write("Person's salary:");
                     fileCabinetRecord.Salary = recordValidator.ReadInput(recordValidator.SalaryConverter, recordValidator.SalaryValidator);
-                    Console.WriteLine($"Record #{fileCabinetService.CreateRecord(fileCabinetRecord)} is created.");
+                    int res = fileCabinetService.CreateRecord(fileCabinetRecord);
+                    if (res > 0)
+                    {
+                        Console.WriteLine($"Record #{res} is created.");
+                    }
                 }
                 catch (ArgumentNullException ex)
                 {
@@ -254,7 +259,6 @@ namespace FileCabinetApp
             {
                 try
                 {
-                    FileCabinetRecord fileCabinetRecord = new FileCabinetRecord();
                     CultureInfo provider = new CultureInfo("en-US");
                     int editInputId = Convert.ToInt32(parameters, provider);
                     if (editInputId > Program.fileCabinetService.GetStat())
@@ -263,8 +267,9 @@ namespace FileCabinetApp
                         return;
                     }
 
-                    fileCabinetRecord.Id = editInputId;
+                    FileCabinetRecord fileCabinetRecord = new FileCabinetRecord();
 
+                    fileCabinetRecord.Id = editInputId;
                     Console.Write("First name:");
                     fileCabinetRecord.FirstName = recordValidator.ReadInput(recordValidator.FirstNameConverter, recordValidator.FirstNameValidator);
                     Console.Write("Last name:");
@@ -312,19 +317,19 @@ namespace FileCabinetApp
             {
                 var firstName = parametersArray[1].Trim('"');
                 var records = fileCabinetService.FindByFirstName(firstName);
-                PrintRecords(records, value);
+                PrintRecords(records, searchParametr, value);
             }
             else if (searchParametr == "lastname")
             {
                 var lastName = parametersArray[1].Trim('"');
                 var records = fileCabinetService.FindByLastName(lastName);
-                PrintRecords(records, value);
+                PrintRecords(records, searchParametr, value);
             }
             else if (searchParametr == "dateofbirth")
             {
                 var dateofbirth = parametersArray[1].Trim('"');
                 var records = fileCabinetService.FindByDateOfBirth(dateofbirth);
-                PrintRecords(records, value);
+                PrintRecords(records, searchParametr, value);
             }
             else
             {
@@ -332,12 +337,12 @@ namespace FileCabinetApp
             }
         }
 
-        private static void PrintRecords(ReadOnlyCollection<FileCabinetRecord> records, string value)
+        private static void PrintRecords(ReadOnlyCollection<FileCabinetRecord> records, string searchparametr, string value)
         {
             CultureInfo provider = new CultureInfo("en-US");
             if (records.Count == 0)
             {
-                Console.WriteLine($"No records are found for firstName = {value}!");
+                Console.WriteLine($"No records are found for {searchparametr} = {value}!");
             }
             else
             {
