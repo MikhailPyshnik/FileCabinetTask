@@ -30,6 +30,12 @@
             </summary>
             <param name=" thePathToTheFile">Input parametr start id.<see cref="T:System.String"/>.</param>
         </member>
+        <member name="M:FileCabinetGenerator.Generator.ImportToXML(System.String)">
+            <summary>
+            Import records to xml file.
+            </summary>
+            <param name=" thePathToTheFile">Input parametr start id.<see cref="T:System.String"/>.</param>
+        </member>
         <member name="T:FileCabinetGenerator.Program">
             <summary>
             Class of console  FileCabinetGenerator application.

@@ -169,9 +169,9 @@ namespace FileCabinetGenerator
         private static void ExportFile(string inputFileName, uint inputIdStart, uint inputIdAmount)
         {
             Generator generator = new Generator(inputIdStart, inputIdAmount);
-            if (typeOfFile == "csv")
+            if (typeOfFile == "xml")
             {
-                generator.ImportToCSV(inputFileName);
+                generator.ImportToXML(inputFileName);
             }
             else
             {

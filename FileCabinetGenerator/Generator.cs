@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Text;
+using System.Xml;
 using Bogus;
 using FileCabinetApp;
 
@@ -93,6 +94,87 @@ namespace FileCabinetGenerator
             }
         }
 
+        /// <summary>
+        /// Import records to xml file.
+        /// </summary>
+        /// <param name=" thePathToTheFile">Input parametr start id.<see cref="string"/>.</param>
+        public void ImportToXML(string thePathToTheFile)
+        {
+            var records = this.GenerateRandomDateDefaultValidator(this.startId, this.countId);
+
+            XmlDocument document = new XmlDocument();
+            document.CreateXmlDeclaration("1.0", "utf-8", null);
+            XmlNode root = document.CreateElement("records");
+            document.AppendChild(root);
+
+            foreach (var record in records)
+            {
+                var salareToString = record.Salary.ToString(new CultureInfo("en-US"));
+                var date = record.DateOfBirth.ToString("dd/MM/yyyy", this.provider);
+
+                XmlNode xmlRecord = document.CreateElement("record");
+                document.DocumentElement.AppendChild(xmlRecord);
+                XmlAttribute idattribute = document.CreateAttribute("id");
+                idattribute.Value = record.Id.ToString(this.provider);
+                xmlRecord.Attributes.Append(idattribute);
+                root.AppendChild(xmlRecord);
+
+                XmlNode statusElement = document.CreateElement("status");
+                document.DocumentElement.AppendChild(statusElement);
+                statusElement.InnerText = record.Status.ToString(this.provider);
+                xmlRecord.AppendChild(statusElement);
+
+                XmlNode nameElement = document.CreateElement("name");
+                document.DocumentElement.AppendChild(nameElement);
+                XmlAttribute firstNameAtribute = document.CreateAttribute("first");
+                firstNameAtribute.Value = record.FirstName;
+                XmlAttribute lastNameAtribute = document.CreateAttribute("last");
+                lastNameAtribute.Value = record.LastName;
+                nameElement.Attributes.Append(firstNameAtribute);
+                nameElement.Attributes.Append(lastNameAtribute);
+                xmlRecord.AppendChild(nameElement);
+
+                XmlNode dateElement = document.CreateElement("dateOfBirth");
+                document.DocumentElement.AppendChild(dateElement);
+                dateElement.InnerText = date;
+                xmlRecord.AppendChild(dateElement);
+
+                XmlNode sexElement = document.CreateElement("sex");
+                document.DocumentElement.AppendChild(sexElement);
+                sexElement.InnerText = record.Sex.ToString(this.provider);
+                xmlRecord.AppendChild(sexElement);
+
+                XmlNode heightElement = document.CreateElement("height");
+                document.DocumentElement.AppendChild(heightElement);
+                heightElement.InnerText = record.Height.ToString(this.provider);
+                xmlRecord.AppendChild(heightElement);
+
+                XmlNode salaryElement = document.CreateElement("salary");
+                document.DocumentElement.AppendChild(salaryElement);
+                salaryElement.InnerText = record.Salary.ToString(this.provider);
+                xmlRecord.AppendChild(salaryElement);
+            }
+
+            StreamWriter streamWriterToXML = null;
+            try
+            {
+                streamWriterToXML = new StreamWriter(thePathToTheFile, false, System.Text.Encoding.Default);
+                document.Save(streamWriterToXML);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new ArgumentException($"{ex.Message}");
+            }
+            finally
+            {
+                if (streamWriterToXML != null)
+                {
+                    streamWriterToXML.Close();
+                }
+            }
+        }
+
         private static string FileCabinetRecordToString(FileCabinetRecord record)
         {
             var sb = new StringBuilder();
@@ -139,7 +221,7 @@ namespace FileCabinetGenerator
                     value = this.randomDataReneretor.Name.LastName();
                     break;
                 case "date":
-                    value = this.randomDataReneretor.Date.Between(new DateTime(1900, 1, 01), new DateTime(2019, 10, 7)).ToString("yyyy-MMM-dd", new CultureInfo("en-US"));
+                    value = this.randomDataReneretor.Date.Between(new DateTime(1900, 1, 01), new DateTime(2019, 10, 7)).ToString("dd/MM/yyyy", new CultureInfo("en-US"));
                     break;
                 case "sex":
                     value = this.randomDataReneretor.Random.Char('A', 'z').ToString(this.provider);

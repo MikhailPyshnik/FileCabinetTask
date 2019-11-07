@@ -3,7 +3,6 @@
 /// <summary>
 /// Work FileCabinetRecord.
 /// </summary>
-// [Serializable]
 public class FileCabinetRecord
 {
     /// <summary>
@@ -21,7 +20,7 @@ public class FileCabinetRecord
     /// <summary>
     /// Gets or sets the FirstName of the record.
     /// </summary>
-    /// <value>The FirstName of the record.</value>
+    /// <value>The FirstName of the record.</value>.
     public string FirstName { get; set; }
 
     /// <summary>

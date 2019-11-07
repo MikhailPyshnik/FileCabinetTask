@@ -590,7 +590,7 @@
             <summary>
             Gets or sets the FirstName of the record.
             </summary>
-            <value>The FirstName of the record.</value>
+            <value>The FirstName of the record.</value>.
         </member>
         <member name="P:FileCabinetRecord.LastName">
             <summary>
