@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.IO;
+using System.Text;
 using Bogus;
 using FileCabinetApp;
 
@@ -12,8 +14,21 @@ namespace FileCabinetGenerator
     /// </summary>
     public class Generator
     {
+        private readonly uint startId;
+        private readonly uint countId;
         private Faker randomDataReneretor = new Faker("en");
         private CultureInfo provider = new CultureInfo("en-US");
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Generator"/> class.
+        /// </summary>
+        /// <param name="startId">Input parametr start id.<see cref="uint"/>.</param>
+        /// <param name="countId">Input parametr amount of records.<see cref="uint"/>.</param>
+        public Generator(uint startId, uint countId)
+        {
+            this.startId = startId;
+            this.countId = countId;
+        }
 
         /// <summary>
         /// Generate data of filecabinetrecod by default rule.
@@ -21,7 +36,7 @@ namespace FileCabinetGenerator
         /// <param name="startId">Input parametr start id.<see cref="uint"/>.</param>
         /// <param name="countId">Input parametr amount id.<see cref="uint"/>.</param>
         /// <returns>Rerords by lastName <see cref="FileCabinetRecord"/>.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> GenerateDefaultValidator(uint startId, uint countId)
+        public ReadOnlyCollection<FileCabinetRecord> GenerateRandomDateDefaultValidator(uint startId, uint countId)
         {
             List<FileCabinetRecord> list = new List<FileCabinetRecord>((int)countId);
 
@@ -45,13 +60,53 @@ namespace FileCabinetGenerator
             return new ReadOnlyCollection<FileCabinetRecord>(list);
         }
 
+        /// <summary>
+        /// Import records to csv file.
+        /// </summary>
+        /// <param name=" thePathToTheFile">Input parametr start id.<see cref="string"/>.</param>
+        public void ImportToCSV(string thePathToTheFile)
+        {
+            string text = null;
+            StreamWriter streamWriterToCsv = null;
+            var records = this.GenerateRandomDateDefaultValidator(this.startId, this.countId);
+            try
+            {
+                streamWriterToCsv = new StreamWriter(thePathToTheFile, false, System.Text.Encoding.Default);
+                streamWriterToCsv.WriteLine("Id, First Name, Last Name, Date of Birth, Sex, Height, Salary.");
+                foreach (var record in records)
+                {
+                    text = FileCabinetRecordToString(record);
+                    streamWriterToCsv.WriteLine(text);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new ArgumentException($"{ex.Message}");
+            }
+            finally
+            {
+                if (streamWriterToCsv != null)
+                {
+                    streamWriterToCsv.Close();
+                }
+            }
+        }
+
+        private static string FileCabinetRecordToString(FileCabinetRecord record)
+        {
+            var sb = new StringBuilder();
+            sb.Append(record.Id + "," + record.FirstName + "," + record.LastName + "," + record.DateOfBirth.ToString("yyyy-MMM-dd", new CultureInfo("en-US")) + "," + record.Sex + "," + record.Height + "," + record.Salary);
+            return sb.ToString();
+        }
+
         private T ReadInput<T>(string inputValue, Func<string, Tuple<bool, string, T>> converter, Func<T, Tuple<bool, string>> validator)
         {
             do
             {
                 T value;
 
-                var input = this.Cause(inputValue);
+                var input = this.GenerateRandomValueFor(inputValue);
                 var conversionResult = converter(input);
 
                 if (!conversionResult.Item1)
@@ -72,7 +127,7 @@ namespace FileCabinetGenerator
             while (true);
         }
 
-        private string Cause(string inputValue)
+        private string GenerateRandomValueFor(string inputValue)
         {
             string value = null;
             switch (inputValue)
@@ -93,7 +148,9 @@ namespace FileCabinetGenerator
                     value = this.randomDataReneretor.Random.Short().ToString(this.provider);
                     break;
                 case "salary":
-                    value = this.randomDataReneretor.Random.Decimal(-100, 20000).ToString(this.provider);
+                    decimal salaryRandom = this.randomDataReneretor.Random.Decimal(0, 20000);
+                    decimal salaryCorrect = decimal.Round(salaryRandom, 0);
+                    value = salaryCorrect.ToString(this.provider);
                     break;
                 default:
                     break;

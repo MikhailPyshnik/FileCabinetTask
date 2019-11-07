@@ -35,11 +35,7 @@ namespace FileCabinetGenerator
                 ValidateInputRules(options.InputTypeFile, options.InputFileName, options.InputIdAmount, options.InputIdStart);
             }
 
-            Generator generator1 = new Generator();
-
-            var asd = generator1.GenerateDefaultValidator(30, 1000);
-
-            Console.WriteLine("sd");
+            Console.ReadLine();
         }
 
         private static void ValidateInputRules(string inputTypeFile, string inputFileName, string inputIdAmount, string inputIdStart)
@@ -71,26 +67,83 @@ namespace FileCabinetGenerator
                         bool containsFile = File.Exists(thePathToTheFile);
                         if (containsFile)
                         {
+                            Console.Write($"File is exist - rewrite {thePathToTheFile}?[Y / n] ");
+                            var inputs = Console.ReadLine().ToLower(provider);
+                            char charComnandYorN;
+                            bool charComnandBool = char.TryParse(inputs, out charComnandYorN);
+                            if (!'y'.Equals(charComnandYorN) & !'n'.Equals(charComnandYorN))
+                            {
+                                Console.WriteLine($"Incorrcect command [Y / n] : {inputs}!");
+                                return;
+                            }
+
+                            if (!charComnandBool)
+                            {
+                                Console.WriteLine($"Incorrcect command [Y / n] : inputs not char - {inputs}");
+                                return;
+                            }
+
+                            if (charComnandYorN == 'n')
+                            {
+                                Console.WriteLine($"Command - n.-Exit command export.");
+                                return;
+                            }
+
+                            if (!uint.TryParse(inputIdAmount, out amountRecords))
+                            {
+                                Console.WriteLine($"The incorrect start id. Default value:{amountRecords}.");
+                            }
+
+                            if (!uint.TryParse(inputIdStart, out startIdToRecords))
+                            {
+                                Console.WriteLine($"The incorrect start id. Default value:{startIdToRecords}.");
+                            }
+
+                            ExportFile(inputFileName, startIdToRecords, amountRecords);
                         }
                         else
                         {
                             var inputDirectoryName = Path.GetDirectoryName(thePathToTheFile);
                             if (inputDirectoryName.Length == 0)
                             {
+                                if (!uint.TryParse(inputIdAmount, out amountRecords))
+                                {
+                                    Console.WriteLine($"The incorrect start id. Default value:{amountRecords}.");
+                                }
+
+                                if (!uint.TryParse(inputIdStart, out startIdToRecords))
+                                {
+                                    Console.WriteLine($"The incorrect start id. Default value:{startIdToRecords}.");
+                                }
+
+                                ExportFile(inputFileName, startIdToRecords, amountRecords);
                             }
 
                             bool containsGetDirectoryName = Directory.Exists(inputDirectoryName);
                             if (!containsGetDirectoryName)
                             {
+                                PrintDefault();
+                                return;
                             }
 
-                            inputfilename = thePathToTheFile;
+                            if (!uint.TryParse(inputIdAmount, out amountRecords))
+                            {
+                                Console.WriteLine($"The incorrect start id. Default value:{amountRecords}.");
+                            }
+
+                            if (!uint.TryParse(inputIdStart, out startIdToRecords))
+                            {
+                                Console.WriteLine($"The incorrect start id. Default value:{startIdToRecords}.");
+                            }
+
+                            ExportFile(inputFileName, startIdToRecords, amountRecords);
                         }
                     }
                     else
                     {
                         Console.WriteLine($"The type of file {extension} does not match export type : {thePathToTheFile}.");
                         PrintDefault();
+                        return;
                     }
                 }
                 else
@@ -98,16 +151,6 @@ namespace FileCabinetGenerator
                     Console.WriteLine($"Incorrect  (is not csv or xml) type of file - {searchParametr}.");
                     PrintDefault();
                     return;
-                }
-
-                if (!uint.TryParse(inputIdAmount, out amountRecords))
-                {
-                    Console.WriteLine($"The incorrect start id. Default value:{amountRecords}.");
-                }
-
-                if (!uint.TryParse(inputIdStart, out startIdToRecords))
-                {
-                    Console.WriteLine($"The incorrect start id. Default value:{startIdToRecords}.");
                 }
 
                 Console.WriteLine($"{amountRecords} records were written to {inputfilename}.");
@@ -121,6 +164,19 @@ namespace FileCabinetGenerator
         private static void PrintDefault()
         {
             Console.WriteLine($"The rules is incorrect. Default value: {typeOfFile} - {inputfilename} - {amountRecords} - {startIdToRecords}.");
+        }
+
+        private static void ExportFile(string inputFileName, uint inputIdStart, uint inputIdAmount)
+        {
+            Generator generator = new Generator(inputIdStart, inputIdAmount);
+            if (typeOfFile == "csv")
+            {
+                generator.ImportToCSV(inputFileName);
+            }
+            else
+            {
+                generator.ImportToCSV(inputFileName);
+            }
         }
 
         private class Options

@@ -9,13 +9,26 @@
             Work with Generator.Generate random data for record(s).
             </summary>
         </member>
-        <member name="M:FileCabinetGenerator.Generator.GenerateDefaultValidator(System.UInt32,System.UInt32)">
+        <member name="M:FileCabinetGenerator.Generator.#ctor(System.UInt32,System.UInt32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetGenerator.Generator"/> class.
+            </summary>
+            <param name="startId">Input parametr start id.<see cref="T:System.UInt32"/>.</param>
+            <param name="countId">Input parametr amount of records.<see cref="T:System.UInt32"/>.</param>
+        </member>
+        <member name="M:FileCabinetGenerator.Generator.GenerateRandomDateDefaultValidator(System.UInt32,System.UInt32)">
             <summary>
             Generate data of filecabinetrecod by default rule.
             </summary>
             <param name="startId">Input parametr start id.<see cref="T:System.UInt32"/>.</param>
             <param name="countId">Input parametr amount id.<see cref="T:System.UInt32"/>.</param>
             <returns>Rerords by lastName <see cref="T:FileCabinetRecord"/>.</returns>
+        </member>
+        <member name="M:FileCabinetGenerator.Generator.ImportToCSV(System.String)">
+            <summary>
+            Import records to csv file.
+            </summary>
+            <param name=" thePathToTheFile">Input parametr start id.<see cref="T:System.String"/>.</param>
         </member>
         <member name="T:FileCabinetGenerator.Program">
             <summary>

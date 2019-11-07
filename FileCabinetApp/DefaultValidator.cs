@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Text;
 
 namespace FileCabinetApp
 {
@@ -120,8 +123,7 @@ namespace FileCabinetApp
         {
             decimal salary;
             bool result = decimal.TryParse(value, out salary);
-            decimal salaryCorrect = decimal.Round(salary, 3);
-            return new Tuple<bool, string, decimal>(result, "Salary - is incorrect", salaryCorrect);
+            return new Tuple<bool, string, decimal>(result, "Salary - is incorrect", salary);
         }
 
         /// <summary>
