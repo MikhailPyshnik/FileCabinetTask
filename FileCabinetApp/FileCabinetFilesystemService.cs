@@ -27,6 +27,12 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Gets or sets the Validator of the Program.
+        /// </summary>
+        /// <value>The Validator of the Program.</value>
+        public IValidatorOfParemetrs Validator { get; set; }
+
+        /// <summary>
         /// Implementation IFileCabinetService GetStat.
         /// </summary>
         /// <returns>Count records <see cref="int"/>.</returns>
@@ -187,6 +193,15 @@ namespace FileCabinetApp
         /// </summary>
         /// <returns>Rerords by dateofbirth <see cref="FileCabinetServiceSnapshot"/>.</returns>
         public FileCabinetServiceSnapshot MakeSnapshot()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Implementation IFileCabinetService Restore.
+        /// </summary>
+        /// <param name="fileCabinetServiceSnapshot">Input parametr fileCabinetServiceSnapshot <see cref="FileCabinetServiceSnapshot"/>.</param>
+        public void Restore(FileCabinetServiceSnapshot fileCabinetServiceSnapshot)
         {
             throw new NotImplementedException();
         }

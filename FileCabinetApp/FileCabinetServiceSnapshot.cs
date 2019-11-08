@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
 
 namespace FileCabinetApp
 {
@@ -17,6 +19,12 @@ namespace FileCabinetApp
         {
             this.records = records;
         }
+
+        /// <summary>
+        /// Gets the records.
+        /// </summary>
+        /// <value>The ReadOnlyCollection records.</value>
+        public ReadOnlyCollection<FileCabinetRecord> Records { get; private set; }
 
         /// <summary>
         /// Set snapshot of FileCabinetServiceSnapshot.
@@ -46,6 +54,19 @@ namespace FileCabinetApp
         {
             FileCabinetRecordXmlWriter fileCabinetRecordXmlWriter = new FileCabinetRecordXmlWriter(streamWriter);
             fileCabinetRecordXmlWriter.Write(this.MakeSnapshot().records);
+        }
+
+        /// <summary>
+        /// Set validate parametrs for FileCabinetRecord.
+        /// </summary>
+        /// <param name="reader">Input parametr record <see cref="StreamReader"/>.</param>
+        public void LoadFromCsv(StreamReader reader)
+        {
+            FileCabinetRecordCSVReader fileCabinetRecordCSVReader = new FileCabinetRecordCSVReader(reader);
+            var il = fileCabinetRecordCSVReader.ReadAll();
+            List<FileCabinetRecord> listImport = new List<FileCabinetRecord>(il);
+            var readonl = new ReadOnlyCollection<FileCabinetRecord>(listImport);
+            this.Records = readonl;
         }
     }
 }

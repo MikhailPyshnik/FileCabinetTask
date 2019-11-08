@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Xml;
 using CommandLine;
 
 namespace FileCabinetApp
@@ -552,98 +549,38 @@ namespace FileCabinetApp
         {
             if (searchParametr == "csv")
             {
-                ReadRecocdFileCvs(thePathToTheFile);
+                StreamReaderRecordFromCSV(thePathToTheFile);
             }
             else if (searchParametr == "xml")
             {
-                ReadRecocdFileXML(thePathToTheFile);
+                // TODO StreamReaderRecordFromXML(thePathToTheFile);
             }
         }
 
-        private static void ReadRecocdFileCvs(string thePathToTheFile)
+        private static void StreamReaderRecordFromCSV(string thePathToTheFile)
         {
-            List<FileCabinetRecord> listImport = new List<FileCabinetRecord>();
-
-            string[] list1 = File.ReadAllLines(thePathToTheFile);
-
-            for (int i = 1; i < list1.Length; i++)
+            StreamReader streamReaderFromCSV = null;
+            try
             {
-                listImport.Add(StreamRiderFromCSV(list1[i]));
+                streamReaderFromCSV = new StreamReader(thePathToTheFile, System.Text.Encoding.Default);
+                fileCabinetService.Validator = recordValidator;
+                var snapshotFileCabinetService = fileCabinetService.MakeSnapshot();
+                snapshotFileCabinetService.LoadFromCsv(streamReaderFromCSV);
+                Console.WriteLine($"All records were imported from {thePathToTheFile}.");
+                fileCabinetService.Restore(snapshotFileCabinetService);
             }
-
-            int countImportRecord = listImport.Count;
-            List<FileCabinetRecord> listresult = fileCabinetService.GetRecords().ToList();
-
-            for (int i = 0; i < listresult.Count; i++)
+            catch (Exception ex)
             {
-                if (!listImport.Exists(item => item.Id == listresult[i].Id))
+                Console.WriteLine(ex.Message);
+                throw new ArgumentException($"{ex.Message}");
+            }
+            finally
+            {
+                if (streamReaderFromCSV != null)
                 {
-                    listImport.Add(listresult[i]);
+                    streamReaderFromCSV.Close();
                 }
             }
-
-            listImport = listImport.OrderBy(item => item.Id).ToList();
-            Console.WriteLine($"{countImportRecord} records were imported from {thePathToTheFile}");
-        }
-
-        private static void ReadRecocdFileXML(string thePathToTheFile)
-        {
-            List<FileCabinetRecord> listImport = new List<FileCabinetRecord>();
-
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.Load(thePathToTheFile);
-            var a = xmlDoc.DocumentElement;
-            XmlNodeList nodeList = xmlDoc.DocumentElement.SelectNodes("record");
-            foreach (XmlNode node in nodeList)
-            {
-                listImport.Add(StreamRiderFromXML(node));
-            }
-
-            int countImportRecord = listImport.Count;
-
-            List<FileCabinetRecord> listresult = fileCabinetService.GetRecords().ToList();
-
-            for (int i = 0; i < listresult.Count; i++)
-            {
-                if (!listImport.Exists(item => item.Id == listresult[i].Id))
-                {
-                    listImport.Add(listresult[i]);
-                }
-            }
-
-            listImport = listImport.OrderBy(item => item.Id).ToList();
-            Console.WriteLine($"{countImportRecord} records were imported from {thePathToTheFile}");
-        }
-
-        private static FileCabinetRecord StreamRiderFromCSV(string csvline)
-        {
-            CultureInfo provider = new CultureInfo("en-US");
-            string[] values = csvline.Split(',');
-            FileCabinetRecord fileCabinetRecord = new FileCabinetRecord();
-            fileCabinetRecord.Id = Convert.ToInt32(values[0], provider);
-            fileCabinetRecord.FirstName = values[1];
-            fileCabinetRecord.LastName = values[2];
-            fileCabinetRecord.DateOfBirth = Convert.ToDateTime(values[3], provider);
-            fileCabinetRecord.Sex = Convert.ToChar(values[4], provider);
-            fileCabinetRecord.Height = Convert.ToInt16(values[5], provider);
-            fileCabinetRecord.Salary = Convert.ToDecimal(values[6], provider);
-
-            return fileCabinetRecord;
-        }
-
-        private static FileCabinetRecord StreamRiderFromXML(XmlNode node)
-        {
-            CultureInfo provider = new CultureInfo("en-US");
-            FileCabinetRecord fileCabinetRecord = new FileCabinetRecord();
-            fileCabinetRecord.Id = Convert.ToInt32(node.Attributes["id"].InnerText, provider);
-            fileCabinetRecord.FirstName = node.SelectSingleNode("name").Attributes["first"].InnerText;
-            fileCabinetRecord.LastName = node.SelectSingleNode("name").Attributes["last"].InnerText;
-            fileCabinetRecord.DateOfBirth = Convert.ToDateTime(node.SelectSingleNode("dateOfBirth").InnerText, provider);
-            fileCabinetRecord.Sex = Convert.ToChar(node.SelectSingleNode("sex").InnerText, provider);
-            fileCabinetRecord.Height = Convert.ToInt16(node.SelectSingleNode("height").InnerText, provider);
-            fileCabinetRecord.Salary = Convert.ToDecimal(node.SelectSingleNode("salary").InnerText, provider);
-
-            return fileCabinetRecord;
         }
 
         private class Options

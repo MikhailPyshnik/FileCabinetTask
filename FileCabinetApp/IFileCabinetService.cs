@@ -11,6 +11,12 @@ namespace FileCabinetApp
     public interface IFileCabinetService
     {
         /// <summary>
+        /// Gets or sets the Validator of the Program.
+        /// </summary>
+        /// <value>The Validator of the Program.</value>
+        IValidatorOfParemetrs Validator { get; set; }
+
+        /// <summary>
         /// Сreate new record FileCabinetRecord.
         /// </summary>
         /// <param name="fileCabinetRecord">Input parametr record <see cref="FileCabinetRecord"/>.</param>
@@ -45,14 +51,14 @@ namespace FileCabinetApp
         /// <summary>
         /// Return records by last name.
         /// </summary>
-        /// <param name="lastName">Input parametr FirstName <see cref="string"/>.</param>
+        /// <param name="lastName">Input parametr LastName <see cref="string"/>.</param>
         /// <returns>Rerords by lastName <see cref="FileCabinetRecord"/>.</returns>
         ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName);
 
         /// <summary>
         /// Return records by date of birth.
         /// </summary>
-        /// <param name="dateofbirth">Input parametr FirstName <see cref="string"/>.</param>
+        /// <param name="dateofbirth">Input parametr DataOfBitrh <see cref="string"/>.</param>
         /// <returns>Rerords by dateofbirth <see cref="FileCabinetRecord"/>.</returns>
         ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(string dateofbirth);
 
@@ -61,5 +67,11 @@ namespace FileCabinetApp
         /// </summary>
         /// <returns>Rerords by dateofbirth <see cref=" FileCabinetServiceSnapshot"/>.</returns>
         FileCabinetServiceSnapshot MakeSnapshot();
+
+        /// <summary>
+        /// Return make snapshot for restore.
+        /// </summary>
+        /// <param name="fileCabinetServiceSnapshot">Input parametr fileCabinetServiceSnapshot <see cref="FileCabinetServiceSnapshot"/>.</param>
+        void Restore(FileCabinetServiceSnapshot fileCabinetServiceSnapshot);
     }
 }
