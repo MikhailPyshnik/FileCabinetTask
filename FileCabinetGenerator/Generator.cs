@@ -119,11 +119,6 @@ namespace FileCabinetGenerator
                 xmlRecord.Attributes.Append(idattribute);
                 root.AppendChild(xmlRecord);
 
-                XmlNode statusElement = document.CreateElement("status");
-                document.DocumentElement.AppendChild(statusElement);
-                statusElement.InnerText = record.Status.ToString(this.provider);
-                xmlRecord.AppendChild(statusElement);
-
                 XmlNode nameElement = document.CreateElement("name");
                 document.DocumentElement.AppendChild(nameElement);
                 XmlAttribute firstNameAtribute = document.CreateAttribute("first");

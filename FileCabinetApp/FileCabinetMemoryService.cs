@@ -148,7 +148,7 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Implementation IFileCabinetService FindByDateOfBirth.
+        /// Implementation IFileCabinetService MakeSnapshot.
         /// </summary>
         /// <returns>Rerords by dateofbirth <see cref="FileCabinetServiceSnapshot"/>.</returns>
         public FileCabinetServiceSnapshot MakeSnapshot()
