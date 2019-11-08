@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
+using System.Linq;
 using System.Text;
 
 namespace FileCabinetApp
@@ -56,7 +56,6 @@ namespace FileCabinetApp
             }
 
             fileCabinetRecord.Id = this.GetStat() + 1;
-            var recordBuffer = new byte[RecordSize];
             this.fileStream.Seek(0, SeekOrigin.End);
             var b1 = FileCabinetRecordToBytes(fileCabinetRecord);
             this.fileStream.Write(b1, 0, b1.Length);
@@ -194,7 +193,11 @@ namespace FileCabinetApp
         /// <returns>Rerords by dateofbirth <see cref="FileCabinetServiceSnapshot"/>.</returns>
         public FileCabinetServiceSnapshot MakeSnapshot()
         {
-            throw new NotImplementedException();
+            var records = this.GetRecords();
+            List<FileCabinetRecord> importedFromDbToList = new List<FileCabinetRecord>(records);
+            FileCabinetRecord[] array = importedFromDbToList.ToArray();
+            FileCabinetServiceSnapshot fileCabinetServiceSnapshot = new FileCabinetServiceSnapshot(array);
+            return fileCabinetServiceSnapshot;
         }
 
         /// <summary>
@@ -203,7 +206,22 @@ namespace FileCabinetApp
         /// <param name="fileCabinetServiceSnapshot">Input parametr fileCabinetServiceSnapshot <see cref="FileCabinetServiceSnapshot"/>.</param>
         public void Restore(FileCabinetServiceSnapshot fileCabinetServiceSnapshot)
         {
-            throw new NotImplementedException();
+            if (fileCabinetServiceSnapshot == null)
+            {
+                throw new ArgumentNullException($"{nameof(fileCabinetServiceSnapshot)} is null");
+            }
+
+            var importRecords = fileCabinetServiceSnapshot.Records;
+
+            List<FileCabinetRecord> listImport = new List<FileCabinetRecord>(importRecords);
+
+            List<FileCabinetRecord> validatedList = this.GetValidFileCabinetRecords(listImport);
+
+            int countImportRecord = validatedList.Count;
+
+            this.UpdateListAfterImport(validatedList);
+
+            Console.WriteLine($"{countImportRecord} records were add to FileCabinetMemoryService");
         }
 
         private static byte[] FileCabinetRecordToBytes(FileCabinetRecord fileCabinetRecord)
@@ -283,6 +301,101 @@ namespace FileCabinetApp
             }
 
             return fileCabinetRecord;
+        }
+
+        private bool ValidateInput<T>(string inputValue, Func<string, Tuple<bool, string, T>> converter, Func<T, Tuple<bool, string>> validator)
+        {
+            T value;
+            bool result = false;
+
+            var input = inputValue;
+            var conversionResult = converter(input);
+
+            if (!conversionResult.Item1)
+            {
+                return result;
+            }
+
+            value = conversionResult.Item3;
+
+            var validationResult = validator(value);
+            if (!validationResult.Item1)
+            {
+                return result;
+            }
+
+            result = true;
+            return result;
+        }
+
+        private bool ValidateImportParametr(FileCabinetRecord fileCabinetRecord)
+        {
+            CultureInfo provider = new CultureInfo("en-US");
+
+            bool isFirstNameValid = this.ValidateInput(fileCabinetRecord.FirstName, this.Validator.FirstNameConverter, this.Validator.FirstNameValidator);
+            bool isLastNameValid = this.ValidateInput(fileCabinetRecord.LastName, this.Validator.LastNameConverter, this.Validator.LastNameValidator);
+            bool isDateOfBirthValid = this.ValidateInput(fileCabinetRecord.DateOfBirth.ToString("dd/MM/yyyy", new CultureInfo("en-US")), this.Validator.DayOfBirthConverter, this.Validator.DayOfBirthValidator);
+            bool isSexValid = this.ValidateInput(fileCabinetRecord.Sex.ToString(provider), this.Validator.SexConverter, this.Validator.SexValidator);
+            bool isHeigthValid = this.ValidateInput(fileCabinetRecord.Height.ToString(provider), this.Validator.HeightConverter, this.Validator.HeightValidator);
+            bool isSalaryValid = this.ValidateInput(fileCabinetRecord.Salary.ToString(provider), this.Validator.SalaryConverter, this.Validator.SalaryValidator);
+
+            return isFirstNameValid && isLastNameValid && isDateOfBirthValid && isSexValid && isHeigthValid && isSalaryValid;
+        }
+
+        private List<FileCabinetRecord> GetValidFileCabinetRecords(List<FileCabinetRecord> listImport)
+        {
+            List<FileCabinetRecord> validatedList = new List<FileCabinetRecord>();
+
+            foreach (var item in listImport)
+            {
+                if (this.ValidateImportParametr(item))
+                {
+                    validatedList.Add(item);
+                }
+                else
+                {
+                    Console.WriteLine($"{item.Id} records has incorrect value.This record was skipped.");
+                }
+            }
+
+            return validatedList;
+        }
+
+        private void UpdateListAfterImport(List<FileCabinetRecord> validateList)
+        {
+            List<FileCabinetRecord> listRecord = new List<FileCabinetRecord>();
+            var recordBuffer = new byte[RecordSize];
+            int counteRecordInFile = this.GetStat();
+            this.fileStream.Seek(0, SeekOrigin.Begin);
+            for (int i = 1; i <= counteRecordInFile; i++)
+            {
+                this.fileStream.Read(recordBuffer, 0, RecordSize);
+                var record = BytesToFileCabinetRecord(recordBuffer);
+                listRecord.Add(record);
+            }
+
+            for (int i = 0; i < listRecord.Count; i++)
+            {
+                if (!validateList.Exists(item => item.Id == listRecord[i].Id))
+                {
+                    validateList.Add(listRecord[i]);
+                }
+            }
+
+            validateList = validateList.OrderBy(item => item.Id).ToList();
+            listRecord.Clear();
+            listRecord.AddRange(validateList);
+
+            this.fileStream.SetLength(0);
+            this.fileStream.Flush();
+
+            foreach (var item in listRecord)
+            {
+                this.fileStream.Seek(0, SeekOrigin.End);
+                var b1 = FileCabinetRecordToBytes(item);
+                this.fileStream.Write(b1, 0, b1.Length);
+                this.fileStream.Flush();
+            }
         }
     }
 }
