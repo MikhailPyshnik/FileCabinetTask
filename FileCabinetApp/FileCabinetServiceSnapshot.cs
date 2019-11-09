@@ -47,7 +47,7 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Set validate parametrs for FileCabinetRecord.
+        /// Save the records to XML.
         /// </summary>
         /// <param name="streamWriter">Input parametr record <see cref="StreamWriter"/>.</param>
         public void SaveToXml(StreamWriter streamWriter)
@@ -57,16 +57,29 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Set validate parametrs for FileCabinetRecord.
+        /// Read records from CSV.
         /// </summary>
         /// <param name="reader">Input parametr record <see cref="StreamReader"/>.</param>
         public void LoadFromCsv(StreamReader reader)
         {
             FileCabinetRecordCSVReader fileCabinetRecordCSVReader = new FileCabinetRecordCSVReader(reader);
-            var il = fileCabinetRecordCSVReader.ReadAll();
-            List<FileCabinetRecord> listImport = new List<FileCabinetRecord>(il);
-            var readonl = new ReadOnlyCollection<FileCabinetRecord>(listImport);
-            this.Records = readonl;
+            var importedRecords = fileCabinetRecordCSVReader.ReadAll();
+            List<FileCabinetRecord> listImport = new List<FileCabinetRecord>(importedRecords);
+            var importedRecordsCollection = new ReadOnlyCollection<FileCabinetRecord>(listImport);
+            this.Records = importedRecordsCollection;
+        }
+
+        /// <summary>
+        /// Read records from XML.
+        /// </summary>
+        /// <param name="reader">Input parametr record <see cref="StreamReader"/>.</param>
+        public void LoadFromXML(StreamReader reader)
+        {
+            FileCabinetRecordXMLReader fileCabinetRecordXMLReader = new FileCabinetRecordXMLReader(reader);
+            var importedRecords = fileCabinetRecordXMLReader.ReadAll();
+            List<FileCabinetRecord> listImport = new List<FileCabinetRecord>(importedRecords);
+            var importedRecordsCollection = new ReadOnlyCollection<FileCabinetRecord>(listImport);
+            this.Records = importedRecordsCollection;
         }
     }
 }

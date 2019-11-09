@@ -6,7 +6,7 @@ using System.IO;
 namespace FileCabinetApp
 {
     /// <summary>
-    /// Read to CSV file.
+    /// Read from CSV file.
     /// </summary>
     public class FileCabinetRecordCSVReader
     {

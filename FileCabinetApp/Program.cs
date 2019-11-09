@@ -553,7 +553,7 @@ namespace FileCabinetApp
             }
             else if (searchParametr == "xml")
             {
-                // TODO StreamReaderRecordFromXML(thePathToTheFile);
+                StreamReaderRecordFromXML(thePathToTheFile);
             }
         }
 
@@ -566,7 +566,7 @@ namespace FileCabinetApp
                 fileCabinetService.Validator = recordValidator;
                 var snapshotFileCabinetService = fileCabinetService.MakeSnapshot();
                 snapshotFileCabinetService.LoadFromCsv(streamReaderFromCSV);
-                Console.WriteLine($"All records were imported from {thePathToTheFile}.");
+                Console.WriteLine($"{snapshotFileCabinetService.Records.Count} record(s) were imported from {thePathToTheFile}.");
                 fileCabinetService.Restore(snapshotFileCabinetService);
             }
             catch (Exception ex)
@@ -579,6 +579,32 @@ namespace FileCabinetApp
                 if (streamReaderFromCSV != null)
                 {
                     streamReaderFromCSV.Close();
+                }
+            }
+        }
+
+        private static void StreamReaderRecordFromXML(string thePathToTheFile)
+        {
+            StreamReader streamReaderFromXML = null;
+            try
+            {
+                streamReaderFromXML = new StreamReader(thePathToTheFile, System.Text.Encoding.Default);
+                fileCabinetService.Validator = recordValidator;
+                var snapshotFileCabinetService = fileCabinetService.MakeSnapshot();
+                snapshotFileCabinetService.LoadFromXML(streamReaderFromXML);
+                Console.WriteLine($"{snapshotFileCabinetService.Records.Count} record(s) were imported from {thePathToTheFile}.");
+                fileCabinetService.Restore(snapshotFileCabinetService);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new ArgumentException($"{ex.Message}");
+            }
+            finally
+            {
+                if (streamReaderFromXML != null)
+                {
+                    streamReaderFromXML.Close();
                 }
             }
         }

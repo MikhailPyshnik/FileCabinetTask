@@ -355,7 +355,7 @@
         </member>
         <member name="T:FileCabinetApp.FileCabinetRecordCSVReader">
             <summary>
-            Read to CSV file.
+            Read from CSV file.
             </summary>
         </member>
         <member name="M:FileCabinetApp.FileCabinetRecordCSVReader.#ctor(System.IO.StreamReader)">
@@ -386,6 +386,23 @@
             Write records to csv file.
             </summary>
             <param name="records">Input parametr array of record <see cref="T:FileCabinetRecord"/>.</param>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordXMLReader">
+            <summary>
+            Read from XML file.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordXMLReader.#ctor(System.IO.StreamReader)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordXMLReader"/> class.
+            </summary>
+            <param name="reader">Input parametr in constructor <see cref="T:System.IO.StreamReader"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordXMLReader.ReadAll">
+            <summary>
+            Initializes a new instance of the class.
+            </summary>
+            <returns>Import rerords by IList.</returns>
         </member>
         <member name="T:FileCabinetApp.FileCabinetRecordXmlWriter">
             <summary>
@@ -435,13 +452,19 @@
         </member>
         <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.SaveToXml(System.IO.StreamWriter)">
             <summary>
-            Set validate parametrs for FileCabinetRecord.
+            Save the records to XML.
             </summary>
             <param name="streamWriter">Input parametr record <see cref="T:System.IO.StreamWriter"/>.</param>
         </member>
         <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.LoadFromCsv(System.IO.StreamReader)">
             <summary>
-            Set validate parametrs for FileCabinetRecord.
+            Read records from CSV.
+            </summary>
+            <param name="reader">Input parametr record <see cref="T:System.IO.StreamReader"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.LoadFromXML(System.IO.StreamReader)">
+            <summary>
+            Read records from XML.
             </summary>
             <param name="reader">Input parametr record <see cref="T:System.IO.StreamReader"/>.</param>
         </member>
