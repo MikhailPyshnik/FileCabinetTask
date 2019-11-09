@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 
 namespace FileCabinetApp
@@ -25,6 +26,12 @@ namespace FileCabinetApp
         public FileCabinetMemoryService()
         {
         }
+
+        /// <summary>
+        /// Gets or sets the Validator of the Program.
+        /// </summary>
+        /// <value>The Validator of the Program.</value>
+        public IValidatorOfParemetrs Validator { get; set; }
 
         /// <summary>
         /// Implementation IFileCabinetService СreateRecod.
@@ -148,7 +155,7 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Implementation IFileCabinetService FindByDateOfBirth.
+        /// Implementation IFileCabinetService MakeSnapshot.
         /// </summary>
         /// <returns>Rerords by dateofbirth <see cref="FileCabinetServiceSnapshot"/>.</returns>
         public FileCabinetServiceSnapshot MakeSnapshot()
@@ -158,6 +165,30 @@ namespace FileCabinetApp
             return fileCabinetServiceSnapshot;
         }
 
+        /// <summary>
+        /// Implementation IFileCabinetService Restore.
+        /// </summary>
+        /// <param name="fileCabinetServiceSnapshot">Input parametr fileCabinetServiceSnapshot <see cref="FileCabinetServiceSnapshot"/>.</param>
+        public void Restore(FileCabinetServiceSnapshot fileCabinetServiceSnapshot)
+        {
+            if (fileCabinetServiceSnapshot == null)
+            {
+                throw new ArgumentNullException($"{nameof(fileCabinetServiceSnapshot)} is null");
+            }
+
+            var importRecords = fileCabinetServiceSnapshot.Records;
+
+            List<FileCabinetRecord> listImport = new List<FileCabinetRecord>(importRecords);
+
+            List<FileCabinetRecord> validatedList = this.GetValidFileCabinetRecords(listImport);
+
+            int countImportRecord = validatedList.Count;
+
+            this.UpdateListAfterImport(validatedList);
+
+            Console.WriteLine($"{countImportRecord} records were add to FileCabinetMemoryService");
+        }
+
         private void AddRecordToDictionary(FileCabinetRecord record)
         {
             this.AddRecordToFirstNameDictionary(record, record.FirstName);
@@ -165,7 +196,7 @@ namespace FileCabinetApp
             this.AddRecordToDateOfBirthDictionary(record, record.DateOfBirth);
         }
 
-        private void ChangeRecordToDictionary(FileCabinetRecord item, string oldFirstName,  string oldLastName,  string oldDateOfBirth)
+        private void ChangeRecordToDictionary(FileCabinetRecord item, string oldFirstName, string oldLastName, string oldDateOfBirth)
         {
             this.ChangeRecordInFirstNameDictionary(item, oldFirstName, item.FirstName);
             this.ChangeRecordInLastNameDictionary(item, oldLastName, item.LastName);
@@ -242,7 +273,7 @@ namespace FileCabinetApp
             }
         }
 
-        private void ChangeRecordInDateOfBirthDictionary(FileCabinetRecord item,  string oldDateOfBirth, DateTime dateOfBirth)
+        private void ChangeRecordInDateOfBirthDictionary(FileCabinetRecord item, string oldDateOfBirth, DateTime dateOfBirth)
         {
             string tempDateOfBirh = dateOfBirth.ToString("yyyy-MMM-dd", new CultureInfo("en-US"));
             if (this.dateOfBirthDictionary.ContainsKey(tempDateOfBirh))
@@ -256,6 +287,79 @@ namespace FileCabinetApp
                 List<FileCabinetRecord> listDateOfBirth = this.list.FindAll(item1 => item.DateOfBirth == dateOfBirth);
                 this.dateOfBirthDictionary.Add(tempDateOfBirh, listDateOfBirth);
             }
+        }
+
+        private bool ValidateInput<T>(string inputValue, Func<string, Tuple<bool, string, T>> converter, Func<T, Tuple<bool, string>> validator)
+        {
+            T value;
+            bool result = false;
+
+            var input = inputValue;
+            var conversionResult = converter(input);
+
+            if (!conversionResult.Item1)
+            {
+                return result;
+            }
+
+            value = conversionResult.Item3;
+
+            var validationResult = validator(value);
+            if (!validationResult.Item1)
+            {
+                return result;
+            }
+
+            result = true;
+            return result;
+        }
+
+        private bool ValidateImportParametr(FileCabinetRecord fileCabinetRecord)
+        {
+            CultureInfo provider = new CultureInfo("en-US");
+
+            bool isFirstNameValid = this.ValidateInput(fileCabinetRecord.FirstName, this.Validator.FirstNameConverter, this.Validator.FirstNameValidator);
+            bool isLastNameValid = this.ValidateInput(fileCabinetRecord.LastName, this.Validator.LastNameConverter, this.Validator.LastNameValidator);
+            bool isDateOfBirthValid = this.ValidateInput(fileCabinetRecord.DateOfBirth.ToString("dd/MM/yyyy", new CultureInfo("en-US")), this.Validator.DayOfBirthConverter, this.Validator.DayOfBirthValidator);
+            bool isSexValid = this.ValidateInput(fileCabinetRecord.Sex.ToString(provider), this.Validator.SexConverter, this.Validator.SexValidator);
+            bool isHeigthValid = this.ValidateInput(fileCabinetRecord.Height.ToString(provider), this.Validator.HeightConverter, this.Validator.HeightValidator);
+            bool isSalaryValid = this.ValidateInput(fileCabinetRecord.Salary.ToString(provider), this.Validator.SalaryConverter, this.Validator.SalaryValidator);
+
+            return isFirstNameValid && isLastNameValid && isDateOfBirthValid && isSexValid && isHeigthValid && isSalaryValid;
+        }
+
+        private List<FileCabinetRecord> GetValidFileCabinetRecords(List<FileCabinetRecord> listImport)
+        {
+            List<FileCabinetRecord> validatedList = new List<FileCabinetRecord>();
+
+            foreach (var item in listImport)
+            {
+                if (this.ValidateImportParametr(item))
+                {
+                    validatedList.Add(item);
+                }
+                else
+                {
+                    Console.WriteLine($"{item.Id} records has incorrect value.This record was skipped.");
+                }
+            }
+
+            return validatedList;
+        }
+
+        private void UpdateListAfterImport(List<FileCabinetRecord> validateList)
+        {
+            for (int i = 0; i < this.list.Count; i++)
+            {
+                if (!validateList.Exists(item => item.Id == this.list[i].Id))
+                {
+                    validateList.Add(this.list[i]);
+                }
+            }
+
+            validateList = validateList.OrderBy(item => item.Id).ToList();
+            this.list.Clear();
+            this.list.AddRange(validateList);
         }
     }
 }

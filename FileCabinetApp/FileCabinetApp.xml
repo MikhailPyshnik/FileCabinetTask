@@ -211,6 +211,12 @@
             </summary>
             <param name="fileStream">Input parametr in constructor <see cref="T:System.IO.FileStream"/>.</param>
         </member>
+        <member name="P:FileCabinetApp.FileCabinetFilesystemService.Validator">
+            <summary>
+            Gets or sets the Validator of the Program.
+            </summary>
+            <value>The Validator of the Program.</value>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.GetStat">
             <summary>
             Implementation IFileCabinetService GetStat.
@@ -263,6 +269,12 @@
             </summary>
             <returns>Rerords by dateofbirth <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/>.</returns>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.Restore(FileCabinetApp.FileCabinetServiceSnapshot)">
+            <summary>
+            Implementation IFileCabinetService Restore.
+            </summary>
+            <param name="fileCabinetServiceSnapshot">Input parametr fileCabinetServiceSnapshot <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/>.</param>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetMemoryService">
             <summary>
             Work with records. Save and change record(s).
@@ -272,6 +284,12 @@
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetMemoryService"/> class.
             </summary>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetMemoryService.Validator">
+            <summary>
+            Gets or sets the Validator of the Program.
+            </summary>
+            <value>The Validator of the Program.</value>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.CreateRecord(FileCabinetRecord)">
             <summary>
@@ -325,9 +343,32 @@
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.MakeSnapshot">
             <summary>
-            Implementation IFileCabinetService FindByDateOfBirth.
+            Implementation IFileCabinetService MakeSnapshot.
             </summary>
             <returns>Rerords by dateofbirth <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.Restore(FileCabinetApp.FileCabinetServiceSnapshot)">
+            <summary>
+            Implementation IFileCabinetService Restore.
+            </summary>
+            <param name="fileCabinetServiceSnapshot">Input parametr fileCabinetServiceSnapshot <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/>.</param>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordCSVReader">
+            <summary>
+            Read from CSV file.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCSVReader.#ctor(System.IO.StreamReader)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordCSVReader"/> class.
+            </summary>
+            <param name="reader">Input parametr in constructor <see cref="T:System.IO.StreamReader"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCSVReader.ReadAll">
+            <summary>
+            Initializes a new instance of the class.
+            </summary>
+            <returns>Import rerords by IList.</returns>
         </member>
         <member name="T:FileCabinetApp.FileCabinetRecordCsvWriter">
             <summary>
@@ -345,6 +386,23 @@
             Write records to csv file.
             </summary>
             <param name="records">Input parametr array of record <see cref="T:FileCabinetRecord"/>.</param>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordXMLReader">
+            <summary>
+            Read from XML file.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordXMLReader.#ctor(System.IO.StreamReader)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordXMLReader"/> class.
+            </summary>
+            <param name="reader">Input parametr in constructor <see cref="T:System.IO.StreamReader"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordXMLReader.ReadAll">
+            <summary>
+            Initializes a new instance of the class.
+            </summary>
+            <returns>Import rerords by IList.</returns>
         </member>
         <member name="T:FileCabinetApp.FileCabinetRecordXmlWriter">
             <summary>
@@ -374,6 +432,12 @@
             </summary>
             <param name="records">Input parametr in constructor <see cref="T:FileCabinetRecord"/>.</param>
         </member>
+        <member name="P:FileCabinetApp.FileCabinetServiceSnapshot.Records">
+            <summary>
+            Gets the records.
+            </summary>
+            <value>The ReadOnlyCollection records.</value>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.MakeSnapshot">
             <summary>
             Set snapshot of FileCabinetServiceSnapshot.
@@ -388,14 +452,32 @@
         </member>
         <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.SaveToXml(System.IO.StreamWriter)">
             <summary>
-            Set validate parametrs for FileCabinetRecord.
+            Save the records to XML.
             </summary>
             <param name="streamWriter">Input parametr record <see cref="T:System.IO.StreamWriter"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.LoadFromCsv(System.IO.StreamReader)">
+            <summary>
+            Read records from CSV.
+            </summary>
+            <param name="reader">Input parametr record <see cref="T:System.IO.StreamReader"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.LoadFromXML(System.IO.StreamReader)">
+            <summary>
+            Read records from XML.
+            </summary>
+            <param name="reader">Input parametr record <see cref="T:System.IO.StreamReader"/>.</param>
         </member>
         <member name="T:FileCabinetApp.IFileCabinetService">
             <summary>
              Exposes an validateParametrs, which supports validate values ​​by criterion.
             </summary>
+        </member>
+        <member name="P:FileCabinetApp.IFileCabinetService.Validator">
+            <summary>
+            Gets or sets the Validator of the Program.
+            </summary>
+            <value>The Validator of the Program.</value>
         </member>
         <member name="M:FileCabinetApp.IFileCabinetService.CreateRecord(FileCabinetRecord)">
             <summary>
@@ -433,14 +515,14 @@
             <summary>
             Return records by last name.
             </summary>
-            <param name="lastName">Input parametr FirstName <see cref="T:System.String"/>.</param>
+            <param name="lastName">Input parametr LastName <see cref="T:System.String"/>.</param>
             <returns>Rerords by lastName <see cref="T:FileCabinetRecord"/>.</returns>
         </member>
         <member name="M:FileCabinetApp.IFileCabinetService.FindByDateOfBirth(System.String)">
             <summary>
             Return records by date of birth.
             </summary>
-            <param name="dateofbirth">Input parametr FirstName <see cref="T:System.String"/>.</param>
+            <param name="dateofbirth">Input parametr DataOfBitrh <see cref="T:System.String"/>.</param>
             <returns>Rerords by dateofbirth <see cref="T:FileCabinetRecord"/>.</returns>
         </member>
         <member name="M:FileCabinetApp.IFileCabinetService.MakeSnapshot">
@@ -448,6 +530,12 @@
             Return make snapshot.
             </summary>
             <returns>Rerords by dateofbirth <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.Restore(FileCabinetApp.FileCabinetServiceSnapshot)">
+            <summary>
+            Return make snapshot for restore.
+            </summary>
+            <param name="fileCabinetServiceSnapshot">Input parametr fileCabinetServiceSnapshot <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/>.</param>
         </member>
         <member name="T:FileCabinetApp.IRecordValidator">
             <summary>
@@ -590,7 +678,7 @@
             <summary>
             Gets or sets the FirstName of the record.
             </summary>
-            <value>The FirstName of the record.</value>
+            <value>The FirstName of the record.</value>.
         </member>
         <member name="P:FileCabinetRecord.LastName">
             <summary>
