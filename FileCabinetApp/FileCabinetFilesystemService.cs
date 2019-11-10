@@ -36,11 +36,11 @@ namespace FileCabinetApp
         /// Implementation IFileCabinetService GetStat.
         /// </summary>
         /// <returns>Count records <see cref="int"/>.</returns>
-        public int GetStat()
+        public Tuple<int, int> GetStat()
         {
-            long length = new FileInfo(this.fileStream.Name).Length;
-            int countRecordInFile = (int)length / 278;
-            return countRecordInFile;
+            int countRecordInFile = this.GetCountAllRecordssFromFile();
+            int countDeleteRecord = this.GetDdeletedRecordList().Count;
+            return new Tuple<int, int>(countRecordInFile, countDeleteRecord);
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{nameof(fileCabinetRecord)} is null!");
             }
 
-            fileCabinetRecord.Id = this.GetStat() + 1;
+            fileCabinetRecord.Id = this.GetCountAllRecordssFromFile() + 1;
             this.fileStream.Seek(0, SeekOrigin.End);
             var b1 = FileCabinetRecordToBytes(fileCabinetRecord);
             this.fileStream.Write(b1, 0, b1.Length);
@@ -72,7 +72,7 @@ namespace FileCabinetApp
         {
             List<FileCabinetRecord> listRecord = new List<FileCabinetRecord>();
             var recordBuffer = new byte[RECORDSIZE];
-            int counteRecordInFile = this.GetStat();
+            int counteRecordInFile = this.GetCountAllRecordssFromFile();
             this.fileStream.Seek(0, SeekOrigin.Begin);
             for (int i = 1; i <= counteRecordInFile; i++)
             {
@@ -104,7 +104,7 @@ namespace FileCabinetApp
 
             int editIdReord = fileCabinetRecord.Id;
             var recordBuffer = new byte[RECORDSIZE];
-            int counteRecordInFile = this.GetStat();
+            int counteRecordInFile = this.GetCountAllRecordssFromFile();
             this.fileStream.Seek(0, SeekOrigin.Begin);
             for (int i = 0; i < counteRecordInFile; i++)
             {
@@ -244,7 +244,7 @@ namespace FileCabinetApp
             int curent = 0;
             int removeIdRecord = id;
             var recordBuffer = new byte[RECORDSIZE];
-            int counteRecordInFile = this.GetStat();
+            int counteRecordInFile = this.GetCountAllRecordssFromFile();
             this.fileStream.Seek(0, SeekOrigin.Begin);
             foreach (var revoveId in recordToList)
             {
@@ -271,7 +271,7 @@ namespace FileCabinetApp
         public void Purge()
         {
             int countDeletedRecords = this.GetDdeletedRecordList().Count;
-            int countRecordsInFile = this.GetStat();
+            int countRecordsInFile = this.GetCountAllRecordssFromFile();
 
             this.WriteRecordsToFile(this.GetNotDeletedRecordsList());
 
@@ -421,7 +421,7 @@ namespace FileCabinetApp
             List<FileCabinetRecord> deletedRecordList = this.GetDdeletedRecordList();
             List<FileCabinetRecord> validatedRecordsWithIdFromDeletedRecordList = new List<FileCabinetRecord>();
             var recordBuffer = new byte[RECORDSIZE];
-            int counteRecordInFile = this.GetStat();
+            int counteRecordInFile = this.GetCountAllRecordssFromFile();
             this.fileStream.Seek(0, SeekOrigin.Begin);
             for (int i = 1; i <= counteRecordInFile; i++)
             {
@@ -486,7 +486,7 @@ namespace FileCabinetApp
         {
             List<FileCabinetRecord> listRecord = new List<FileCabinetRecord>();
             var recordBuffer = new byte[RECORDSIZE];
-            int counteRecordInFile = this.GetStat();
+            int counteRecordInFile = this.GetCountAllRecordssFromFile();
             this.fileStream.Seek(0, SeekOrigin.Begin);
             for (int i = 1; i <= counteRecordInFile; i++)
             {
@@ -502,7 +502,7 @@ namespace FileCabinetApp
         {
             List<FileCabinetRecord> notDeletedRecordsList = new List<FileCabinetRecord>();
             var recordBuffer = new byte[RECORDSIZE];
-            int counteRecordInFile = this.GetStat();
+            int counteRecordInFile = this.GetCountAllRecordssFromFile();
             this.fileStream.Seek(0, SeekOrigin.Begin);
             for (int i = 1; i <= counteRecordInFile; i++)
             {
@@ -522,7 +522,7 @@ namespace FileCabinetApp
             List<FileCabinetRecord> deletedRecordList = new List<FileCabinetRecord>();
 
             var recordBuffer = new byte[RECORDSIZE];
-            int counteRecordInFile = this.GetStat();
+            int counteRecordInFile = this.GetCountAllRecordssFromFile();
             this.fileStream.Seek(0, SeekOrigin.Begin);
             for (int i = 1; i <= counteRecordInFile; i++)
             {
@@ -542,7 +542,7 @@ namespace FileCabinetApp
             List<FileCabinetRecord> deletedRecordList = new List<FileCabinetRecord>();
 
             var recordBuffer = new byte[RECORDSIZE];
-            int counteRecordInFile = this.GetStat();
+            int counteRecordInFile = this.GetCountAllRecordssFromFile();
             this.fileStream.Seek(0, SeekOrigin.Begin);
             for (int i = 1; i <= counteRecordInFile; i++)
             {
@@ -569,6 +569,13 @@ namespace FileCabinetApp
                 this.fileStream.Write(b1, 0, b1.Length);
                 this.fileStream.Flush();
             }
+        }
+
+        private int GetCountAllRecordssFromFile()
+        {
+            long length = new FileInfo(this.fileStream.Name).Length;
+            int countRecordInFile = (int)length / 278;
+            return countRecordInFile;
         }
     }
 }

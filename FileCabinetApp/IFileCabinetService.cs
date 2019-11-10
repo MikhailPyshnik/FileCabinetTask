@@ -30,10 +30,10 @@ namespace FileCabinetApp
         ReadOnlyCollection<FileCabinetRecord> GetRecords();
 
         /// <summary>
-        /// Get count of record FileCabinetRecord.
+        /// Get count of record and delete records FileCabinetRecord.
         /// </summary>
-        /// <returns>Count records <see cref="int"/>.</returns>
-        int GetStat();
+        /// <returns>Count records <see cref="Tuple"/>.</returns>
+        Tuple<int, int> GetStat();
 
         /// <summary>
         /// Edit record by id.

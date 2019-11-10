@@ -65,9 +65,11 @@ namespace FileCabinetApp
         /// Implementation IFileCabinetService GetStat.
         /// </summary>
         /// <returns>Count records <see cref="int"/>.</returns>
-        public int GetStat()
+        public Tuple<int, int> GetStat()
         {
-            return this.list.Count;
+            int countRecordInFile = this.list.Count;
+            int countDeleteRecord = 0;
+            return new Tuple<int, int>(countRecordInFile, countDeleteRecord);
         }
 
         /// <summary>
@@ -83,7 +85,7 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{nameof(fileCabinetRecord)} is null!");
             }
 
-            if (fileCabinetRecord.Id > this.GetStat())
+            if (fileCabinetRecord.Id > this.GetStat().Item1)
             {
                 throw new ArgumentException("Input Id is incorrect value.");
             }

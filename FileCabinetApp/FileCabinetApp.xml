@@ -516,9 +516,9 @@
         </member>
         <member name="M:FileCabinetApp.IFileCabinetService.GetStat">
             <summary>
-            Get count of record FileCabinetRecord.
+            Get count of record and delete records FileCabinetRecord.
             </summary>
-            <returns>Count records <see cref="T:System.Int32"/>.</returns>
+            <returns>Count records <see cref="T:System.Tuple"/>.</returns>
         </member>
         <member name="M:FileCabinetApp.IFileCabinetService.EditRecord(FileCabinetRecord)">
             <summary>

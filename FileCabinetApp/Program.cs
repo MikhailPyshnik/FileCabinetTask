@@ -190,8 +190,18 @@ namespace FileCabinetApp
 
         private static void Stat(string parameters)
         {
-            var recordsCount = Program.fileCabinetService.GetStat();
-            Console.WriteLine($"{recordsCount} record(s).");
+            if (fileCabinetService is FileCabinetFilesystemService)
+            {
+                var recordsCount = Program.fileCabinetService.GetStat().Item1;
+                var deleteRecords = Program.fileCabinetService.GetStat().Item2;
+                Console.WriteLine($"{recordsCount} record(s).");
+                Console.WriteLine($"{deleteRecords} record(s) were deleted.");
+            }
+            else
+            {
+                var recordsCount = Program.fileCabinetService.GetStat().Item1;
+                Console.WriteLine($"{recordsCount} record(s).");
+            }
         }
 
         private static void Create(string parameters)
@@ -267,7 +277,7 @@ namespace FileCabinetApp
                 {
                     CultureInfo provider = new CultureInfo("en-US");
                     int editInputId = Convert.ToInt32(parameters, provider);
-                    if (fileCabinetService.GetStat() < 1)
+                    if (fileCabinetService.GetStat().Item1 < 1)
                     {
                         Console.WriteLine("File is not empty.");
                         return;
@@ -500,7 +510,7 @@ namespace FileCabinetApp
 
         private static void Remove(string parameters)
         {
-            if (fileCabinetService.GetStat() < 1)
+            if (fileCabinetService.GetStat().Item1 < 1)
             {
                 Console.WriteLine("File is not empty.");
                 return;
