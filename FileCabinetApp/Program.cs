@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
@@ -37,6 +38,8 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("find", Find),
             new Tuple<string, Action<string>>("export", Export),
             new Tuple<string, Action<string>>("import", Import),
+            new Tuple<string, Action<string>>("remove", Remove),
+            new Tuple<string, Action<string>>("purge", Purge),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -50,6 +53,8 @@ namespace FileCabinetApp
             new string[] { "find", "find record(s)", "The 'find' return all record by условие." },
             new string[] { "export", "export file", "The 'export' export records to file." },
             new string[] { "import", "import file", "The 'import' import type of file." },
+            new string[] { "remove", "remove record by id", "The 'remove' delete record." },
+            new string[] { "purge", "purge records in FileCabinetFilesystemService", "The 'purge' records in FileCabinetFilesystemService." },
         };
 
         /// <summary>
@@ -185,8 +190,18 @@ namespace FileCabinetApp
 
         private static void Stat(string parameters)
         {
-            var recordsCount = Program.fileCabinetService.GetStat();
-            Console.WriteLine($"{recordsCount} record(s).");
+            if (fileCabinetService is FileCabinetFilesystemService)
+            {
+                var recordsCount = Program.fileCabinetService.GetStat().Item1;
+                var deleteRecords = Program.fileCabinetService.GetStat().Item2;
+                Console.WriteLine($"{recordsCount} record(s).");
+                Console.WriteLine($"{deleteRecords} record(s) were deleted.");
+            }
+            else
+            {
+                var recordsCount = Program.fileCabinetService.GetStat().Item1;
+                Console.WriteLine($"{recordsCount} record(s).");
+            }
         }
 
         private static void Create(string parameters)
@@ -262,29 +277,38 @@ namespace FileCabinetApp
                 {
                     CultureInfo provider = new CultureInfo("en-US");
                     int editInputId = Convert.ToInt32(parameters, provider);
-                    if (editInputId > Program.fileCabinetService.GetStat())
+                    if (fileCabinetService.GetStat().Item1 < 1)
                     {
-                        Console.WriteLine($"#{editInputId} record is not found.");
+                        Console.WriteLine("File is not empty.");
                         return;
                     }
 
-                    FileCabinetRecord fileCabinetRecord = new FileCabinetRecord();
+                    var records = fileCabinetService.GetRecords();
+                    List<FileCabinetRecord> listValidRecords = new List<FileCabinetRecord>(records);
+                    if (listValidRecords.Exists(item => item.Id == editInputId))
+                    {
+                        FileCabinetRecord fileCabinetRecord = new FileCabinetRecord();
 
-                    fileCabinetRecord.Id = editInputId;
-                    Console.Write("First name:");
-                    fileCabinetRecord.FirstName = recordValidator.ReadInput(recordValidator.FirstNameConverter, recordValidator.FirstNameValidator);
-                    Console.Write("Last name:");
-                    fileCabinetRecord.LastName = recordValidator.ReadInput(recordValidator.LastNameConverter, recordValidator.LastNameValidator);
-                    Console.Write("Date of birth:");
-                    fileCabinetRecord.DateOfBirth = recordValidator.ReadInput(recordValidator.DayOfBirthConverter, recordValidator.DayOfBirthValidator);
-                    Console.Write("Person's sex:");
-                    fileCabinetRecord.Sex = recordValidator.ReadInput(recordValidator.SexConverter, recordValidator.SexValidator);
-                    Console.Write("Person's height:");
-                    fileCabinetRecord.Height = recordValidator.ReadInput(recordValidator.HeightConverter, recordValidator.HeightValidator);
-                    Console.Write("Person's salary:");
-                    fileCabinetRecord.Salary = recordValidator.ReadInput(recordValidator.SalaryConverter, recordValidator.SalaryValidator);
-                    fileCabinetService.EditRecord(fileCabinetRecord);
-                    Console.WriteLine($"Record #{editInputId} is updated");
+                        fileCabinetRecord.Id = editInputId;
+                        Console.Write("First name:");
+                        fileCabinetRecord.FirstName = recordValidator.ReadInput(recordValidator.FirstNameConverter, recordValidator.FirstNameValidator);
+                        Console.Write("Last name:");
+                        fileCabinetRecord.LastName = recordValidator.ReadInput(recordValidator.LastNameConverter, recordValidator.LastNameValidator);
+                        Console.Write("Date of birth:");
+                        fileCabinetRecord.DateOfBirth = recordValidator.ReadInput(recordValidator.DayOfBirthConverter, recordValidator.DayOfBirthValidator);
+                        Console.Write("Person's sex:");
+                        fileCabinetRecord.Sex = recordValidator.ReadInput(recordValidator.SexConverter, recordValidator.SexValidator);
+                        Console.Write("Person's height:");
+                        fileCabinetRecord.Height = recordValidator.ReadInput(recordValidator.HeightConverter, recordValidator.HeightValidator);
+                        Console.Write("Person's salary:");
+                        fileCabinetRecord.Salary = recordValidator.ReadInput(recordValidator.SalaryConverter, recordValidator.SalaryValidator);
+                        fileCabinetService.EditRecord(fileCabinetRecord);
+                        Console.WriteLine($"Record #{editInputId} is updated");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"#{editInputId} record is not found.");
+                    }
                 }
                 catch (ArgumentNullException ex)
                 {
@@ -481,6 +505,58 @@ namespace FileCabinetApp
             else
             {
                 Console.WriteLine($"Incorrect (is not csv or xml) type of file - {searchParametr}.-Exit command import.");
+            }
+        }
+
+        private static void Remove(string parameters)
+        {
+            if (fileCabinetService.GetStat().Item1 < 1)
+            {
+                Console.WriteLine("File is not empty.");
+                return;
+            }
+
+            var parametersArray = parameters.Split(' ', 1);
+            if (parameters.Length == 0)
+            {
+                Console.WriteLine("remove command is empty!");
+                return;
+            }
+
+            if (parametersArray.Length > 1)
+            {
+                Console.WriteLine("Incorrect value input in comand remove!");
+                return;
+            }
+
+            string inputId = parametersArray[0];
+            int validId;
+            bool result = int.TryParse(inputId, out validId);
+
+            List<FileCabinetRecord> list = new List<FileCabinetRecord>(fileCabinetService.GetRecords());
+
+            bool isExists = list.Exists(record => record.Id == validId);
+
+            if (result && isExists)
+            {
+                fileCabinetService.Remove(validId);
+                Console.WriteLine($"Record #{inputId} is removed.");
+            }
+            else
+            {
+                Console.WriteLine($"Record #{inputId} doesn't exists.");
+            }
+        }
+
+        private static void Purge(string parameters)
+        {
+            if (fileCabinetService is FileCabinetFilesystemService)
+            {
+                fileCabinetService.Purge();
+            }
+            else
+            {
+                Console.WriteLine("fileCabinetService is not FileCabinetFilesystemService.");
             }
         }
 

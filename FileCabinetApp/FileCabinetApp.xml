@@ -275,6 +275,17 @@
             </summary>
             <param name="fileCabinetServiceSnapshot">Input parametr fileCabinetServiceSnapshot <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/>.</param>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.Remove(System.Int32)">
+            <summary>
+            Implementation IFileCabinetService Restore.
+            </summary>
+            <param name="id">Input parametr id of record <see cref="T:System.Int32"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.Purge">
+            <summary>
+            Implementation IFileCabinetService Purge.
+            </summary>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetMemoryService">
             <summary>
             Work with records. Save and change record(s).
@@ -352,6 +363,17 @@
             Implementation IFileCabinetService Restore.
             </summary>
             <param name="fileCabinetServiceSnapshot">Input parametr fileCabinetServiceSnapshot <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.Remove(System.Int32)">
+            <summary>
+            Implementation IFileCabinetService Restore.
+            </summary>
+            <param name="id">Input parametr id of record <see cref="T:System.Int32"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.Purge">
+            <summary>
+            Implementation IFileCabinetService Purge.
+            </summary>
         </member>
         <member name="T:FileCabinetApp.FileCabinetRecordCSVReader">
             <summary>
@@ -494,9 +516,9 @@
         </member>
         <member name="M:FileCabinetApp.IFileCabinetService.GetStat">
             <summary>
-            Get count of record FileCabinetRecord.
+            Get count of record and delete records FileCabinetRecord.
             </summary>
-            <returns>Count records <see cref="T:System.Int32"/>.</returns>
+            <returns>Count records <see cref="T:System.Tuple"/>.</returns>
         </member>
         <member name="M:FileCabinetApp.IFileCabinetService.EditRecord(FileCabinetRecord)">
             <summary>
@@ -536,6 +558,17 @@
             Return make snapshot for restore.
             </summary>
             <param name="fileCabinetServiceSnapshot">Input parametr fileCabinetServiceSnapshot <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.Remove(System.Int32)">
+            <summary>
+            Delete record by id.
+            </summary>
+            <param name="id">Input parametr id of record <see cref="T:System.Int32"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.Purge">
+            <summary>
+            Delete record by bit in file.
+            </summary>
         </member>
         <member name="T:FileCabinetApp.IRecordValidator">
             <summary>

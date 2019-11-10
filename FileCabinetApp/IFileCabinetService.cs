@@ -30,10 +30,10 @@ namespace FileCabinetApp
         ReadOnlyCollection<FileCabinetRecord> GetRecords();
 
         /// <summary>
-        /// Get count of record FileCabinetRecord.
+        /// Get count of record and delete records FileCabinetRecord.
         /// </summary>
-        /// <returns>Count records <see cref="int"/>.</returns>
-        int GetStat();
+        /// <returns>Count records <see cref="Tuple"/>.</returns>
+        Tuple<int, int> GetStat();
 
         /// <summary>
         /// Edit record by id.
@@ -73,5 +73,17 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="fileCabinetServiceSnapshot">Input parametr fileCabinetServiceSnapshot <see cref="FileCabinetServiceSnapshot"/>.</param>
         void Restore(FileCabinetServiceSnapshot fileCabinetServiceSnapshot);
+
+        /// <summary>
+        /// Delete record by id.
+        /// </summary>
+        /// <param name="id">Input parametr id of record <see cref="int"/>.</param>
+        void Remove(int id);
+
+        /// <summary>
+        /// Delete record by bit in file.
+        /// </summary>
+        // /// <param name="id">Input parametr id of record <see cref="int"/>.</param>
+        void Purge();
     }
 }
