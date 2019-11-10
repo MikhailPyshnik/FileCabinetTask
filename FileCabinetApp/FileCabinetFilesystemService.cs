@@ -13,8 +13,8 @@ namespace FileCabinetApp
     /// </summary>
     public class FileCabinetFilesystemService : IFileCabinetService
     {
-        private const int MaxStringLength = 120;
-        private const int RecordSize = 278;
+        private const int MAXSTRINGLENGTH = 120;
+        private const int RECORDSIZE = 278;
         private FileStream fileStream;
 
         /// <summary>
@@ -71,14 +71,21 @@ namespace FileCabinetApp
         public ReadOnlyCollection<FileCabinetRecord> GetRecords()
         {
             List<FileCabinetRecord> listRecord = new List<FileCabinetRecord>();
-            var recordBuffer = new byte[RecordSize];
+            var recordBuffer = new byte[RECORDSIZE];
             int counteRecordInFile = this.GetStat();
             this.fileStream.Seek(0, SeekOrigin.Begin);
             for (int i = 1; i <= counteRecordInFile; i++)
             {
-                this.fileStream.Read(recordBuffer, 0, RecordSize);
-                var record = BytesToFileCabinetRecord(recordBuffer);
-                listRecord.Add(record);
+                this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
+                if (recordBuffer[1] == 1)
+                {
+                    continue;
+                }
+                else
+                {
+                    var record = BytesToFileCabinetRecord(recordBuffer);
+                    listRecord.Add(record);
+                }
             }
 
             return new ReadOnlyCollection<FileCabinetRecord>(listRecord);
@@ -95,33 +102,35 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{nameof(fileCabinetRecord)} is null!");
             }
 
-            if (fileCabinetRecord.Id > this.GetStat())
-            {
-                throw new ArgumentException("Input Id is incorrect value.Id less than count of record in file.");
-            }
-
             int editIdReord = fileCabinetRecord.Id;
-            var recordBuffer = new byte[RecordSize];
+            var recordBuffer = new byte[RECORDSIZE];
             int counteRecordInFile = this.GetStat();
             this.fileStream.Seek(0, SeekOrigin.Begin);
             for (int i = 0; i < counteRecordInFile; i++)
             {
-                this.fileStream.Read(recordBuffer, 0, RecordSize);
-                var bytesToRecord = BytesToFileCabinetRecord(recordBuffer);
-                if (bytesToRecord.Id == editIdReord)
+                this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
+                if (recordBuffer[1] == 1)
                 {
-                    this.fileStream.Seek(i * 278, SeekOrigin.Begin);
-                    bytesToRecord.FirstName = fileCabinetRecord.FirstName;
-                    bytesToRecord.LastName = fileCabinetRecord.LastName;
-                    bytesToRecord.DateOfBirth = fileCabinetRecord.DateOfBirth;
-                    bytesToRecord.Sex = fileCabinetRecord.Sex;
-                    bytesToRecord.Height = fileCabinetRecord.Height;
-                    bytesToRecord.Salary = fileCabinetRecord.Salary;
-                    this.fileStream.Seek(0, SeekOrigin.Current);
-                    var recordToBytes = FileCabinetRecordToBytes(bytesToRecord);
-                    this.fileStream.Write(recordToBytes, 0, recordToBytes.Length);
-                    this.fileStream.Flush();
-                    return;
+                    continue;
+                }
+                else
+                {
+                    var bytesToRecord = BytesToFileCabinetRecord(recordBuffer);
+                    if (bytesToRecord.Id == editIdReord)
+                    {
+                        this.fileStream.Seek(i * 278, SeekOrigin.Begin);
+                        bytesToRecord.FirstName = fileCabinetRecord.FirstName;
+                        bytesToRecord.LastName = fileCabinetRecord.LastName;
+                        bytesToRecord.DateOfBirth = fileCabinetRecord.DateOfBirth;
+                        bytesToRecord.Sex = fileCabinetRecord.Sex;
+                        bytesToRecord.Height = fileCabinetRecord.Height;
+                        bytesToRecord.Salary = fileCabinetRecord.Salary;
+                        this.fileStream.Seek(0, SeekOrigin.Current);
+                        var recordToBytes = FileCabinetRecordToBytes(bytesToRecord);
+                        this.fileStream.Write(recordToBytes, 0, recordToBytes.Length);
+                        this.fileStream.Flush();
+                        return;
+                    }
                 }
             }
         }
@@ -224,6 +233,37 @@ namespace FileCabinetApp
             Console.WriteLine($"{countImportRecord} records were add to FileCabinetMemoryService");
         }
 
+        /// <summary>
+        /// Implementation IFileCabinetService Restore.
+        /// </summary>
+        /// <param name="id">Input parametr id of record <see cref="int"/>.</param>
+        public void Remove(int id)
+        {
+            var a = this.GetAllRecordsFromFile();
+            List<FileCabinetRecord> recordToList = new List<FileCabinetRecord>(a);
+            int curent = 0;
+            int removeIdRecord = id;
+            var recordBuffer = new byte[RECORDSIZE];
+            int counteRecordInFile = this.GetStat();
+            this.fileStream.Seek(0, SeekOrigin.Begin);
+            foreach (var revoveId in recordToList)
+            {
+                this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
+                if (revoveId.Id == id)
+                {
+                    this.fileStream.Seek(curent * 278, SeekOrigin.Begin);
+                    this.fileStream.Seek(0, SeekOrigin.Current);
+                    var removeRecord = recordBuffer;
+                    removeRecord[1] = 1;
+                    this.fileStream.Write(removeRecord, 0, removeRecord.Length);
+                    this.fileStream.Flush();
+                    break;
+                }
+
+                ++curent;
+            }
+        }
+
         private static byte[] FileCabinetRecordToBytes(FileCabinetRecord fileCabinetRecord)
         {
             if (fileCabinetRecord == null)
@@ -231,7 +271,7 @@ namespace FileCabinetApp
                 throw new ArgumentNullException(nameof(fileCabinetRecord));
             }
 
-            var bytes = new byte[RecordSize];
+            var bytes = new byte[RECORDSIZE];
             using (var memoryStream = new MemoryStream(bytes))
             using (var binaryWriter = new BinaryWriter(memoryStream))
             {
@@ -239,9 +279,9 @@ namespace FileCabinetApp
                 binaryWriter.Write(fileCabinetRecord.Id);
                 Encoding unicode = Encoding.Unicode;
                 var firstnameBytes = unicode.GetBytes(fileCabinetRecord.FirstName);
-                var nameBuffer = new byte[MaxStringLength];
+                var nameBuffer = new byte[MAXSTRINGLENGTH];
                 var lastnameBytes = unicode.GetBytes(fileCabinetRecord.LastName);
-                var lastnameBuffer = new byte[MaxStringLength];
+                var lastnameBuffer = new byte[MAXSTRINGLENGTH];
 
                 int nameLength = firstnameBytes.Length;
                 int lastnameLength = lastnameBytes.Length;
@@ -281,12 +321,12 @@ namespace FileCabinetApp
                 fileCabinetRecord.Status = binaryReader.ReadInt16();
                 fileCabinetRecord.Id = binaryReader.ReadInt32();
 
-                var nameBuffer = binaryReader.ReadBytes(MaxStringLength);
-                string first = unicode.GetString(nameBuffer, 0, MaxStringLength);
+                var nameBuffer = binaryReader.ReadBytes(MAXSTRINGLENGTH);
+                string first = unicode.GetString(nameBuffer, 0, MAXSTRINGLENGTH);
                 fileCabinetRecord.FirstName = first.Trim('\u0000');
 
-                var lastnameBuffer = binaryReader.ReadBytes(MaxStringLength);
-                string second = unicode.GetString(lastnameBuffer, 0, MaxStringLength);
+                var lastnameBuffer = binaryReader.ReadBytes(MAXSTRINGLENGTH);
+                string second = unicode.GetString(lastnameBuffer, 0, MAXSTRINGLENGTH);
                 fileCabinetRecord.LastName = second.Trim('\u0000');
 
                 int year = binaryReader.ReadInt32();
@@ -363,39 +403,130 @@ namespace FileCabinetApp
 
         private void UpdateListAfterImport(List<FileCabinetRecord> validateList)
         {
-            List<FileCabinetRecord> listRecord = new List<FileCabinetRecord>();
-            var recordBuffer = new byte[RecordSize];
-            int counteRecordInFile = this.GetStat();
-            this.fileStream.Seek(0, SeekOrigin.Begin);
-            for (int i = 1; i <= counteRecordInFile; i++)
-            {
-                this.fileStream.Read(recordBuffer, 0, RecordSize);
-                var record = BytesToFileCabinetRecord(recordBuffer);
-                listRecord.Add(record);
-            }
+            List<FileCabinetRecord> notDeletedRecordsList = this.GetNotDeletedRecordsList();
+            List<FileCabinetRecord> deletedRecordList = this.GetDdeletedRecordList();
+            List<FileCabinetRecord> validatedRecordsWithIdFromDeletedRecordList = new List<FileCabinetRecord>();
 
-            for (int i = 0; i < listRecord.Count; i++)
+            // Add records from notDeletedRecordsList to validateList by id.
+            for (int i = 0; i < notDeletedRecordsList.Count; i++)
             {
-                if (!validateList.Exists(item => item.Id == listRecord[i].Id))
+                if (!validateList.Exists(item => item.Id == notDeletedRecordsList[i].Id))
                 {
-                    validateList.Add(listRecord[i]);
+                    validateList.Add(notDeletedRecordsList[i]);
                 }
             }
 
             validateList = validateList.OrderBy(item => item.Id).ToList();
-            listRecord.Clear();
-            listRecord.AddRange(validateList);
+
+            // Get records by id form validateList if id exist in deletedRecordList.
+            foreach (var item in validateList)
+            {
+                if (deletedRecordList.Exists(item1 => item1.Id == item.Id))
+                {
+                    validatedRecordsWithIdFromDeletedRecordList.Add(item);
+                }
+            }
+
+            // Remove records by id form validateList if id exist in deletedRecordList.
+            foreach (var item in deletedRecordList)
+            {
+                if (validateList.Exists(item1 => item1.Id == item.Id))
+                {
+                    validateList.RemoveAll(item1 => item1.Id == item.Id);
+                }
+            }
+
+            notDeletedRecordsList.Clear();
+            notDeletedRecordsList.AddRange(validateList);
+
+            notDeletedRecordsList.AddRange(validatedRecordsWithIdFromDeletedRecordList);
 
             this.fileStream.SetLength(0);
             this.fileStream.Flush();
 
-            foreach (var item in listRecord)
+            // Write in cabinet-records.db all records.
+            foreach (var item in notDeletedRecordsList)
             {
                 this.fileStream.Seek(0, SeekOrigin.End);
                 var b1 = FileCabinetRecordToBytes(item);
                 this.fileStream.Write(b1, 0, b1.Length);
                 this.fileStream.Flush();
             }
+        }
+
+        private ReadOnlyCollection<FileCabinetRecord> GetAllRecordsFromFile()
+        {
+            List<FileCabinetRecord> listRecord = new List<FileCabinetRecord>();
+            var recordBuffer = new byte[RECORDSIZE];
+            int counteRecordInFile = this.GetStat();
+            this.fileStream.Seek(0, SeekOrigin.Begin);
+            for (int i = 1; i <= counteRecordInFile; i++)
+            {
+                this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
+                var record = BytesToFileCabinetRecord(recordBuffer);
+                listRecord.Add(record);
+            }
+
+            return new ReadOnlyCollection<FileCabinetRecord>(listRecord);
+        }
+
+        private List<FileCabinetRecord> GetNotDeletedRecordsList()
+        {
+            List<FileCabinetRecord> notDeletedRecordsList = new List<FileCabinetRecord>();
+            var recordBuffer = new byte[RECORDSIZE];
+            int counteRecordInFile = this.GetStat();
+            this.fileStream.Seek(0, SeekOrigin.Begin);
+            for (int i = 1; i <= counteRecordInFile; i++)
+            {
+                this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
+                if (recordBuffer[1] != 1)
+                {
+                    var record = BytesToFileCabinetRecord(recordBuffer);
+                    notDeletedRecordsList.Add(record);
+                }
+            }
+
+            return notDeletedRecordsList;
+        }
+
+        private List<FileCabinetRecord> GetDdeletedRecordList()
+        {
+            List<FileCabinetRecord> deletedRecordList = new List<FileCabinetRecord>();
+
+            var recordBuffer = new byte[RECORDSIZE];
+            int counteRecordInFile = this.GetStat();
+            this.fileStream.Seek(0, SeekOrigin.Begin);
+            for (int i = 1; i <= counteRecordInFile; i++)
+            {
+                this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
+                if (recordBuffer[1] == 1)
+                {
+                    var record = BytesToFileCabinetRecord(recordBuffer);
+                    deletedRecordList.Add(record);
+                }
+            }
+
+            return deletedRecordList;
+        }
+
+        private List<FileCabinetRecord> GetValidRecordListWithNotDeletedRecordsList(List<FileCabinetRecord> list)
+        {
+            List<FileCabinetRecord> deletedRecordList = new List<FileCabinetRecord>();
+
+            var recordBuffer = new byte[RECORDSIZE];
+            int counteRecordInFile = this.GetStat();
+            this.fileStream.Seek(0, SeekOrigin.Begin);
+            for (int i = 1; i <= counteRecordInFile; i++)
+            {
+                this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
+                if (recordBuffer[1] == 1)
+                {
+                    var record = BytesToFileCabinetRecord(recordBuffer);
+                    deletedRecordList.Add(record);
+                }
+            }
+
+            return deletedRecordList;
         }
     }
 }

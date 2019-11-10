@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 
 namespace FileCabinetApp
 {
@@ -189,6 +188,23 @@ namespace FileCabinetApp
             Console.WriteLine($"{countImportRecord} records were add to FileCabinetMemoryService");
         }
 
+        /// <summary>
+        /// Implementation IFileCabinetService Restore.
+        /// </summary>
+        /// <param name="id">Input parametr id of record <see cref="int"/>.</param>
+        public void Remove(int id)
+        {
+            foreach (var removeId in this.list)
+            {
+                if (removeId.Id == id)
+                {
+                    this.list.Remove(removeId);
+                    this.RemoveRecordFromDictionary(removeId);
+                    break;
+                }
+            }
+        }
+
         private void AddRecordToDictionary(FileCabinetRecord record)
         {
             this.AddRecordToFirstNameDictionary(record, record.FirstName);
@@ -360,6 +376,40 @@ namespace FileCabinetApp
             validateList = validateList.OrderBy(item => item.Id).ToList();
             this.list.Clear();
             this.list.AddRange(validateList);
+        }
+
+        private void RemoveRecordFromDictionary(FileCabinetRecord record)
+        {
+            this.RemoveItemByFirstName(record);
+            this.RemoveItemLastName(record);
+            this.RemoveItemDateOfBirth(record);
+        }
+
+        private void RemoveItemByFirstName(FileCabinetRecord record)
+        {
+            string firstName = record.FirstName;
+            if (this.firstNameDictionary.ContainsKey(firstName.ToLower(new CultureInfo("en-US"))))
+            {
+                this.firstNameDictionary[firstName].Remove(record);
+            }
+        }
+
+        private void RemoveItemLastName(FileCabinetRecord record)
+        {
+            string lastName = record.LastName;
+            if (this.firstNameDictionary.ContainsKey(lastName.ToLower(new CultureInfo("en-US"))))
+            {
+                this.firstNameDictionary[lastName].Remove(record);
+            }
+        }
+
+        private void RemoveItemDateOfBirth(FileCabinetRecord record)
+        {
+            string tempDateOfBirh = record.DateOfBirth.ToString("yyyy-MMM-dd", new CultureInfo("en-US"));
+            if (this.firstNameDictionary.ContainsKey(tempDateOfBirh.ToLower(new CultureInfo("en-US"))))
+            {
+                this.firstNameDictionary[tempDateOfBirh].Remove(record);
+            }
         }
     }
 }

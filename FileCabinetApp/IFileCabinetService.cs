@@ -73,5 +73,11 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="fileCabinetServiceSnapshot">Input parametr fileCabinetServiceSnapshot <see cref="FileCabinetServiceSnapshot"/>.</param>
         void Restore(FileCabinetServiceSnapshot fileCabinetServiceSnapshot);
+
+        /// <summary>
+        /// Delete record bu id.
+        /// </summary>
+        /// <param name="id">Input parametr id of record <see cref="int"/>.</param>
+        void Remove(int id);
     }
 }
