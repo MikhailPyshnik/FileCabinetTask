@@ -39,6 +39,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("export", Export),
             new Tuple<string, Action<string>>("import", Import),
             new Tuple<string, Action<string>>("remove", Remove),
+            new Tuple<string, Action<string>>("purge", Purge),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -53,6 +54,7 @@ namespace FileCabinetApp
             new string[] { "export", "export file", "The 'export' export records to file." },
             new string[] { "import", "import file", "The 'import' import type of file." },
             new string[] { "remove", "remove record by id", "The 'remove' delete record." },
+            new string[] { "purge", "purge records in FileCabinetFilesystemService", "The 'purge' records in FileCabinetFilesystemService." },
         };
 
         /// <summary>
@@ -533,6 +535,18 @@ namespace FileCabinetApp
             else
             {
                 Console.WriteLine($"Record #{inputId} doesn't exists.");
+            }
+        }
+
+        private static void Purge(string parameters)
+        {
+            if (fileCabinetService is FileCabinetFilesystemService)
+            {
+                fileCabinetService.Purge();
+            }
+            else
+            {
+                Console.WriteLine("fileCabinetService is not FileCabinetFilesystemService.");
             }
         }
 

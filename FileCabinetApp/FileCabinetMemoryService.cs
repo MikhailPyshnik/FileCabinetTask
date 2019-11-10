@@ -205,6 +205,14 @@ namespace FileCabinetApp
             }
         }
 
+        /// <summary>
+        /// Implementation IFileCabinetService Purge.
+        /// </summary>
+        public void Purge()
+        {
+            Console.WriteLine("In FileCabinetMemoryService purge is not exist.");
+        }
+
         private void AddRecordToDictionary(FileCabinetRecord record)
         {
             this.AddRecordToFirstNameDictionary(record, record.FirstName);

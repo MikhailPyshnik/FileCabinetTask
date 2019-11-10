@@ -264,6 +264,20 @@ namespace FileCabinetApp
             }
         }
 
+        /// <summary>
+        /// Implementation IFileCabinetService Purge.
+        /// </summary>
+      // /// <param name="id">Input parametr id of record <see cref="int"/>.</param>
+        public void Purge()
+        {
+            int countDeletedRecords = this.GetDdeletedRecordList().Count;
+            int countRecordsInFile = this.GetStat();
+
+            this.WriteRecordsToFile(this.GetNotDeletedRecordsList());
+
+            Console.WriteLine($"Data file processing is completed: {countDeletedRecords} of {countRecordsInFile} records were purged.");
+        }
+
         private static byte[] FileCabinetRecordToBytes(FileCabinetRecord fileCabinetRecord)
         {
             if (fileCabinetRecord == null)
@@ -403,16 +417,30 @@ namespace FileCabinetApp
 
         private void UpdateListAfterImport(List<FileCabinetRecord> validateList)
         {
-            List<FileCabinetRecord> notDeletedRecordsList = this.GetNotDeletedRecordsList();
+            List<FileCabinetRecord> listRecord = new List<FileCabinetRecord>();
             List<FileCabinetRecord> deletedRecordList = this.GetDdeletedRecordList();
             List<FileCabinetRecord> validatedRecordsWithIdFromDeletedRecordList = new List<FileCabinetRecord>();
+            var recordBuffer = new byte[RECORDSIZE];
+            int counteRecordInFile = this.GetStat();
+            this.fileStream.Seek(0, SeekOrigin.Begin);
+            for (int i = 1; i <= counteRecordInFile; i++)
+            {
+                this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
+                var record = BytesToFileCabinetRecord(recordBuffer);
+                listRecord.Add(record);
+            }
 
             // Add records from notDeletedRecordsList to validateList by id.
-            for (int i = 0; i < notDeletedRecordsList.Count; i++)
+            foreach (var it in listRecord)
             {
-                if (!validateList.Exists(item => item.Id == notDeletedRecordsList[i].Id))
+                if (it.Status == 256)
                 {
-                    validateList.Add(notDeletedRecordsList[i]);
+                    validateList.Add(it);
+                }
+
+                if (!validateList.Exists(item => item.Id == it.Id))
+                {
+                    validateList.Add(it);
                 }
             }
 
@@ -436,16 +464,16 @@ namespace FileCabinetApp
                 }
             }
 
-            notDeletedRecordsList.Clear();
-            notDeletedRecordsList.AddRange(validateList);
+            listRecord.Clear();
+            listRecord.AddRange(validateList);
 
-            notDeletedRecordsList.AddRange(validatedRecordsWithIdFromDeletedRecordList);
+            listRecord.AddRange(validatedRecordsWithIdFromDeletedRecordList);
 
             this.fileStream.SetLength(0);
             this.fileStream.Flush();
 
             // Write in cabinet-records.db all records.
-            foreach (var item in notDeletedRecordsList)
+            foreach (var item in listRecord)
             {
                 this.fileStream.Seek(0, SeekOrigin.End);
                 var b1 = FileCabinetRecordToBytes(item);
@@ -527,6 +555,20 @@ namespace FileCabinetApp
             }
 
             return deletedRecordList;
+        }
+
+        private void WriteRecordsToFile(List<FileCabinetRecord> list)
+        {
+            this.fileStream.SetLength(0);
+            this.fileStream.Flush();
+
+            foreach (var item in list)
+            {
+                this.fileStream.Seek(0, SeekOrigin.End);
+                var b1 = FileCabinetRecordToBytes(item);
+                this.fileStream.Write(b1, 0, b1.Length);
+                this.fileStream.Flush();
+            }
         }
     }
 }
