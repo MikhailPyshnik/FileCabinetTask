@@ -4,6 +4,70 @@
         <name>FileCabinetApp</name>
     </assembly>
     <members>
+        <member name="T:FileCabinetApp.AppCommandRequest">
+            <summary>
+            Work AppCommandRequest.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.AppCommandRequest.Command">
+            <summary>
+            Gets or sets the Command.
+            </summary>
+            <value>The Command.</value>
+        </member>
+        <member name="P:FileCabinetApp.AppCommandRequest.Parameters">
+            <summary>
+            Gets or sets the Parameters.
+            </summary>
+            <value>The Command.</value>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandler">
+            <summary>
+            Work with commands.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
+            <summary>
+            Override method Handle by CommandHandlerBase in CommandHandler.
+            </summary>
+            <param name="appCommandRequest">Input parametr record <see cref="T:FileCabinetApp.AppCommandRequest"/>.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlerBase">
+            <summary>
+            Base class CommandHandler.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlerBase.SetNext(FileCabinetApp.ICommandHandler)">
+            <summary>
+             Implementation method SetNext by ICommandHandler in CommandHandlerBase..
+            </summary>
+            <param name="commandHandler">Input parametr record <see cref="T:FileCabinetApp.ICommandHandler"/>.</param>
+            <returns>Id <see cref="T:System.Int32"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlerBase.Handle(FileCabinetApp.AppCommandRequest)">
+            <summary>
+            Implementation method Handle by ICommandHandler in CommandHandlerBase.
+            </summary>
+            <param name="appCommandRequest">Input parametr record <see cref="T:FileCabinetApp.AppCommandRequest"/>.</param>
+        </member>
+        <member name="T:FileCabinetApp.ICommandHandler">
+            <summary>
+             Contains methods SetNext and Handle.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.ICommandHandler.SetNext(FileCabinetApp.ICommandHandler)">
+            <summary>
+            Method SetNext.
+            </summary>
+            <param name="commandHandler">Input parametr record <see cref="T:FileCabinetApp.ICommandHandler"/>.</param>
+            <returns>Id <see cref="T:System.Int32"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ICommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
+            <summary>
+            Method Handle.
+            </summary>
+            <param name="appCommandRequest">Input parametr record <see cref="T:FileCabinetApp.AppCommandRequest"/>.</param>
+        </member>
         <member name="T:FileCabinetApp.CustomValidator">
             <summary>
             Class of console application.
