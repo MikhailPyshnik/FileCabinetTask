@@ -9,16 +9,19 @@ namespace FileCabinetApp.CommandHandlers
     public class ExitCommandHandler : ServiceCommandHandlerBase
     {
         private static FileStream fileStream;
+        private static Action<bool> action;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExitCommandHandler"/> class.
         /// </summary>
         /// <param name="fileCabinetService">Input parametr start id.<see cref="IFileCabinetService"/>.</param>
         /// <param name="filestream">Input parametr fileStream.<see cref="FileStream"/>.</param>
-        public ExitCommandHandler(IFileCabinetService fileCabinetService, FileStream filestream)
+        /// <param name="exit">Input delegate Action.<see cref="Action"/>.</param>
+        public ExitCommandHandler(IFileCabinetService fileCabinetService, FileStream filestream, Action<bool> exit)
              : base(fileCabinetService)
         {
             fileStream = filestream;
+            action = exit;
         }
 
         /// <summary>
@@ -51,7 +54,7 @@ namespace FileCabinetApp.CommandHandlers
             }
 
             Console.WriteLine("Exiting an application...");
-            Program.isRunning = false;
+            action(false);
         }
     }
 }

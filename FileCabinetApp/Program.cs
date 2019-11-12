@@ -11,21 +11,13 @@ namespace FileCabinetApp
     /// </summary>
     public static class Program
     {
-#pragma warning disable SA1401 // Fields should be private
-#pragma warning disable CA2211 // Non-constant fields should not be visible
-#pragma warning disable SA1307 // Accessible fields should begin with upper-case letter
-#pragma warning disable SA1600 // Elements should be documented
-        public static bool isRunning = true;
-#pragma warning restore SA1600 // Elements should be documented
-#pragma warning restore SA1307 // Accessible fields should begin with upper-case letter
-#pragma warning restore CA2211 // Non-constant fields should not be visible
-#pragma warning restore SA1401 // Fields should be private
         private const string DeveloperName = "Mikhail Pyshnik";
         private const string HintMessage = "Enter your command, or enter 'help' to get help.";
 
         private static IFileCabinetService fileCabinetService;
         private static IValidatorOfParemetrs recordValidator;
         private static FileStream filestream;
+        private static bool isRunning = true;
 
         private static string validationRules = "default";
 
@@ -152,7 +144,7 @@ namespace FileCabinetApp
             var removeHandler = new RemoveCommandHandler(fileCabinetService);
             var purgeHandler = new PurgeCommandHandler(fileCabinetService);
             var exportHandler = new ExportCommandHandler(fileCabinetService);
-            var exitHandler = new ExitCommandHandler(fileCabinetService, filestream);
+            var exitHandler = new ExitCommandHandler(fileCabinetService, filestream, ActionIsRunning);
             helpHandler.SetNext(createHandler)
                        .SetNext(importHandler)
                        .SetNext(statHandler)
@@ -164,6 +156,14 @@ namespace FileCabinetApp
                        .SetNext(exportHandler)
                        .SetNext(exitHandler);
             return helpHandler;
+        }
+
+        private static void ActionIsRunning(bool running)
+        {
+            if (!running)
+            {
+                isRunning = false;
+            }
         }
 
         private class Options
