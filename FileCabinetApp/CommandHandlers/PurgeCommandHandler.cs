@@ -7,6 +7,17 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class PurgeCommandHandler : CommandHandlerBase
     {
+        private static IFileCabinetService service;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PurgeCommandHandler"/> class.
+        /// </summary>
+        /// <param name="fileCabinetService">Input parametr start id.<see cref="IFileCabinetService"/>.</param>
+        public PurgeCommandHandler(IFileCabinetService fileCabinetService)
+        {
+            service = fileCabinetService;
+        }
+
         /// <summary>
         /// Override method Handle by CommandHandlerBase in PurgeCommandHandler.
         /// </summary>
@@ -31,9 +42,9 @@ namespace FileCabinetApp.CommandHandlers
 
         private static void Purge(string parameters)
         {
-            if (Program.fileCabinetService is FileCabinetFilesystemService)
+            if (service is FileCabinetFilesystemService)
             {
-                Program.fileCabinetService.Purge();
+                service.Purge();
             }
             else
             {

@@ -7,6 +7,17 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class StatCommandHandler : CommandHandlerBase
     {
+        private static IFileCabinetService service;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StatCommandHandler"/> class.
+        /// </summary>
+        /// <param name="fileCabinetService">Input parametr start id.<see cref="IFileCabinetService"/>.</param>
+        public StatCommandHandler(IFileCabinetService fileCabinetService)
+        {
+            service = fileCabinetService;
+        }
+
         /// <summary>
         /// Override method Handle by CommandHandlerBase in StatCommandHandler.
         /// </summary>
@@ -31,16 +42,16 @@ namespace FileCabinetApp.CommandHandlers
 
         private static void Stat(string parameters)
         {
-            if (Program.fileCabinetService is FileCabinetFilesystemService)
+            if (service is FileCabinetFilesystemService)
             {
-                var recordsCount = Program.fileCabinetService.GetStat().Item1;
-                var deleteRecords = Program.fileCabinetService.GetStat().Item2;
+                var recordsCount = service.GetStat().Item1;
+                var deleteRecords = service.GetStat().Item2;
                 Console.WriteLine($"{recordsCount} record(s).");
                 Console.WriteLine($"{deleteRecords} record(s) were deleted.");
             }
             else
             {
-                var recordsCount = Program.fileCabinetService.GetStat().Item1;
+                var recordsCount = service.GetStat().Item1;
                 Console.WriteLine($"{recordsCount} record(s).");
             }
         }

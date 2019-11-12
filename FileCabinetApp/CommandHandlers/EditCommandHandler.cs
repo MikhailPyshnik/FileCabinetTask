@@ -9,6 +9,20 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class EditCommandHandler : CommandHandlerBase
     {
+        private static IFileCabinetService service;
+        private static IValidatorOfParemetrs inputParamsValidator;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EditCommandHandler"/> class.
+        /// </summary>
+        /// <param name="fileCabinetService">Input parametr start id.<see cref="IFileCabinetService"/>.</param>
+        /// <param name="recordValidator">Input parametr amount of records.<see cref="IValidatorOfParemetrs"/>.</param>
+        public EditCommandHandler(IFileCabinetService fileCabinetService, IValidatorOfParemetrs recordValidator)
+        {
+            service = fileCabinetService;
+            inputParamsValidator = recordValidator;
+        }
+
         /// <summary>
         /// Override method Handle by CommandHandlerBase in EditCommandHandler.
         /// </summary>
@@ -39,13 +53,13 @@ namespace FileCabinetApp.CommandHandlers
                 {
                     CultureInfo provider = new CultureInfo("en-US");
                     int editInputId = Convert.ToInt32(parameters, provider);
-                    if (Program.fileCabinetService.GetStat().Item1 < 1)
+                    if (service.GetStat().Item1 < 1)
                     {
                         Console.WriteLine("File is not empty.");
                         return;
                     }
 
-                    var records = Program.fileCabinetService.GetRecords();
+                    var records = service.GetRecords();
                     List<FileCabinetRecord> listValidRecords = new List<FileCabinetRecord>(records);
                     if (listValidRecords.Exists(item => item.Id == editInputId))
                     {
@@ -53,18 +67,18 @@ namespace FileCabinetApp.CommandHandlers
 
                         fileCabinetRecord.Id = editInputId;
                         Console.Write("First name:");
-                        fileCabinetRecord.FirstName = Program.recordValidator.ReadInput(Program.recordValidator.FirstNameConverter, Program.recordValidator.FirstNameValidator);
+                        fileCabinetRecord.FirstName = inputParamsValidator.ReadInput(inputParamsValidator.FirstNameConverter, inputParamsValidator.FirstNameValidator);
                         Console.Write("Last name:");
-                        fileCabinetRecord.LastName = Program.recordValidator.ReadInput(Program.recordValidator.LastNameConverter, Program.recordValidator.LastNameValidator);
+                        fileCabinetRecord.LastName = inputParamsValidator.ReadInput(inputParamsValidator.LastNameConverter, inputParamsValidator.LastNameValidator);
                         Console.Write("Date of birth:");
-                        fileCabinetRecord.DateOfBirth = Program.recordValidator.ReadInput(Program.recordValidator.DayOfBirthConverter, Program.recordValidator.DayOfBirthValidator);
+                        fileCabinetRecord.DateOfBirth = inputParamsValidator.ReadInput(inputParamsValidator.DayOfBirthConverter, inputParamsValidator.DayOfBirthValidator);
                         Console.Write("Person's sex:");
-                        fileCabinetRecord.Sex = Program.recordValidator.ReadInput(Program.recordValidator.SexConverter, Program.recordValidator.SexValidator);
+                        fileCabinetRecord.Sex = inputParamsValidator.ReadInput(inputParamsValidator.SexConverter, inputParamsValidator.SexValidator);
                         Console.Write("Person's height:");
-                        fileCabinetRecord.Height = Program.recordValidator.ReadInput(Program.recordValidator.HeightConverter, Program.recordValidator.HeightValidator);
+                        fileCabinetRecord.Height = inputParamsValidator.ReadInput(inputParamsValidator.HeightConverter, inputParamsValidator.HeightValidator);
                         Console.Write("Person's salary:");
-                        fileCabinetRecord.Salary = Program.recordValidator.ReadInput(Program.recordValidator.SalaryConverter, Program.recordValidator.SalaryValidator);
-                        Program.fileCabinetService.EditRecord(fileCabinetRecord);
+                        fileCabinetRecord.Salary = inputParamsValidator.ReadInput(inputParamsValidator.SalaryConverter, inputParamsValidator.SalaryValidator);
+                        service.EditRecord(fileCabinetRecord);
                         Console.WriteLine($"Record #{editInputId} is updated");
                     }
                     else

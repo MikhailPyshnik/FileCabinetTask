@@ -8,6 +8,17 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class RemoveCommandHandler : CommandHandlerBase
     {
+        private static IFileCabinetService service;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RemoveCommandHandler"/> class.
+        /// </summary>
+        /// <param name="fileCabinetService">Input parametr start id.<see cref="IFileCabinetService"/>.</param>
+        public RemoveCommandHandler(IFileCabinetService fileCabinetService)
+        {
+            service = fileCabinetService;
+        }
+
         /// <summary>
         /// Override method Handle by CommandHandlerBase in RemoveCommandHandler.
         /// </summary>
@@ -32,7 +43,7 @@ namespace FileCabinetApp.CommandHandlers
 
         private static void Remove(string parameters)
         {
-            if (Program.fileCabinetService.GetStat().Item1 < 1)
+            if (service.GetStat().Item1 < 1)
             {
                 Console.WriteLine("File is not empty.");
                 return;
@@ -55,13 +66,13 @@ namespace FileCabinetApp.CommandHandlers
             int validId;
             bool result = int.TryParse(inputId, out validId);
 
-            List<FileCabinetRecord> list = new List<FileCabinetRecord>(Program.fileCabinetService.GetRecords());
+            List<FileCabinetRecord> list = new List<FileCabinetRecord>(service.GetRecords());
 
             bool isExists = list.Exists(record => record.Id == validId);
 
             if (result && isExists)
             {
-                Program.fileCabinetService.Remove(validId);
+                service.Remove(validId);
                 Console.WriteLine($"Record #{inputId} is removed.");
             }
             else

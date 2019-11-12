@@ -8,6 +8,17 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class ListCommandHandler : CommandHandlerBase
     {
+        private static IFileCabinetService service;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ListCommandHandler"/> class.
+        /// </summary>
+        /// <param name="fileCabinetService">Input parametr start id.<see cref="IFileCabinetService"/>.</param>
+        public ListCommandHandler(IFileCabinetService fileCabinetService)
+        {
+            service = fileCabinetService;
+        }
+
         /// <summary>
         /// Override method Handle by CommandHandlerBase in ListCommandHandler.
         /// </summary>
@@ -33,7 +44,7 @@ namespace FileCabinetApp.CommandHandlers
         private static void List(string parameters)
         {
             CultureInfo provider = new CultureInfo("en-US");
-            var reultList = Program.fileCabinetService.GetRecords();
+            var reultList = service.GetRecords();
             if (reultList.Count == 0)
             {
                 Console.Write("The list is empty.Add new record => add command - create");

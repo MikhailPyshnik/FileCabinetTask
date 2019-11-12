@@ -55,7 +55,7 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{nameof(fileCabinetRecord)} is null!");
             }
 
-            fileCabinetRecord.Id = this.GetCountAllRecordssFromFile() + 1;
+            fileCabinetRecord.Id = this.GetMaxIdInNotDeletedRecordsFromFile() + 1;
             this.fileStream.Seek(0, SeekOrigin.End);
             var b1 = FileCabinetRecordToBytes(fileCabinetRecord);
             this.fileStream.Write(b1, 0, b1.Length);
@@ -576,6 +576,22 @@ namespace FileCabinetApp
             long length = new FileInfo(this.fileStream.Name).Length;
             int countRecordInFile = (int)length / 278;
             return countRecordInFile;
+        }
+
+        private int GetMaxIdInNotDeletedRecordsFromFile()
+        {
+            int maxIdInFile = 0;
+
+            List<FileCabinetRecord> notDeletedRecordsList = this.GetNotDeletedRecordsList();
+            foreach (var item in notDeletedRecordsList)
+            {
+                if (item.Id > maxIdInFile)
+                {
+                    maxIdInFile = item.Id;
+                }
+            }
+
+            return maxIdInFile;
         }
     }
 }

@@ -8,6 +8,20 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class CreateCommandHandler : CommandHandlerBase
     {
+        private static IFileCabinetService service;
+        private static IValidatorOfParemetrs inpuyParamsValidator;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CreateCommandHandler"/> class.
+        /// </summary>
+        /// <param name="fileCabinetService">Input parametr start id.<see cref="IFileCabinetService"/>.</param>
+        /// <param name="recordValidator">Input parametr amount of records.<see cref="IValidatorOfParemetrs"/>.</param>
+        public CreateCommandHandler(IFileCabinetService fileCabinetService, IValidatorOfParemetrs recordValidator)
+        {
+            service = fileCabinetService;
+            inpuyParamsValidator = recordValidator;
+        }
+
         /// <summary>
         /// Override method Handle by CommandHandlerBase in CreateCommandHandler.
         /// </summary>
@@ -39,21 +53,21 @@ namespace FileCabinetApp.CommandHandlers
                     FileCabinetRecord fileCabinetRecord = new FileCabinetRecord();
                     CultureInfo provider = new CultureInfo("en-US");
                     Console.Write("First name:");
-                    fileCabinetRecord.FirstName = Program.recordValidator.ReadInput(Program.recordValidator.FirstNameConverter, Program.recordValidator.FirstNameValidator);
+                    fileCabinetRecord.FirstName = inpuyParamsValidator.ReadInput(inpuyParamsValidator.FirstNameConverter, inpuyParamsValidator.FirstNameValidator);
                     Console.Write("Last name:");
-                    fileCabinetRecord.LastName = Program.recordValidator.ReadInput(Program.recordValidator.LastNameConverter, Program.recordValidator.LastNameValidator);
+                    fileCabinetRecord.LastName = inpuyParamsValidator.ReadInput(inpuyParamsValidator.LastNameConverter, inpuyParamsValidator.LastNameValidator);
                     Console.Write("Date of birth:");
-                    fileCabinetRecord.DateOfBirth = Program.recordValidator.ReadInput(Program.recordValidator.DayOfBirthConverter, Program.recordValidator.DayOfBirthValidator);
+                    fileCabinetRecord.DateOfBirth = inpuyParamsValidator.ReadInput(inpuyParamsValidator.DayOfBirthConverter, inpuyParamsValidator.DayOfBirthValidator);
                     Console.Write("Person's sex:");
-                    fileCabinetRecord.Sex = Program.recordValidator.ReadInput(Program.recordValidator.SexConverter, Program.recordValidator.SexValidator);
+                    fileCabinetRecord.Sex = inpuyParamsValidator.ReadInput(inpuyParamsValidator.SexConverter, inpuyParamsValidator.SexValidator);
                     Console.Write("Person's height:");
-                    fileCabinetRecord.Height = Program.recordValidator.ReadInput(Program.recordValidator.HeightConverter, Program.recordValidator.HeightValidator);
+                    fileCabinetRecord.Height = inpuyParamsValidator.ReadInput(inpuyParamsValidator.HeightConverter, inpuyParamsValidator.HeightValidator);
                     Console.Write("Person's salary:");
-                    fileCabinetRecord.Salary = Program.recordValidator.ReadInput(Program.recordValidator.SalaryConverter, Program.recordValidator.SalaryValidator);
-                    int res = Program.fileCabinetService.CreateRecord(fileCabinetRecord);
-                    if (res > 0)
+                    fileCabinetRecord.Salary = inpuyParamsValidator.ReadInput(inpuyParamsValidator.SalaryConverter, inpuyParamsValidator.SalaryValidator);
+                    int result = service.CreateRecord(fileCabinetRecord);
+                    if (result > 0)
                     {
-                        Console.WriteLine($"Record #{res} is created.");
+                        Console.WriteLine($"Record #{result} is created.");
                     }
                 }
                 catch (ArgumentNullException ex)

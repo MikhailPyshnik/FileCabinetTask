@@ -9,6 +9,17 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class FindCommandHandler : CommandHandlerBase
     {
+        private static IFileCabinetService service;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FindCommandHandler"/> class.
+        /// </summary>
+        /// <param name="fileCabinetService">Input parametr start id.<see cref="IFileCabinetService"/>.</param>
+        public FindCommandHandler(IFileCabinetService fileCabinetService)
+        {
+            service = fileCabinetService;
+        }
+
         /// <summary>
         /// Override method Handle by CommandHandlerBase in FindCommandHandler.
         /// </summary>
@@ -40,19 +51,19 @@ namespace FileCabinetApp.CommandHandlers
             if (searchParametr == "firstname")
             {
                 var firstName = parametersArray[1].Trim('"');
-                var records = Program.fileCabinetService.FindByFirstName(firstName);
+                var records = service.FindByFirstName(firstName);
                 PrintRecords(records, searchParametr, value);
             }
             else if (searchParametr == "lastname")
             {
                 var lastName = parametersArray[1].Trim('"');
-                var records = Program.fileCabinetService.FindByLastName(lastName);
+                var records = service.FindByLastName(lastName);
                 PrintRecords(records, searchParametr, value);
             }
             else if (searchParametr == "dateofbirth")
             {
                 var dateofbirth = parametersArray[1].Trim('"');
-                var records = Program.fileCabinetService.FindByDateOfBirth(dateofbirth);
+                var records = service.FindByDateOfBirth(dateofbirth);
                 PrintRecords(records, searchParametr, value);
             }
             else

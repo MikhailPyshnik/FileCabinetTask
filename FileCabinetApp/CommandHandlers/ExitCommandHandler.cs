@@ -7,6 +7,17 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class ExitCommandHandler : CommandHandlerBase
     {
+        private static IFileCabinetService service;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExitCommandHandler"/> class.
+        /// </summary>
+        /// <param name="fileCabinetService">Input parametr start id.<see cref="IFileCabinetService"/>.</param>
+        public ExitCommandHandler(IFileCabinetService fileCabinetService)
+        {
+            service = fileCabinetService;
+        }
+
         /// <summary>
         /// Override method Handle by CommandHandlerBase in ExitCommandHandler.
         /// </summary>
@@ -31,7 +42,7 @@ namespace FileCabinetApp.CommandHandlers
 
         private static void Exit(string parameters)
         {
-            if (Program.fileCabinetService is FileCabinetFilesystemService)
+            if (service is FileCabinetFilesystemService)
             {
                 Program.filestream.Close();
             }

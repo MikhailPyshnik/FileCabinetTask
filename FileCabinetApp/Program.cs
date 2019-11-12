@@ -15,8 +15,6 @@ namespace FileCabinetApp
 #pragma warning disable CA2211 // Non-constant fields should not be visible
 #pragma warning disable SA1307 // Accessible fields should begin with upper-case letter
 #pragma warning disable SA1600 // Elements should be documented
-        public static IFileCabinetService fileCabinetService;
-        public static IValidatorOfParemetrs recordValidator;
         public static FileStream filestream;
         public static bool isRunning = true;
 #pragma warning restore SA1600 // Elements should be documented
@@ -25,6 +23,9 @@ namespace FileCabinetApp
 #pragma warning restore SA1401 // Fields should be private
         private const string DeveloperName = "Mikhail Pyshnik";
         private const string HintMessage = "Enter your command, or enter 'help' to get help.";
+
+        private static IFileCabinetService fileCabinetService;
+        private static IValidatorOfParemetrs recordValidator;
 
         private static string validationRules = "default";
 
@@ -119,7 +120,7 @@ namespace FileCabinetApp
                         const int parametersIndex = 1;
                         var parameters = inputs.Length > 1 ? inputs[parametersIndex] : string.Empty;
 
-                        var commandHandler = CreateCommandHandlers();
+                        var commandHandler = CreateCommandHandlers(fileCabinetService, recordValidator);
 
                         commandHandler.Handle(
                             new AppCommandRequest
@@ -139,19 +140,19 @@ namespace FileCabinetApp
             Console.WriteLine();
         }
 
-        private static ICommandHandler CreateCommandHandlers()
+        private static ICommandHandler CreateCommandHandlers(IFileCabinetService fileCabinetService, IValidatorOfParemetrs validatorOfParemetrs)
         {
             var helpHandler = new HelpCommandHandler();
-            var createHandler = new CreateCommandHandler();
-            var importHandler = new ImportCommandHandler();
-            var statHandler = new StatCommandHandler();
-            var listHandler = new ListCommandHandler();
-            var findHandler = new FindCommandHandler();
-            var editHandler = new EditCommandHandler();
-            var removeHandler = new RemoveCommandHandler();
-            var purgeHandler = new PurgeCommandHandler();
-            var exportHandler = new ExportCommandHandler();
-            var exitHandler = new ExitCommandHandler();
+            var createHandler = new CreateCommandHandler(fileCabinetService, validatorOfParemetrs);
+            var importHandler = new ImportCommandHandler(fileCabinetService, validatorOfParemetrs);
+            var statHandler = new StatCommandHandler(fileCabinetService);
+            var listHandler = new ListCommandHandler(fileCabinetService);
+            var findHandler = new FindCommandHandler(fileCabinetService);
+            var editHandler = new EditCommandHandler(fileCabinetService, validatorOfParemetrs);
+            var removeHandler = new RemoveCommandHandler(fileCabinetService);
+            var purgeHandler = new PurgeCommandHandler(fileCabinetService);
+            var exportHandler = new ExportCommandHandler(fileCabinetService);
+            var exitHandler = new ExitCommandHandler(fileCabinetService);
             helpHandler.SetNext(createHandler)
                        .SetNext(importHandler)
                        .SetNext(statHandler)

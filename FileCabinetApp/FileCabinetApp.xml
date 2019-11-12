@@ -21,17 +21,6 @@
             </summary>
             <value>The Command.</value>
         </member>
-        <member name="T:FileCabinetApp.CommandHandler">
-            <summary>
-            Work with commands.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
-            <summary>
-            Override method Handle by CommandHandlerBase in CommandHandler.
-            </summary>
-            <param name="appCommandRequest">Input parametr record <see cref="T:FileCabinetApp.AppCommandRequest"/>.</param>
-        </member>
         <member name="T:FileCabinetApp.CommandHandlerBase">
             <summary>
             Base class CommandHandler.
@@ -55,6 +44,13 @@
             Create command.
             </summary>
         </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CreateCommandHandler.#ctor(FileCabinetApp.IFileCabinetService,FileCabinetApp.IValidatorOfParemetrs)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.CreateCommandHandler"/> class.
+            </summary>
+            <param name="fileCabinetService">Input parametr start id.<see cref="T:FileCabinetApp.IFileCabinetService"/>.</param>
+            <param name="recordValidator">Input parametr amount of records.<see cref="T:FileCabinetApp.IValidatorOfParemetrs"/>.</param>
+        </member>
         <member name="M:FileCabinetApp.CommandHandlers.CreateCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
             <summary>
             Override method Handle by CommandHandlerBase in CreateCommandHandler.
@@ -65,6 +61,13 @@
             <summary>
             Edit command.
             </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.EditCommandHandler.#ctor(FileCabinetApp.IFileCabinetService,FileCabinetApp.IValidatorOfParemetrs)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.EditCommandHandler"/> class.
+            </summary>
+            <param name="fileCabinetService">Input parametr start id.<see cref="T:FileCabinetApp.IFileCabinetService"/>.</param>
+            <param name="recordValidator">Input parametr amount of records.<see cref="T:FileCabinetApp.IValidatorOfParemetrs"/>.</param>
         </member>
         <member name="M:FileCabinetApp.CommandHandlers.EditCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
             <summary>
@@ -77,6 +80,12 @@
             Exit command.
             </summary>
         </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ExitCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.ExitCommandHandler"/> class.
+            </summary>
+            <param name="fileCabinetService">Input parametr start id.<see cref="T:FileCabinetApp.IFileCabinetService"/>.</param>
+        </member>
         <member name="M:FileCabinetApp.CommandHandlers.ExitCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
             <summary>
             Override method Handle by CommandHandlerBase in ExitCommandHandler.
@@ -88,6 +97,12 @@
             Export command.
             </summary>
         </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ExportCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.ExportCommandHandler"/> class.
+            </summary>
+            <param name="fileCabinetService">Input parametr start id.<see cref="T:FileCabinetApp.IFileCabinetService"/>.</param>
+        </member>
         <member name="M:FileCabinetApp.CommandHandlers.ExportCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
             <summary>
             Override method Handle by CommandHandlerBase in ExportCommandHandler.
@@ -98,6 +113,12 @@
             <summary>
             Find command.
             </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.FindCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.FindCommandHandler"/> class.
+            </summary>
+            <param name="fileCabinetService">Input parametr start id.<see cref="T:FileCabinetApp.IFileCabinetService"/>.</param>
         </member>
         <member name="M:FileCabinetApp.CommandHandlers.FindCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
             <summary>
@@ -121,6 +142,13 @@
             Import command.
             </summary>
         </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ImportCommandHandler.#ctor(FileCabinetApp.IFileCabinetService,FileCabinetApp.IValidatorOfParemetrs)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.ImportCommandHandler"/> class.
+            </summary>
+            <param name="fileCabinetService">Input parametr start id.<see cref="T:FileCabinetApp.IFileCabinetService"/>.</param>
+            <param name="recordValidator">Input parametr amount of records.<see cref="T:FileCabinetApp.IValidatorOfParemetrs"/>.</param>
+        </member>
         <member name="M:FileCabinetApp.CommandHandlers.ImportCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
             <summary>
             Override method Handle by CommandHandlerBase in ImportCommandHandler.
@@ -131,6 +159,12 @@
             <summary>
             List command.
             </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ListCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.ListCommandHandler"/> class.
+            </summary>
+            <param name="fileCabinetService">Input parametr start id.<see cref="T:FileCabinetApp.IFileCabinetService"/>.</param>
         </member>
         <member name="M:FileCabinetApp.CommandHandlers.ListCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
             <summary>
@@ -143,6 +177,12 @@
             Purge command.
             </summary>
         </member>
+        <member name="M:FileCabinetApp.CommandHandlers.PurgeCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.PurgeCommandHandler"/> class.
+            </summary>
+            <param name="fileCabinetService">Input parametr start id.<see cref="T:FileCabinetApp.IFileCabinetService"/>.</param>
+        </member>
         <member name="M:FileCabinetApp.CommandHandlers.PurgeCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
             <summary>
             Override method Handle by CommandHandlerBase in PurgeCommandHandler.
@@ -154,6 +194,12 @@
             Remove command.
             </summary>
         </member>
+        <member name="M:FileCabinetApp.CommandHandlers.RemoveCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.RemoveCommandHandler"/> class.
+            </summary>
+            <param name="fileCabinetService">Input parametr start id.<see cref="T:FileCabinetApp.IFileCabinetService"/>.</param>
+        </member>
         <member name="M:FileCabinetApp.CommandHandlers.RemoveCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
             <summary>
             Override method Handle by CommandHandlerBase in RemoveCommandHandler.
@@ -164,6 +210,12 @@
             <summary>
             Stat command.
             </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.StatCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.StatCommandHandler"/> class.
+            </summary>
+            <param name="fileCabinetService">Input parametr start id.<see cref="T:FileCabinetApp.IFileCabinetService"/>.</param>
         </member>
         <member name="M:FileCabinetApp.CommandHandlers.StatCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
             <summary>

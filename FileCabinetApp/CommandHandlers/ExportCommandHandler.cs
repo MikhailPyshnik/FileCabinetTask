@@ -9,6 +9,17 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class ExportCommandHandler : CommandHandlerBase
     {
+        private static IFileCabinetService service;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExportCommandHandler"/> class.
+        /// </summary>
+        /// <param name="fileCabinetService">Input parametr start id.<see cref="IFileCabinetService"/>.</param>
+        public ExportCommandHandler(IFileCabinetService fileCabinetService)
+        {
+            service = fileCabinetService;
+        }
+
         /// <summary>
         /// Override method Handle by CommandHandlerBase in ExportCommandHandler.
         /// </summary>
@@ -125,7 +136,7 @@ namespace FileCabinetApp.CommandHandlers
             try
             {
                 streamWriterToCsv = new StreamWriter(thePathToTheFile, false, System.Text.Encoding.Default);
-                var snapshotFileCabinetService = Program.fileCabinetService.MakeSnapshot();
+                var snapshotFileCabinetService = service.MakeSnapshot();
                 snapshotFileCabinetService.SaveToCsv(streamWriterToCsv);
                 Console.WriteLine($"All records are exported to file {thePathToTheFile}.");
             }
@@ -149,7 +160,7 @@ namespace FileCabinetApp.CommandHandlers
             try
             {
                 streamWriterToCsv = new StreamWriter(thePathToTheFile, false, System.Text.Encoding.Default);
-                var snapshotFileCabinetService = Program.fileCabinetService.MakeSnapshot();
+                var snapshotFileCabinetService = service.MakeSnapshot();
                 snapshotFileCabinetService.SaveToXml(streamWriterToCsv);
             }
             catch (Exception ex)
