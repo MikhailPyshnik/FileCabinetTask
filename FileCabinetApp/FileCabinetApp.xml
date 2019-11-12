@@ -50,6 +50,127 @@
             </summary>
             <param name="appCommandRequest">Input parametr record <see cref="T:FileCabinetApp.AppCommandRequest"/>.</param>
         </member>
+        <member name="T:FileCabinetApp.CommandHandlers.CreateCommandHandler">
+            <summary>
+            Create command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CreateCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
+            <summary>
+            Override method Handle by CommandHandlerBase in CreateCommandHandler.
+            </summary>
+            <param name="appCommandRequest">Input parametr record <see cref="T:FileCabinetApp.AppCommandRequest"/>.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.EditCommandHandler">
+            <summary>
+            Edit command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.EditCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
+            <summary>
+            Override method Handle by CommandHandlerBase in EditCommandHandler.
+            </summary>
+            <param name="appCommandRequest">Input parametr record <see cref="T:FileCabinetApp.AppCommandRequest"/>.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.ExitCommandHandler">
+            <summary>
+            Exit command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ExitCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
+            <summary>
+            Override method Handle by CommandHandlerBase in ExitCommandHandler.
+            </summary>
+            <param name="appCommandRequest">Input parametr record <see cref="T:FileCabinetApp.AppCommandRequest"/>.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.ExportCommandHandler">
+            <summary>
+            Export command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ExportCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
+            <summary>
+            Override method Handle by CommandHandlerBase in ExportCommandHandler.
+            </summary>
+            <param name="appCommandRequest">Input parametr record <see cref="T:FileCabinetApp.AppCommandRequest"/>.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.FindCommandHandler">
+            <summary>
+            Find command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.FindCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
+            <summary>
+            Override method Handle by CommandHandlerBase in FindCommandHandler.
+            </summary>
+            <param name="appCommandRequest">Input parametr record <see cref="T:FileCabinetApp.AppCommandRequest"/>.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.HelpCommandHandler">
+            <summary>
+            Help command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.HelpCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
+            <summary>
+            Override method Handle by CommandHandlerBase in HelpCommandHandler.
+            </summary>
+            <param name="appCommandRequest">Input parametr record <see cref="T:FileCabinetApp.AppCommandRequest"/>.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.ImportCommandHandler">
+            <summary>
+            Import command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ImportCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
+            <summary>
+            Override method Handle by CommandHandlerBase in ImportCommandHandler.
+            </summary>
+            <param name="appCommandRequest">Input parametr record <see cref="T:FileCabinetApp.AppCommandRequest"/>.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.ListCommandHandler">
+            <summary>
+            List command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ListCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
+            <summary>
+            Override method Handle by CommandHandlerBase in ListCommandHandler.
+            </summary>
+            <param name="appCommandRequest">Input parametr record <see cref="T:FileCabinetApp.AppCommandRequest"/>.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.PurgeCommandHandler">
+            <summary>
+            Purge command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.PurgeCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
+            <summary>
+            Override method Handle by CommandHandlerBase in PurgeCommandHandler.
+            </summary>
+            <param name="appCommandRequest">Input parametr record <see cref="T:FileCabinetApp.AppCommandRequest"/>.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.RemoveCommandHandler">
+            <summary>
+            Remove command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.RemoveCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
+            <summary>
+            Override method Handle by CommandHandlerBase in RemoveCommandHandler.
+            </summary>
+            <param name="appCommandRequest">Input parametr record <see cref="T:FileCabinetApp.AppCommandRequest"/>.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.StatCommandHandler">
+            <summary>
+            Stat command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.StatCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
+            <summary>
+            Override method Handle by CommandHandlerBase in StatCommandHandler.
+            </summary>
+            <param name="appCommandRequest">Input parametr record <see cref="T:FileCabinetApp.AppCommandRequest"/>.</param>
+        </member>
         <member name="T:FileCabinetApp.ICommandHandler">
             <summary>
              Contains methods SetNext and Handle.

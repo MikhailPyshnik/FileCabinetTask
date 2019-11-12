@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
-using System.Text;
 
 namespace FileCabinetApp
 {
@@ -625,12 +624,6 @@ namespace FileCabinetApp
                     streamReaderFromXML.Close();
                 }
             }
-        }
-
-        private static ICommandHandler CreateCommandHandlers()
-        {
-            var commandHandler = new CommandHandler();
-            return commandHandler;
         }
     }
 }

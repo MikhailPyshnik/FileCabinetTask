@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.IO;
 using CommandLine;
+using FileCabinetApp.CommandHandlers;
 
 namespace FileCabinetApp
 {
@@ -24,11 +25,12 @@ namespace FileCabinetApp
 #pragma warning restore SA1401 // Fields should be private
         private const string DeveloperName = "Mikhail Pyshnik";
         private const string HintMessage = "Enter your command, or enter 'help' to get help.";
-        private const int CommandHelpIndex = 0;
 
         private static string validationRules = "default";
 
         private static string storageRules = "memory";
+
+        private static string[] existCommands = new string[] { "help", "exit", "stat", "create", "list", "edit", "find", "export", "import", "remove", "purge" };
 
         /// <summary>
         ///  Method Main of console application.The poin of enter application.
@@ -105,6 +107,12 @@ namespace FileCabinetApp
                         continue;
                     }
 
+                    if (!Array.Exists(existCommands, element => element == command))
+                    {
+                        PrintMissedCommandInfo(command);
+                        continue;
+                    }
+
                     var index = inputs.Length;
                     if (index >= 0)
                     {
@@ -133,8 +141,28 @@ namespace FileCabinetApp
 
         private static ICommandHandler CreateCommandHandlers()
         {
-            var commandHandler = new CommandHandler();
-            return commandHandler;
+            var helpHandler = new HelpCommandHandler();
+            var createHandler = new CreateCommandHandler();
+            var importHandler = new ImportCommandHandler();
+            var statHandler = new StatCommandHandler();
+            var listHandler = new ListCommandHandler();
+            var findHandler = new FindCommandHandler();
+            var editHandler = new EditCommandHandler();
+            var removeHandler = new RemoveCommandHandler();
+            var purgeHandler = new PurgeCommandHandler();
+            var exportHandler = new ExportCommandHandler();
+            var exitHandler = new ExitCommandHandler();
+            helpHandler.SetNext(createHandler)
+                       .SetNext(importHandler)
+                       .SetNext(statHandler)
+                       .SetNext(listHandler)
+                       .SetNext(findHandler)
+                       .SetNext(editHandler)
+                       .SetNext(removeHandler)
+                       .SetNext(purgeHandler)
+                       .SetNext(exportHandler)
+                       .SetNext(exitHandler);
+            return helpHandler;
         }
 
         private class Options
