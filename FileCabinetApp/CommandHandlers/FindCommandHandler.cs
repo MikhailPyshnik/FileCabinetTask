@@ -7,17 +7,15 @@ namespace FileCabinetApp.CommandHandlers
     /// <summary>
     /// Find command.
     /// </summary>
-    public class FindCommandHandler : CommandHandlerBase
+    public class FindCommandHandler : ServiceCommandHandlerBase
     {
-        private static IFileCabinetService service;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="FindCommandHandler"/> class.
         /// </summary>
         /// <param name="fileCabinetService">Input parametr start id.<see cref="IFileCabinetService"/>.</param>
         public FindCommandHandler(IFileCabinetService fileCabinetService)
+            : base(fileCabinetService)
         {
-            service = fileCabinetService;
         }
 
         /// <summary>
@@ -25,22 +23,22 @@ namespace FileCabinetApp.CommandHandlers
         /// </summary>
         /// <param name="appCommandRequest">Input parametr record <see cref="AppCommandRequest"/>.</param>
         public override void Handle(AppCommandRequest appCommandRequest)
-        {
-            if (appCommandRequest == null)
             {
-                throw new ArgumentNullException(nameof(appCommandRequest));
-            }
+                if (appCommandRequest == null)
+                {
+                    throw new ArgumentNullException(nameof(appCommandRequest));
+                }
 
-            if (appCommandRequest.Command == "find")
-            {
-                var parameters = appCommandRequest.Parameters;
-                Find(parameters);
+                if (appCommandRequest.Command == "find")
+                {
+                    var parameters = appCommandRequest.Parameters;
+                    Find(parameters);
+                }
+                else
+                {
+                    base.Handle(appCommandRequest);
+                }
             }
-            else
-            {
-                base.Handle(appCommandRequest);
-            }
-        }
 
         private static void Find(string parameters)
         {

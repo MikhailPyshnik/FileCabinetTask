@@ -9,9 +9,8 @@ namespace FileCabinetApp.CommandHandlers
     /// <summary>
     /// Import command.
     /// </summary>
-    public class ImportCommandHandler : CommandHandlerBase
+    public class ImportCommandHandler : ServiceCommandHandlerBase
     {
-        private static IFileCabinetService service;
         private static IValidatorOfParemetrs inputParamsValidator;
 
         /// <summary>
@@ -20,8 +19,8 @@ namespace FileCabinetApp.CommandHandlers
         /// <param name="fileCabinetService">Input parametr start id.<see cref="IFileCabinetService"/>.</param>
         /// <param name="recordValidator">Input parametr amount of records.<see cref="IValidatorOfParemetrs"/>.</param>
         public ImportCommandHandler(IFileCabinetService fileCabinetService, IValidatorOfParemetrs recordValidator)
+            : base(fileCabinetService)
         {
-            service = fileCabinetService;
             inputParamsValidator = recordValidator;
         }
 

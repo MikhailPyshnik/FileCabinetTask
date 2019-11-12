@@ -15,7 +15,6 @@ namespace FileCabinetApp
 #pragma warning disable CA2211 // Non-constant fields should not be visible
 #pragma warning disable SA1307 // Accessible fields should begin with upper-case letter
 #pragma warning disable SA1600 // Elements should be documented
-        public static FileStream filestream;
         public static bool isRunning = true;
 #pragma warning restore SA1600 // Elements should be documented
 #pragma warning restore SA1307 // Accessible fields should begin with upper-case letter
@@ -26,6 +25,7 @@ namespace FileCabinetApp
 
         private static IFileCabinetService fileCabinetService;
         private static IValidatorOfParemetrs recordValidator;
+        private static FileStream filestream;
 
         private static string validationRules = "default";
 
@@ -152,7 +152,7 @@ namespace FileCabinetApp
             var removeHandler = new RemoveCommandHandler(fileCabinetService);
             var purgeHandler = new PurgeCommandHandler(fileCabinetService);
             var exportHandler = new ExportCommandHandler(fileCabinetService);
-            var exitHandler = new ExitCommandHandler(fileCabinetService);
+            var exitHandler = new ExitCommandHandler(fileCabinetService, filestream);
             helpHandler.SetNext(createHandler)
                        .SetNext(importHandler)
                        .SetNext(statHandler)

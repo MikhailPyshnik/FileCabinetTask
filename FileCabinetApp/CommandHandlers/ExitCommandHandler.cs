@@ -1,21 +1,24 @@
 ﻿using System;
+using System.IO;
 
 namespace FileCabinetApp.CommandHandlers
 {
     /// <summary>
     /// Exit command.
     /// </summary>
-    public class ExitCommandHandler : CommandHandlerBase
+    public class ExitCommandHandler : ServiceCommandHandlerBase
     {
-        private static IFileCabinetService service;
+        private static FileStream fileStream;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExitCommandHandler"/> class.
         /// </summary>
         /// <param name="fileCabinetService">Input parametr start id.<see cref="IFileCabinetService"/>.</param>
-        public ExitCommandHandler(IFileCabinetService fileCabinetService)
+        /// <param name="filestream">Input parametr fileStream.<see cref="FileStream"/>.</param>
+        public ExitCommandHandler(IFileCabinetService fileCabinetService, FileStream filestream)
+             : base(fileCabinetService)
         {
-            service = fileCabinetService;
+            fileStream = filestream;
         }
 
         /// <summary>
@@ -44,7 +47,7 @@ namespace FileCabinetApp.CommandHandlers
         {
             if (service is FileCabinetFilesystemService)
             {
-                Program.filestream.Close();
+                fileStream.Close();
             }
 
             Console.WriteLine("Exiting an application...");
