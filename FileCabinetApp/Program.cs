@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using CommandLine;
@@ -134,18 +135,12 @@ namespace FileCabinetApp
 
         private static ICommandHandler CreateCommandHandlers()
         {
-            var recordPrinter = new DefaultRecordPrinter();
-
-            var listCommandHandler = new ListCommandHandler(Program.fileCabinetService, recordPrinter);
-
-            var findCommandHandler = new FindCommandHandler(Program.fileCabinetService, recordPrinter);
-
             var helpHandler = new HelpCommandHandler();
             var createHandler = new CreateCommandHandler(fileCabinetService, recordValidator);
             var importHandler = new ImportCommandHandler(fileCabinetService, recordValidator);
             var statHandler = new StatCommandHandler(fileCabinetService);
-            var listHandler = new ListCommandHandler(fileCabinetService, new DefaultRecordPrinter());
-            var findHandler = new FindCommandHandler(fileCabinetService, new DefaultRecordPrinter());
+            var listHandler = new ListCommandHandler(fileCabinetService, DefaultRecordPrinter);
+            var findHandler = new FindCommandHandler(fileCabinetService, DefaultRecordPrinter);
             var editHandler = new EditCommandHandler(fileCabinetService, recordValidator);
             var removeHandler = new RemoveCommandHandler(fileCabinetService);
             var purgeHandler = new PurgeCommandHandler(fileCabinetService);
@@ -169,6 +164,20 @@ namespace FileCabinetApp
             if (!running)
             {
                 isRunning = false;
+            }
+        }
+
+        private static void DefaultRecordPrinter(IEnumerable<FileCabinetRecord> records)
+        {
+            if (records == null)
+            {
+                throw new ArgumentNullException(nameof(records));
+            }
+
+            CultureInfo provider = new CultureInfo("en-US");
+            foreach (var record in records)
+            {
+                Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", provider)}, {record.Sex}, {record.Height}, {record.Salary}");
             }
         }
 

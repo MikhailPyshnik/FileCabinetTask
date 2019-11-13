@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 
@@ -9,14 +10,14 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class FindCommandHandler : ServiceCommandHandlerBase
     {
-        private IRecordPrinter printer;
+        private Action<IEnumerable<FileCabinetRecord>> printer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FindCommandHandler"/> class.
         /// </summary>
         /// <param name="fileCabinetService">Input parametr start id.<see cref="IFileCabinetService"/>.</param>
         /// <param name="inputPrinter">Input parametr start id.<see cref="IRecordPrinter"/>.</param>
-        public FindCommandHandler(IFileCabinetService fileCabinetService, IRecordPrinter inputPrinter)
+        public FindCommandHandler(IFileCabinetService fileCabinetService, Action<IEnumerable<FileCabinetRecord>> inputPrinter)
             : base(fileCabinetService)
         {
             this.printer = inputPrinter;
@@ -89,7 +90,7 @@ namespace FileCabinetApp.CommandHandlers
             }
             else
             {
-                this.printer.Print(records);
+                this.printer(records);
             }
         }
     }
