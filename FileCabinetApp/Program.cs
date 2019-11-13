@@ -112,7 +112,7 @@ namespace FileCabinetApp
                         const int parametersIndex = 1;
                         var parameters = inputs.Length > 1 ? inputs[parametersIndex] : string.Empty;
 
-                        var commandHandler = CreateCommandHandlers(fileCabinetService, recordValidator);
+                        var commandHandler = CreateCommandHandlers();
 
                         commandHandler.Handle(
                             new AppCommandRequest
@@ -132,15 +132,21 @@ namespace FileCabinetApp
             Console.WriteLine();
         }
 
-        private static ICommandHandler CreateCommandHandlers(IFileCabinetService fileCabinetService, IValidatorOfParemetrs validatorOfParemetrs)
+        private static ICommandHandler CreateCommandHandlers()
         {
+            var recordPrinter = new DefaultRecordPrinter();
+
+            var listCommandHandler = new ListCommandHandler(Program.fileCabinetService, recordPrinter);
+
+            var findCommandHandler = new FindCommandHandler(Program.fileCabinetService, recordPrinter);
+
             var helpHandler = new HelpCommandHandler();
-            var createHandler = new CreateCommandHandler(fileCabinetService, validatorOfParemetrs);
-            var importHandler = new ImportCommandHandler(fileCabinetService, validatorOfParemetrs);
+            var createHandler = new CreateCommandHandler(fileCabinetService, recordValidator);
+            var importHandler = new ImportCommandHandler(fileCabinetService, recordValidator);
             var statHandler = new StatCommandHandler(fileCabinetService);
-            var listHandler = new ListCommandHandler(fileCabinetService);
-            var findHandler = new FindCommandHandler(fileCabinetService);
-            var editHandler = new EditCommandHandler(fileCabinetService, validatorOfParemetrs);
+            var listHandler = new ListCommandHandler(fileCabinetService, new DefaultRecordPrinter());
+            var findHandler = new FindCommandHandler(fileCabinetService, new DefaultRecordPrinter());
+            var editHandler = new EditCommandHandler(fileCabinetService, recordValidator);
             var removeHandler = new RemoveCommandHandler(fileCabinetService);
             var purgeHandler = new PurgeCommandHandler(fileCabinetService);
             var exportHandler = new ExportCommandHandler(fileCabinetService);

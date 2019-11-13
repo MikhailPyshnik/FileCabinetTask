@@ -9,13 +9,17 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class FindCommandHandler : ServiceCommandHandlerBase
     {
+        private IRecordPrinter printer;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FindCommandHandler"/> class.
         /// </summary>
         /// <param name="fileCabinetService">Input parametr start id.<see cref="IFileCabinetService"/>.</param>
-        public FindCommandHandler(IFileCabinetService fileCabinetService)
+        /// <param name="inputPrinter">Input parametr start id.<see cref="IRecordPrinter"/>.</param>
+        public FindCommandHandler(IFileCabinetService fileCabinetService, IRecordPrinter inputPrinter)
             : base(fileCabinetService)
         {
+            this.printer = inputPrinter;
         }
 
         /// <summary>
@@ -32,7 +36,7 @@ namespace FileCabinetApp.CommandHandlers
                 if (appCommandRequest.Command == "find")
                 {
                     var parameters = appCommandRequest.Parameters;
-                    Find(parameters);
+                    this.Find(parameters);
                 }
                 else
                 {
@@ -40,29 +44,36 @@ namespace FileCabinetApp.CommandHandlers
                 }
             }
 
-        private static void Find(string parameters)
+        private void Find(string parameters)
         {
             CultureInfo provider = new CultureInfo("en-US");
             var parametersArray = parameters.ToLower(provider).Split(' ', 2);
+            if (parametersArray.Length < 2)
+            {
+                Console.WriteLine($"There is not input parameters.");
+                return;
+            }
+
             string searchParametr = parametersArray[0];
             string value = parametersArray[1];
+
             if (searchParametr == "firstname")
             {
                 var firstName = parametersArray[1].Trim('"');
                 var records = service.FindByFirstName(firstName);
-                PrintRecords(records, searchParametr, value);
+                this.PrintRecords(records, searchParametr, value);
             }
             else if (searchParametr == "lastname")
             {
                 var lastName = parametersArray[1].Trim('"');
                 var records = service.FindByLastName(lastName);
-                PrintRecords(records, searchParametr, value);
+                this.PrintRecords(records, searchParametr, value);
             }
             else if (searchParametr == "dateofbirth")
             {
                 var dateofbirth = parametersArray[1].Trim('"');
                 var records = service.FindByDateOfBirth(dateofbirth);
-                PrintRecords(records, searchParametr, value);
+                this.PrintRecords(records, searchParametr, value);
             }
             else
             {
@@ -70,19 +81,15 @@ namespace FileCabinetApp.CommandHandlers
             }
         }
 
-        private static void PrintRecords(ReadOnlyCollection<FileCabinetRecord> records, string searchparametr, string value)
+        private void PrintRecords(ReadOnlyCollection<FileCabinetRecord> records, string searchparametr, string value)
         {
-            CultureInfo provider = new CultureInfo("en-US");
             if (records.Count == 0)
             {
                 Console.WriteLine($"No records are found for {searchparametr} = {value}!");
             }
             else
             {
-                foreach (var record in records)
-                {
-                    Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", provider)}, {record.Sex}, {record.Height}, {record.Salary}");
-                }
+                this.printer.Print(records);
             }
         }
     }

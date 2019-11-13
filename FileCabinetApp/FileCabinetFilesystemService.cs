@@ -77,7 +77,7 @@ namespace FileCabinetApp
             for (int i = 1; i <= counteRecordInFile; i++)
             {
                 this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
-                if (recordBuffer[1] == 1)
+                if (recordBuffer[0] == 4)
                 {
                     continue;
                 }
@@ -109,7 +109,7 @@ namespace FileCabinetApp
             for (int i = 0; i < counteRecordInFile; i++)
             {
                 this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
-                if (recordBuffer[1] == 1)
+                if (recordBuffer[0] == 4)
                 {
                     continue;
                 }
@@ -254,7 +254,7 @@ namespace FileCabinetApp
                     this.fileStream.Seek(curent * 278, SeekOrigin.Begin);
                     this.fileStream.Seek(0, SeekOrigin.Current);
                     var removeRecord = recordBuffer;
-                    removeRecord[1] = 1;
+                    removeRecord[0] = 4;
                     this.fileStream.Write(removeRecord, 0, removeRecord.Length);
                     this.fileStream.Flush();
                     break;
@@ -433,7 +433,7 @@ namespace FileCabinetApp
             // Add records from notDeletedRecordsList to validateList by id.
             foreach (var it in listRecord)
             {
-                if (it.Status == 256)
+                if (it.Status == 4)
                 {
                     validateList.Add(it);
                 }
@@ -507,7 +507,7 @@ namespace FileCabinetApp
             for (int i = 1; i <= counteRecordInFile; i++)
             {
                 this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
-                if (recordBuffer[1] != 1)
+                if (recordBuffer[0] != 4)
                 {
                     var record = BytesToFileCabinetRecord(recordBuffer);
                     notDeletedRecordsList.Add(record);
@@ -527,7 +527,7 @@ namespace FileCabinetApp
             for (int i = 1; i <= counteRecordInFile; i++)
             {
                 this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
-                if (recordBuffer[1] == 1)
+                if (recordBuffer[0] == 4)
                 {
                     var record = BytesToFileCabinetRecord(recordBuffer);
                     deletedRecordList.Add(record);
@@ -547,7 +547,7 @@ namespace FileCabinetApp
             for (int i = 1; i <= counteRecordInFile; i++)
             {
                 this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
-                if (recordBuffer[1] == 1)
+                if (recordBuffer[0] == 4)
                 {
                     var record = BytesToFileCabinetRecord(recordBuffer);
                     deletedRecordList.Add(record);

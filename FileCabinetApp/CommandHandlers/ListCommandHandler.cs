@@ -8,13 +8,17 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class ListCommandHandler : ServiceCommandHandlerBase
     {
+        private IRecordPrinter printer;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ListCommandHandler"/> class.
         /// </summary>
         /// <param name="fileCabinetService">Input parametr start id.<see cref="IFileCabinetService"/>.</param>
-        public ListCommandHandler(IFileCabinetService fileCabinetService)
+        /// <param name="inputPrinter">Input parametr start id.<see cref="IRecordPrinter"/>.</param>
+        public ListCommandHandler(IFileCabinetService fileCabinetService, IRecordPrinter inputPrinter)
             : base(fileCabinetService)
         {
+            this.printer = inputPrinter;
         }
 
         /// <summary>
@@ -31,7 +35,7 @@ namespace FileCabinetApp.CommandHandlers
             if (appCommandRequest.Command == "list")
             {
                 var parameters = appCommandRequest.Parameters;
-                List(parameters);
+                this.List(parameters);
             }
             else
             {
@@ -39,20 +43,17 @@ namespace FileCabinetApp.CommandHandlers
             }
         }
 
-        private static void List(string parameters)
+        private void List(string parameters)
         {
-            CultureInfo provider = new CultureInfo("en-US");
             var reultList = service.GetRecords();
+
             if (reultList.Count == 0)
             {
                 Console.Write("The list is empty.Add new record => add command - create");
             }
             else
             {
-                for (int i = 0; i < reultList.Count; i++)
-                {
-                    Console.WriteLine($"#{reultList[i].Id},{reultList[i].FirstName},{reultList[i].LastName},{reultList[i].DateOfBirth.ToString("yyyy-MMM-dd", provider)},{reultList[i].Sex},{reultList[i].Height},{reultList[i].Salary}");
-                }
+               this.printer.Print(reultList);
             }
         }
     }
