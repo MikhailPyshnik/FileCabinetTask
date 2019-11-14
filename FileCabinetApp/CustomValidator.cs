@@ -1,10 +1,11 @@
 ﻿using System;
+using FileCabinetApp.CustomDefaultValidator;
 
 namespace FileCabinetApp
 {
-     /// <summary>
-     /// Class of console application.
-     /// </summary>
+    /// <summary>
+    /// Class CustomValidator.
+    /// </summary>
     public class CustomValidator : IValidatorOfParemetrs, IRecordValidator
     {
         /// <summary>
@@ -258,9 +259,9 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Implements the method FirstNameConverter.
+        /// Implements the method ValidateParametrs.
         /// </summary>
-        /// <param name="fileCabinetRecord">Input parametr record <see cref="FileCabinetRecord"/>.</param>
+        /// <param name="fileCabinetRecord">Input parameter record <see cref="FileCabinetRecord"/>.</param>
         public void ValidateParametrs(FileCabinetRecord fileCabinetRecord)
         {
             if (fileCabinetRecord == null)
@@ -268,12 +269,12 @@ namespace FileCabinetApp
                 throw new ArgumentNullException(nameof(fileCabinetRecord));
             }
 
-            this.ValidateFirstName(fileCabinetRecord);
-            this.ValidateLastName(fileCabinetRecord);
-            this.ValidateDateOfBitrh(fileCabinetRecord);
-            this.ValidateSex(fileCabinetRecord);
-            this.ValidateHeight(fileCabinetRecord);
-            this.ValidateSalary(fileCabinetRecord);
+            new CustomFirstNameValidator().ValidateParametrs(fileCabinetRecord);
+            new CustomLastNameValidator().ValidateParametrs(fileCabinetRecord);
+            new CustomDateOfBirthValidator().ValidateParametrs(fileCabinetRecord);
+            new CustomGenderValidator().ValidateParametrs(fileCabinetRecord);
+            new CustomHeightValidator().ValidateParametrs(fileCabinetRecord);
+            new CustomSalaryValidator().ValidateParametrs(fileCabinetRecord);
         }
 
         private static bool WhiteSpace(string value)
@@ -289,82 +290,6 @@ namespace FileCabinetApp
             }
 
             return result;
-        }
-
-        private void ValidateFirstName(FileCabinetRecord fileCabinetRecord)
-        {
-            string value = fileCabinetRecord.FirstName;
-            if (string.IsNullOrEmpty(value))
-            {
-                throw new ArgumentException("First name is null.");
-            }
-
-            if (value.Length < 2 || value.Length > 20)
-            {
-                throw new ArgumentException("First name is incorrect value.");
-            }
-
-            if (WhiteSpace(value))
-            {
-                throw new ArgumentException("First name consists of spaces.");
-            }
-        }
-
-        private void ValidateLastName(FileCabinetRecord fileCabinetRecord)
-        {
-            string value = fileCabinetRecord.LastName;
-            if (string.IsNullOrEmpty(value))
-            {
-                throw new ArgumentException("Last  name is null.");
-            }
-
-            if (value.Length < 2 || value.Length > 20)
-            {
-                throw new ArgumentException("Last name is incorrect value.");
-            }
-
-            if (WhiteSpace(value))
-            {
-                throw new ArgumentException("Last name consists of spaces.");
-            }
-        }
-
-        private void ValidateDateOfBitrh(FileCabinetRecord fileCabinetRecord)
-        {
-            var value = fileCabinetRecord.DateOfBirth;
-            DateTime date1 = new DateTime(1939, 1, 09);
-
-            if (date1 > value || value > DateTime.Now)
-            {
-                throw new ArgumentException("Date Of Birth is incorrect value.");
-            }
-        }
-
-        private void ValidateSex(FileCabinetRecord fileCabinetRecord)
-        {
-            var value = fileCabinetRecord.Sex;
-            if (!'F'.Equals(value) & !'f'.Equals(value) & !'M'.Equals(value) & !'m'.Equals(value))
-            {
-                throw new ArgumentException("Sex is incorrect value.");
-            }
-        }
-
-        private void ValidateHeight(FileCabinetRecord fileCabinetRecord)
-        {
-            var value = fileCabinetRecord.Height;
-            if (value < 100 || value > 230)
-            {
-                throw new ArgumentException("Height is incorrect value.");
-            }
-        }
-
-        private void ValidateSalary(FileCabinetRecord fileCabinetRecord)
-        {
-            decimal value = fileCabinetRecord.Salary;
-            if (value < 500 || value > 5000)
-            {
-                throw new ArgumentException("Salary is incorrect value.");
-            }
         }
     }
 }
