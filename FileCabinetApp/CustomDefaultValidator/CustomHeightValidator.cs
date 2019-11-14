@@ -8,7 +8,7 @@ namespace FileCabinetApp.CustomDefaultValidator
     public class CustomHeightValidator : IRecordValidator
     {
         /// <summary>
-        /// Implements the method ValidateParametrs.
+        /// Implements the method ValidateParameters.
         /// </summary>
         /// <param name="fileCabinetRecord">Input parameter record <see cref="FileCabinetRecord"/>.</param>
         public void ValidateParametrs(FileCabinetRecord fileCabinetRecord)

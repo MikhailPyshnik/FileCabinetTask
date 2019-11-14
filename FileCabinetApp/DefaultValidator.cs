@@ -1,5 +1,5 @@
 ﻿using System;
-using FileCabinetApp.RecordValidator;
+using FileCabinetApp.CommonValidator;
 
 namespace FileCabinetApp
 {
@@ -269,12 +269,12 @@ namespace FileCabinetApp
                 throw new ArgumentNullException(nameof(fileCabinetRecord));
             }
 
-            new DefaultFirstNameValidator().ValidateParametrs(fileCabinetRecord);
-            new DefaultLastNameValidator().ValidateParametrs(fileCabinetRecord);
-            new DefaultDateOfBirthValidator().ValidateParametrs(fileCabinetRecord);
-            new DefaultGenderValidator().ValidateParametrs(fileCabinetRecord);
-            new DefaultHeightValidator().ValidateParametrs(fileCabinetRecord);
-            new DefaultSalaryValidator().ValidateParametrs(fileCabinetRecord);
+            new FirstNameValidator(2, 60).ValidateParametrs(fileCabinetRecord);
+            new LastNameValidator(2, 60).ValidateParametrs(fileCabinetRecord);
+            new DateOfBirthValidator(new DateTime(1950, 1, 01), DateTime.Now).ValidateParametrs(fileCabinetRecord);
+            new GenderValidator('m', 'f').ValidateParametrs(fileCabinetRecord);
+            new HeightValidator(60, 230).ValidateParametrs(fileCabinetRecord);
+            new SalaryValidator(500, 10000).ValidateParametrs(fileCabinetRecord);
         }
 
         private static bool WhiteSpace(string value)

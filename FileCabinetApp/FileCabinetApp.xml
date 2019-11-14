@@ -283,6 +283,114 @@
             </summary>
             <param name="appCommandRequest">Input parametr record <see cref="T:FileCabinetApp.AppCommandRequest"/>.</param>
         </member>
+        <member name="T:FileCabinetApp.CommonValidator.DateOfBirthValidator">
+            <summary>
+            Class DateOfBirthValidator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommonValidator.DateOfBirthValidator.#ctor(System.DateTime,System.DateTime)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommonValidator.DateOfBirthValidator"/> class.
+            </summary>
+            <param name="from">Input parametr start date of birth.<see cref="T:System.DateTime"/>.</param>
+            <param name="to">Input parametr end date of birth.<see cref="T:System.DateTime"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommonValidator.DateOfBirthValidator.ValidateParametrs(FileCabinetRecord)">
+            <summary>
+            Implements the method ValidateParametrs.
+            </summary>
+            <param name="fileCabinetRecord">Input parameter record <see cref="T:FileCabinetRecord"/>.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommonValidator.FirstNameValidator">
+            <summary>
+            Class FirstNameValidator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommonValidator.FirstNameValidator.#ctor(System.UInt32,System.UInt32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommonValidator.FirstNameValidator"/> class.
+            </summary>
+            <param name="minLenght">Input parametr min salary.<see cref="T:System.UInt32"/>.</param>
+            <param name="maxLenght">Input parametr max salary.<see cref="T:System.UInt32"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommonValidator.FirstNameValidator.ValidateParametrs(FileCabinetRecord)">
+            <summary>
+            Implements the method ValidateParametrs.
+            </summary>
+            <param name="fileCabinetRecord">Input parameter record <see cref="T:FileCabinetRecord"/>.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommonValidator.GenderValidator">
+            <summary>
+            Class GenderValidator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommonValidator.GenderValidator.#ctor(System.Char,System.Char)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommonValidator.GenderValidator"/> class.
+            </summary>
+            <param name="maleSex">Input parameter male sex.<see cref="T:System.Char"/>.</param>
+            <param name="femaleSex">Input parameter female sex.<see cref="T:System.Char"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommonValidator.GenderValidator.ValidateParametrs(FileCabinetRecord)">
+            <summary>
+            Implements the method ValidateParametrs.
+            </summary>
+            <param name="fileCabinetRecord">Input parameter record <see cref="T:FileCabinetRecord"/>.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommonValidator.HeightValidator">
+            <summary>
+            Class HeightValidator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommonValidator.HeightValidator.#ctor(System.Int16,System.Int16)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommonValidator.HeightValidator"/> class.
+            </summary>
+            <param name="minHeight">Input parametr min height.<see cref="T:System.Int16"/>.</param>
+            <param name="maxHeight">Input parametr max height.<see cref="T:System.Int16"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommonValidator.HeightValidator.ValidateParametrs(FileCabinetRecord)">
+            <summary>
+            Implements the method ValidateParameters.
+            </summary>
+            <param name="fileCabinetRecord">Input parameter record <see cref="T:FileCabinetRecord"/>.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommonValidator.LastNameValidator">
+            <summary>
+            Class LastNameValidator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommonValidator.LastNameValidator.#ctor(System.UInt32,System.UInt32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommonValidator.LastNameValidator"/> class.
+            </summary>
+            <param name="minLenght">Input parametr min salary.<see cref="T:System.UInt32"/>.</param>
+            <param name="maxLenght">Input parametr max salary.<see cref="T:System.UInt32"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommonValidator.LastNameValidator.ValidateParametrs(FileCabinetRecord)">
+            <summary>
+            Implements the method ValidateParametrs.
+            </summary>
+            <param name="fileCabinetRecord">Input parameter record <see cref="T:FileCabinetRecord"/>.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommonValidator.SalaryValidator">
+            <summary>
+            Class SalaryValidator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommonValidator.SalaryValidator.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommonValidator.SalaryValidator"/> class.
+            </summary>
+            <param name="minSalary">Input parametr min salary.<see cref="T:System.Int32"/>.</param>
+            <param name="maxSalary">Input parametr max salary.<see cref="T:System.Int32"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommonValidator.SalaryValidator.ValidateParametrs(FileCabinetRecord)">
+            <summary>
+            Implements the method ValidateParameters.
+            </summary>
+            <param name="fileCabinetRecord">Input parameter record <see cref="T:FileCabinetRecord"/>.</param>
+        </member>
         <member name="T:FileCabinetApp.CustomDefaultValidator.CustomDateOfBirthValidator">
             <summary>
             Class CustomDateOfBirthValidator.
@@ -323,7 +431,7 @@
         </member>
         <member name="M:FileCabinetApp.CustomDefaultValidator.CustomHeightValidator.ValidateParametrs(FileCabinetRecord)">
             <summary>
-            Implements the method ValidateParametrs.
+            Implements the method ValidateParameters.
             </summary>
             <param name="fileCabinetRecord">Input parameter record <see cref="T:FileCabinetRecord"/>.</param>
         </member>
