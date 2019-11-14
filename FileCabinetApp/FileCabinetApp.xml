@@ -391,6 +391,23 @@
             </summary>
             <param name="fileCabinetRecord">Input parameter record <see cref="T:FileCabinetRecord"/>.</param>
         </member>
+        <member name="T:FileCabinetApp.CompositeValidator">
+            <summary>
+            Base class CompositeValidator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CompositeValidator.#ctor(System.Collections.Generic.List{FileCabinetApp.IRecordValidator})">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CompositeValidator"/> class.
+            </summary>
+            <param name="validators">Input parametr list.<see cref="T:FileCabinetApp.IRecordValidator"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.CompositeValidator.ValidateParametrs(FileCabinetRecord)">
+            <summary>
+            Implements the method ValidateParametrs.
+            </summary>
+            <param name="fileCabinetRecord">Input parameter record <see cref="T:FileCabinetRecord"/>.</param>
+        </member>
         <member name="T:FileCabinetApp.CustomDefaultValidator.CustomDateOfBirthValidator">
             <summary>
             Class CustomDateOfBirthValidator.
@@ -460,6 +477,11 @@
         <member name="T:FileCabinetApp.CustomValidator">
             <summary>
             Class CustomValidator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CustomValidator.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CustomValidator"/> class.
             </summary>
         </member>
         <member name="M:FileCabinetApp.CustomValidator.ReadInput``1(System.Func{System.String,System.Tuple{System.Boolean,System.String,``0}},System.Func{``0,System.Tuple{System.Boolean,System.String}})">
@@ -555,12 +577,6 @@
             <param name="value">The validator.</param>
             <returns>The correct value.</returns>
         </member>
-        <member name="M:FileCabinetApp.CustomValidator.ValidateParametrs(FileCabinetRecord)">
-            <summary>
-            Implements the method ValidateParametrs.
-            </summary>
-            <param name="fileCabinetRecord">Input parameter record <see cref="T:FileCabinetRecord"/>.</param>
-        </member>
         <member name="T:FileCabinetApp.RecordValidator.DefaultDateOfBirthValidator">
             <summary>
             Class DefaultDateOfBirthValidator.
@@ -630,6 +646,11 @@
         <member name="T:FileCabinetApp.DefaultValidator">
             <summary>
             Class DefaultValidator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.DefaultValidator.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.DefaultValidator"/> class.
             </summary>
         </member>
         <member name="M:FileCabinetApp.DefaultValidator.ReadInput``1(System.Func{System.String,System.Tuple{System.Boolean,System.String,``0}},System.Func{``0,System.Tuple{System.Boolean,System.String}})">
@@ -724,12 +745,6 @@
             </summary>
             <param name="value">The validator.</param>
             <returns>The correct value.</returns>
-        </member>
-        <member name="M:FileCabinetApp.DefaultValidator.ValidateParametrs(FileCabinetRecord)">
-            <summary>
-            Implements the method ValidateParametrs.
-            </summary>
-            <param name="fileCabinetRecord">Input parameter record <see cref="T:FileCabinetRecord"/>.</param>
         </member>
         <member name="T:FileCabinetApp.FileCabinetFilesystemService">
             <summary>

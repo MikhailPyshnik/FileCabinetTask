@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using FileCabinetApp.CommonValidator;
 
 namespace FileCabinetApp
@@ -6,8 +7,24 @@ namespace FileCabinetApp
     /// <summary>
     /// Class DefaultValidator.
     /// </summary>
-    public class DefaultValidator : IValidatorOfParemetrs, IRecordValidator
+    public class DefaultValidator : CompositeValidator, IValidatorOfParemetrs
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DefaultValidator"/> class.
+        /// </summary>
+        public DefaultValidator()
+            : base(new List<IRecordValidator>
+            {
+                new FirstNameValidator(2, 60),
+                new LastNameValidator(2, 60),
+                new DateOfBirthValidator(new DateTime(1950, 1, 01), DateTime.Now),
+                new GenderValidator('m', 'f'),
+                new HeightValidator(60, 230),
+                new SalaryValidator(500, 10000),
+            })
+        {
+        }
+
         /// <summary>
         /// Implement the method ReadInput.
         /// </summary>
@@ -256,25 +273,6 @@ namespace FileCabinetApp
             }
 
             return new Tuple<bool, string>(result, message);
-        }
-
-        /// <summary>
-        /// Implements the method ValidateParametrs.
-        /// </summary>
-        /// <param name="fileCabinetRecord">Input parameter record <see cref="FileCabinetRecord"/>.</param>
-        public void ValidateParametrs(FileCabinetRecord fileCabinetRecord)
-        {
-            if (fileCabinetRecord == null)
-            {
-                throw new ArgumentNullException(nameof(fileCabinetRecord));
-            }
-
-            new FirstNameValidator(2, 60).ValidateParametrs(fileCabinetRecord);
-            new LastNameValidator(2, 60).ValidateParametrs(fileCabinetRecord);
-            new DateOfBirthValidator(new DateTime(1950, 1, 01), DateTime.Now).ValidateParametrs(fileCabinetRecord);
-            new GenderValidator('m', 'f').ValidateParametrs(fileCabinetRecord);
-            new HeightValidator(60, 230).ValidateParametrs(fileCabinetRecord);
-            new SalaryValidator(500, 10000).ValidateParametrs(fileCabinetRecord);
         }
 
         private static bool WhiteSpace(string value)
