@@ -15,15 +15,18 @@ namespace FileCabinetApp
     {
         private const int MAXSTRINGLENGTH = 120;
         private const int RECORDSIZE = 278;
+        private readonly IRecordValidator validator;
         private FileStream fileStream;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetFilesystemService"/> class.
         /// </summary>
         /// <param name="fileStream">Input parametr in constructor <see cref="FileStream"/>.</param>
-        public FileCabinetFilesystemService(FileStream fileStream)
+        /// <param name="recordValidator">Input parametr in constructor <see cref="IRecordValidator"/>.</param>
+        public FileCabinetFilesystemService(FileStream fileStream, IRecordValidator recordValidator)
         {
             this.fileStream = fileStream;
+            this.validator = recordValidator;
         }
 
         /// <summary>
@@ -55,6 +58,7 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{nameof(fileCabinetRecord)} is null!");
             }
 
+            this.validator.ValidateParametrs(fileCabinetRecord);
             fileCabinetRecord.Id = this.GetMaxIdInNotDeletedRecordsFromFile() + 1;
             this.fileStream.Seek(0, SeekOrigin.End);
             var b1 = FileCabinetRecordToBytes(fileCabinetRecord);
@@ -102,6 +106,7 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{nameof(fileCabinetRecord)} is null!");
             }
 
+            this.validator.ValidateParametrs(fileCabinetRecord);
             int editIdReord = fileCabinetRecord.Id;
             var recordBuffer = new byte[RECORDSIZE];
             int counteRecordInFile = this.GetCountAllRecordssFromFile();

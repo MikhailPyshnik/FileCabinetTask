@@ -8,7 +8,7 @@ namespace FileCabinetApp
     /// <summary>
     /// Class of console application.
     /// </summary>
-    public class DefaultValidator : IValidatorOfParemetrs
+    public class DefaultValidator : IValidatorOfParemetrs, IRecordValidator
     {
         /// <summary>
         /// Implement the method ReadInput.
@@ -260,6 +260,25 @@ namespace FileCabinetApp
             return new Tuple<bool, string>(result, message);
         }
 
+        /// <summary>
+        /// Implements the method FirstNameConverter.
+        /// </summary>
+        /// <param name="fileCabinetRecord">Input parametr record <see cref="FileCabinetRecord"/>.</param>
+        public void ValidateParametrs(FileCabinetRecord fileCabinetRecord)
+        {
+            if (fileCabinetRecord == null)
+            {
+                throw new ArgumentNullException(nameof(fileCabinetRecord));
+            }
+
+            this.ValidateFirstName(fileCabinetRecord);
+            this.ValidateLastName(fileCabinetRecord);
+            this.ValidateDateOfBitrh(fileCabinetRecord);
+            this.ValidateSex(fileCabinetRecord);
+            this.ValidateHeight(fileCabinetRecord);
+            this.ValidateSalary(fileCabinetRecord);
+        }
+
         private static bool WhiteSpace(string value)
         {
             bool result = true;
@@ -273,6 +292,82 @@ namespace FileCabinetApp
             }
 
             return result;
+        }
+
+        private void ValidateFirstName(FileCabinetRecord fileCabinetRecord)
+        {
+            string value = fileCabinetRecord.FirstName;
+            if (string.IsNullOrEmpty(value))
+            {
+                throw new ArgumentException("First name is null.");
+            }
+
+            if (value.Length < 2 || value.Length > 60)
+            {
+                throw new ArgumentException("First name is incorrect value.");
+            }
+
+            if (WhiteSpace(value))
+            {
+                throw new ArgumentException("First name consists of spaces.");
+            }
+        }
+
+        private void ValidateLastName(FileCabinetRecord fileCabinetRecord)
+        {
+            string value = fileCabinetRecord.LastName;
+            if (string.IsNullOrEmpty(value))
+            {
+                throw new ArgumentException("Last  name is null.");
+            }
+
+            if (value.Length < 2 || value.Length > 60)
+            {
+                throw new ArgumentException("Last name is incorrect value.");
+            }
+
+            if (WhiteSpace(value))
+            {
+                throw new ArgumentException("Last name consists of spaces.");
+            }
+        }
+
+        private void ValidateDateOfBitrh(FileCabinetRecord fileCabinetRecord)
+        {
+            var value = fileCabinetRecord.DateOfBirth;
+            DateTime date1 = new DateTime(1950, 1, 01);
+
+            if (date1 > value || value > DateTime.Now)
+            {
+                throw new ArgumentException("Date Of Birth is incorrect value.");
+            }
+        }
+
+        private void ValidateSex(FileCabinetRecord fileCabinetRecord)
+        {
+            var value = fileCabinetRecord.Sex;
+            if (!'F'.Equals(value) & !'f'.Equals(value) & !'M'.Equals(value) & !'m'.Equals(value))
+            {
+                throw new ArgumentException("Sex is incorrect value.");
+            }
+        }
+
+        private void ValidateHeight(FileCabinetRecord fileCabinetRecord)
+        {
+            var value = fileCabinetRecord.Height;
+            if (value < 60 || value > 230)
+            {
+                throw new ArgumentException("Height is incorrect value.");
+            }
+        }
+
+        private void ValidateSalary(FileCabinetRecord fileCabinetRecord)
+        {
+            decimal value = fileCabinetRecord.Salary;
+            if (value < 500 || value > 10000)
+            {
+                throw new ArgumentException("Salary is incorrect value.");
+            }
         }
     }
 }

@@ -16,7 +16,8 @@ namespace FileCabinetApp
         private const string HintMessage = "Enter your command, or enter 'help' to get help.";
 
         private static IFileCabinetService fileCabinetService;
-        private static IValidatorOfParemetrs recordValidator;
+        private static IValidatorOfParemetrs recorInputdValidator;
+        private static IRecordValidator recordValidator;
         private static FileStream filestream;
         private static bool isRunning = true;
 
@@ -39,13 +40,15 @@ namespace FileCabinetApp
             if (result.Tag == ParserResultType.NotParsed)
             {
                 Console.WriteLine($"Not parsed command!");
+                recorInputdValidator = new DefaultValidator();
                 recordValidator = new DefaultValidator();
-                fileCabinetService = new FileCabinetMemoryService();
+                fileCabinetService = new FileCabinetMemoryService(recordValidator);
             }
             else
             {
                 if (options.InputFile == null)
                 {
+                    recorInputdValidator = new DefaultValidator();
                     recordValidator = new DefaultValidator();
                 }
                 else
@@ -53,18 +56,20 @@ namespace FileCabinetApp
                     string compareInputFile = options.InputFile.ToLower(new CultureInfo("en-US"));
                     if (compareInputFile == "custom")
                     {
+                        recorInputdValidator = new CustomValidator();
                         recordValidator = new CustomValidator();
                         validationRules = "custom";
                     }
                     else
                     {
+                        recorInputdValidator = new DefaultValidator();
                         recordValidator = new DefaultValidator();
                     }
                 }
 
                 if (options.InputStorage == null)
                 {
-                    fileCabinetService = new FileCabinetMemoryService();
+                    fileCabinetService = new FileCabinetMemoryService(recordValidator);
                 }
                 else
                 {
@@ -74,11 +79,11 @@ namespace FileCabinetApp
                     {
                         filestream = File.Open("cabinet-records.db", FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
                         storageRules = "file";
-                        fileCabinetService = new FileCabinetFilesystemService(filestream);
+                        fileCabinetService = new FileCabinetFilesystemService(filestream, recordValidator);
                     }
                     else
                     {
-                        fileCabinetService = new FileCabinetMemoryService();
+                        fileCabinetService = new FileCabinetMemoryService(recordValidator);
                     }
                 }
 
@@ -136,12 +141,12 @@ namespace FileCabinetApp
         private static ICommandHandler CreateCommandHandlers()
         {
             var helpHandler = new HelpCommandHandler();
-            var createHandler = new CreateCommandHandler(fileCabinetService, recordValidator);
-            var importHandler = new ImportCommandHandler(fileCabinetService, recordValidator);
+            var createHandler = new CreateCommandHandler(fileCabinetService, recorInputdValidator);
+            var importHandler = new ImportCommandHandler(fileCabinetService, recorInputdValidator);
             var statHandler = new StatCommandHandler(fileCabinetService);
             var listHandler = new ListCommandHandler(fileCabinetService, DefaultRecordPrinter);
             var findHandler = new FindCommandHandler(fileCabinetService, DefaultRecordPrinter);
-            var editHandler = new EditCommandHandler(fileCabinetService, recordValidator);
+            var editHandler = new EditCommandHandler(fileCabinetService, recorInputdValidator);
             var removeHandler = new RemoveCommandHandler(fileCabinetService);
             var purgeHandler = new PurgeCommandHandler(fileCabinetService);
             var exportHandler = new ExportCommandHandler(fileCabinetService);

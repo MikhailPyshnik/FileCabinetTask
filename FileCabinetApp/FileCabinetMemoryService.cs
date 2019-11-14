@@ -11,6 +11,8 @@ namespace FileCabinetApp
     /// </summary>
     public class FileCabinetMemoryService : IFileCabinetService
     {
+        private readonly IRecordValidator validator;
+
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
 
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>(StringComparer.OrdinalIgnoreCase);
@@ -22,8 +24,10 @@ namespace FileCabinetApp
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetMemoryService"/> class.
         /// </summary>
-        public FileCabinetMemoryService()
+        /// <param name="recordValidator">Input parametr in constructor <see cref="IRecordValidator"/>.</param>
+        public FileCabinetMemoryService(IRecordValidator recordValidator)
         {
+            this.validator = recordValidator;
         }
 
         /// <summary>
@@ -46,6 +50,7 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{nameof(fileCabinetRecord)} is null!");
             }
 
+            this.validator.ValidateParametrs(fileCabinetRecord);
             fileCabinetRecord.Id = this.list.Count + 1;
             this.list.Add(fileCabinetRecord);
             this.AddRecordToDictionary(fileCabinetRecord);
@@ -89,6 +94,8 @@ namespace FileCabinetApp
             {
                 throw new ArgumentException("Input Id is incorrect value.");
             }
+
+            this.validator.ValidateParametrs(fileCabinetRecord);
 
             int editId = fileCabinetRecord.Id - 1;
             FileCabinetRecord res = this.list.Find(item1 => item1.Id == fileCabinetRecord.Id);
