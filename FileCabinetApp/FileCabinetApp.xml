@@ -378,12 +378,12 @@
             Class SalaryValidator.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.CommonValidator.SalaryValidator.#ctor(System.Int32,System.Int32)">
+        <member name="M:FileCabinetApp.CommonValidator.SalaryValidator.#ctor(System.Decimal,System.Decimal)">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.CommonValidator.SalaryValidator"/> class.
             </summary>
-            <param name="minSalary">Input parametr min salary.<see cref="T:System.Int32"/>.</param>
-            <param name="maxSalary">Input parametr max salary.<see cref="T:System.Int32"/>.</param>
+            <param name="minSalary">Input parametr min salary.<see cref="T:System.Decimal"/>.</param>
+            <param name="maxSalary">Input parametr max salary.<see cref="T:System.Decimal"/>.</param>
         </member>
         <member name="M:FileCabinetApp.CommonValidator.SalaryValidator.ValidateParametrs(FileCabinetRecord)">
             <summary>
@@ -1237,6 +1237,65 @@
              Method Main of console application.The poin of enter application.
             </summary>
             <param name="args">Input parametr args[] <see cref="T:System.String"/>.</param>
+        </member>
+        <member name="T:FileCabinetApp.ValidatorBuilder">
+            <summary>
+            Class ValidatorBuilder.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.ValidatorBuilder.ValidateFirstName(System.UInt32,System.UInt32)">
+            <summary>
+            Validate first name.
+            </summary>
+            <param name="minLenght">Input parametr min salary.<see cref="T:System.UInt32"/>.</param>
+            <param name="maxLenght">Input parametr max salary.<see cref="T:System.UInt32"/>.</param>
+            <returns>Return <see cref="T:FileCabinetApp.ValidatorBuilder"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ValidatorBuilder.ValidateLastName(System.UInt32,System.UInt32)">
+            <summary>
+            Validate last name.
+            </summary>
+            <param name="minLenght">Input parametr min salary.<see cref="T:System.UInt32"/>.</param>
+            <param name="maxLenght">Input parametr max salary.<see cref="T:System.UInt32"/>.</param>
+            <returns>Return <see cref="T:FileCabinetApp.ValidatorBuilder"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ValidatorBuilder.ValidateDateOfBirth(System.DateTime,System.DateTime)">
+            <summary>
+            Validate date of birth.
+            </summary>
+            <param name="from">Input parametr start date of birth.<see cref="T:System.DateTime"/>.</param>
+            <param name="to">Input parametr end date of birth.<see cref="T:System.DateTime"/>.</param>
+            <returns>Return <see cref="T:FileCabinetApp.ValidatorBuilder"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ValidatorBuilder.ValidateGender(System.Char,System.Char)">
+            <summary>
+            Validate gender.
+            </summary>
+            <param name="maleSex">Input parameter male sex.<see cref="T:System.Char"/>.</param>
+            <param name="femaleSex">Input parameter female sex.<see cref="T:System.Char"/>.</param>
+            <returns>Return <see cref="T:FileCabinetApp.ValidatorBuilder"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ValidatorBuilder.ValidateHeigth(System.Int16,System.Int16)">
+            <summary>
+            Validate heigth.
+            </summary>
+            <param name="minHeight">Input parametr min height.<see cref="T:System.Int16"/>.</param>
+            <param name="maxHeight">Input parametr max height.<see cref="T:System.Int16"/>.</param>
+            <returns>Return <see cref="T:FileCabinetApp.ValidatorBuilder"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ValidatorBuilder.ValidateSalary(System.Decimal,System.Decimal)">
+            <summary>
+            Validate salary.
+            </summary>
+            <param name="minSalary">Input parametr min salary.<see cref="T:System.Decimal"/>.</param>
+            <param name="maxSalary">Input parametr max salary.<see cref="T:System.Decimal"/>.</param>
+            <returns>Return <see cref="T:FileCabinetApp.ValidatorBuilder"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ValidatorBuilder.Create">
+            <summary>
+            Create new CompositeValidator.
+            </summary>
+            <returns>Return <see cref="T:FileCabinetApp.IRecordValidator"/>.</returns>
         </member>
         <member name="T:FileCabinetRecord">
             <summary>

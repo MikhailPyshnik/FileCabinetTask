@@ -7,15 +7,15 @@ namespace FileCabinetApp.CommonValidator
     /// </summary>
     public class SalaryValidator : IRecordValidator
     {
-        private readonly int minSalary;
-        private readonly int maxSalary;
+        private readonly decimal minSalary;
+        private readonly decimal maxSalary;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SalaryValidator"/> class.
         /// </summary>
-        /// <param name="minSalary">Input parametr min salary.<see cref="int"/>.</param>
-        /// <param name="maxSalary">Input parametr max salary.<see cref="int"/>.</param>
-        public SalaryValidator(int minSalary, int maxSalary)
+        /// <param name="minSalary">Input parametr min salary.<see cref="decimal"/>.</param>
+        /// <param name="maxSalary">Input parametr max salary.<see cref="decimal"/>.</param>
+        public SalaryValidator(decimal minSalary, decimal maxSalary)
         {
             this.minSalary = minSalary;
             this.maxSalary = maxSalary;

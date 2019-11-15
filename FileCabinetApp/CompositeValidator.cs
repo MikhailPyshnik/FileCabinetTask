@@ -5,7 +5,7 @@ namespace FileCabinetApp
     /// <summary>
     /// Base class CompositeValidator.
     /// </summary>
-    public abstract class CompositeValidator : IRecordValidator
+    public class CompositeValidator : IRecordValidator
     {
         private readonly List<IRecordValidator> validators;
 
@@ -13,7 +13,7 @@ namespace FileCabinetApp
         /// Initializes a new instance of the <see cref="CompositeValidator"/> class.
         /// </summary>
         /// <param name="validators">Input parametr list.<see cref="IRecordValidator"/>.</param>
-        protected CompositeValidator(List<IRecordValidator> validators)
+        public CompositeValidator(List<IRecordValidator> validators)
         {
             this.validators = validators;
         }
