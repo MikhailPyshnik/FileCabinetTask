@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
 
 namespace FileCabinetApp
 {
     /// <summary>
-    /// Class of console application.
+    /// Class DefaultValidator.
     /// </summary>
     public class DefaultValidator : IValidatorOfParemetrs
     {

@@ -18,7 +18,7 @@ namespace FileCabinetApp
         /// <param name="reader">Input parametr in constructor <see cref="StreamReader"/>.</param>
         public FileCabinetRecordCSVReader(StreamReader reader)
         {
-            this.reader = reader;
+            this.reader = reader ?? throw new ArgumentNullException(nameof(reader));
         }
 
         /// <summary>

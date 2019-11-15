@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 
@@ -17,7 +18,7 @@ namespace FileCabinetApp
         /// <param name="records">Input parametr in constructor <see cref="FileCabinetRecord"/>.</param>
         public FileCabinetServiceSnapshot(FileCabinetRecord[] records)
         {
-            this.records = records;
+            this.records = records ?? throw new ArgumentNullException(nameof(records));
         }
 
         /// <summary>

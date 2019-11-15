@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using FileCabinetApp.CommonValidator;
 
 namespace FileCabinetApp
 {
-     /// <summary>
-     /// Class of console application.
-     /// </summary>
+    /// <summary>
+    /// Class CustomValidator.
+    /// </summary>
     public class CustomValidator : IValidatorOfParemetrs
     {
         /// <summary>
