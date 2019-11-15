@@ -408,80 +408,9 @@
             </summary>
             <param name="fileCabinetRecord">Input parameter record <see cref="T:FileCabinetRecord"/>.</param>
         </member>
-        <member name="T:FileCabinetApp.CustomDefaultValidator.CustomDateOfBirthValidator">
-            <summary>
-            Class CustomDateOfBirthValidator.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.CustomDefaultValidator.CustomDateOfBirthValidator.ValidateParametrs(FileCabinetRecord)">
-            <summary>
-            Implements the method ValidateParametrs.
-            </summary>
-            <param name="fileCabinetRecord">Input parameter record <see cref="T:FileCabinetRecord"/>.</param>
-        </member>
-        <member name="T:FileCabinetApp.CustomDefaultValidator.CustomFirstNameValidator">
-            <summary>
-            Class CustomFirstNameValidator.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.CustomDefaultValidator.CustomFirstNameValidator.ValidateParametrs(FileCabinetRecord)">
-            <summary>
-            Implements the method ValidateParametrs.
-            </summary>
-            <param name="fileCabinetRecord">Input parameter record <see cref="T:FileCabinetRecord"/>.</param>
-        </member>
-        <member name="T:FileCabinetApp.CustomDefaultValidator.CustomGenderValidator">
-            <summary>
-            Class CustomGenderValidator.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.CustomDefaultValidator.CustomGenderValidator.ValidateParametrs(FileCabinetRecord)">
-            <summary>
-            Implements the method ValidateParametrs.
-            </summary>
-            <param name="fileCabinetRecord">Input parameter record <see cref="T:FileCabinetRecord"/>.</param>
-        </member>
-        <member name="T:FileCabinetApp.CustomDefaultValidator.CustomHeightValidator">
-            <summary>
-            Class CustomHeightValidator.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.CustomDefaultValidator.CustomHeightValidator.ValidateParametrs(FileCabinetRecord)">
-            <summary>
-            Implements the method ValidateParameters.
-            </summary>
-            <param name="fileCabinetRecord">Input parameter record <see cref="T:FileCabinetRecord"/>.</param>
-        </member>
-        <member name="T:FileCabinetApp.CustomDefaultValidator.CustomLastNameValidator">
-            <summary>
-            Class CustomLastNameValidator.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.CustomDefaultValidator.CustomLastNameValidator.ValidateParametrs(FileCabinetRecord)">
-            <summary>
-            Implements the method ValidateParametrs.
-            </summary>
-            <param name="fileCabinetRecord">Input parameter record <see cref="T:FileCabinetRecord"/>.</param>
-        </member>
-        <member name="T:FileCabinetApp.CustomDefaultValidator.CustomSalaryValidator">
-            <summary>
-            Class CustomLastNameValidator.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.CustomDefaultValidator.CustomSalaryValidator.ValidateParametrs(FileCabinetRecord)">
-            <summary>
-            Implements the method ValidateParametrs.
-            </summary>
-            <param name="fileCabinetRecord">Input parameter record <see cref="T:FileCabinetRecord"/>.</param>
-        </member>
         <member name="T:FileCabinetApp.CustomValidator">
             <summary>
             Class CustomValidator.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.CustomValidator.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.CustomValidator"/> class.
             </summary>
         </member>
         <member name="M:FileCabinetApp.CustomValidator.ReadInput``1(System.Func{System.String,System.Tuple{System.Boolean,System.String,``0}},System.Func{``0,System.Tuple{System.Boolean,System.String}})">
@@ -577,80 +506,9 @@
             <param name="value">The validator.</param>
             <returns>The correct value.</returns>
         </member>
-        <member name="T:FileCabinetApp.RecordValidator.DefaultDateOfBirthValidator">
-            <summary>
-            Class DefaultDateOfBirthValidator.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.RecordValidator.DefaultDateOfBirthValidator.ValidateParametrs(FileCabinetRecord)">
-            <summary>
-            Implements the method ValidateParametrs.
-            </summary>
-            <param name="fileCabinetRecord">Input parameter record <see cref="T:FileCabinetRecord"/>.</param>
-        </member>
-        <member name="T:FileCabinetApp.RecordValidator.DefaultFirstNameValidator">
-            <summary>
-            Class DefaultFirstNameValidator.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.RecordValidator.DefaultFirstNameValidator.ValidateParametrs(FileCabinetRecord)">
-            <summary>
-            Implements the method ValidateParametrs.
-            </summary>
-            <param name="fileCabinetRecord">Input parameter record <see cref="T:FileCabinetRecord"/>.</param>
-        </member>
-        <member name="T:FileCabinetApp.RecordValidator.DefaultGenderValidator">
-            <summary>
-            Class DefaultGenderValidator.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.RecordValidator.DefaultGenderValidator.ValidateParametrs(FileCabinetRecord)">
-            <summary>
-            Implements the method ValidateParametrs.
-            </summary>
-            <param name="fileCabinetRecord">Input parameter record <see cref="T:FileCabinetRecord"/>.</param>
-        </member>
-        <member name="T:FileCabinetApp.RecordValidator.DefaultHeightValidator">
-            <summary>
-            Class DefaultHeightValidator.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.RecordValidator.DefaultHeightValidator.ValidateParametrs(FileCabinetRecord)">
-            <summary>
-            Implements the method ValidateParametrs.
-            </summary>
-            <param name="fileCabinetRecord">Input parameter record <see cref="T:FileCabinetRecord"/>.</param>
-        </member>
-        <member name="T:FileCabinetApp.RecordValidator.DefaultLastNameValidator">
-            <summary>
-            Class DefaultLastNameValidator.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.RecordValidator.DefaultLastNameValidator.ValidateParametrs(FileCabinetRecord)">
-            <summary>
-            Implements the method ValidateParametrs.
-            </summary>
-            <param name="fileCabinetRecord">Input parameter record <see cref="T:FileCabinetRecord"/>.</param>
-        </member>
-        <member name="T:FileCabinetApp.RecordValidator.DefaultSalaryValidator">
-            <summary>
-            Class DefaultSalaryValidator.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.RecordValidator.DefaultSalaryValidator.ValidateParametrs(FileCabinetRecord)">
-            <summary>
-            Implements the method ValidateParametrs.
-            </summary>
-            <param name="fileCabinetRecord">Input parameter record <see cref="T:FileCabinetRecord"/>.</param>
-        </member>
         <member name="T:FileCabinetApp.DefaultValidator">
             <summary>
             Class DefaultValidator.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.DefaultValidator.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.DefaultValidator"/> class.
             </summary>
         </member>
         <member name="M:FileCabinetApp.DefaultValidator.ReadInput``1(System.Func{System.String,System.Tuple{System.Boolean,System.String,``0}},System.Func{``0,System.Tuple{System.Boolean,System.String}})">
@@ -1295,6 +1153,25 @@
             <summary>
             Create new CompositeValidator.
             </summary>
+            <returns>Return <see cref="T:FileCabinetApp.IRecordValidator"/>.</returns>
+        </member>
+        <member name="T:FileCabinetApp.ValidatorBuilderExtention">
+            <summary>
+            Class extention ValidatorBuilder.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.ValidatorBuilderExtention.CreateDefault(FileCabinetApp.ValidatorBuilder)">
+            <summary>
+            Extention method CreateDefault.
+            </summary>
+            <param name="validator">Input parametr min salary.<see cref="T:FileCabinetApp.ValidatorBuilder"/>.</param>
+            <returns>Return <see cref="T:FileCabinetApp.IRecordValidator"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ValidatorBuilderExtention.CreateCustom(FileCabinetApp.ValidatorBuilder)">
+            <summary>
+            Extention method CreateCustom.
+            </summary>
+            <param name="validator">Input parametr min salary.<see cref="T:FileCabinetApp.ValidatorBuilder"/>.</param>
             <returns>Return <see cref="T:FileCabinetApp.IRecordValidator"/>.</returns>
         </member>
         <member name="T:FileCabinetRecord">

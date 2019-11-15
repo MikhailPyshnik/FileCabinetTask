@@ -20,7 +20,7 @@ namespace FileCabinetApp.CommandHandlers
         public FindCommandHandler(IFileCabinetService fileCabinetService, Action<IEnumerable<FileCabinetRecord>> inputPrinter)
             : base(fileCabinetService)
         {
-            this.printer = inputPrinter;
+            this.printer = inputPrinter ?? throw new ArgumentNullException(nameof(inputPrinter));
         }
 
         /// <summary>

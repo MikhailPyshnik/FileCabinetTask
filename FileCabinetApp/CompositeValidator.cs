@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace FileCabinetApp
 {
@@ -15,7 +16,7 @@ namespace FileCabinetApp
         /// <param name="validators">Input parametr list.<see cref="IRecordValidator"/>.</param>
         public CompositeValidator(List<IRecordValidator> validators)
         {
-            this.validators = validators;
+            this.validators = validators ?? throw new ArgumentNullException(nameof(validators));
         }
 
         /// <summary>

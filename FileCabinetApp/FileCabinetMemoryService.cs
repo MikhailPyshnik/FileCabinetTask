@@ -27,7 +27,7 @@ namespace FileCabinetApp
         /// <param name="recordValidator">Input parametr in constructor <see cref="IRecordValidator"/>.</param>
         public FileCabinetMemoryService(IRecordValidator recordValidator)
         {
-            this.validator = recordValidator;
+            this.validator = recordValidator ?? throw new ArgumentNullException(nameof(recordValidator));
         }
 
         /// <summary>

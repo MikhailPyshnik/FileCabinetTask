@@ -19,7 +19,7 @@ namespace FileCabinetApp.CommandHandlers
         public EditCommandHandler(IFileCabinetService fileCabinetService, IValidatorOfParemetrs recordValidator)
             : base(fileCabinetService)
         {
-            inputParamsValidator = recordValidator;
+            inputParamsValidator = recordValidator ?? throw new ArgumentNullException(nameof(recordValidator));
         }
 
         /// <summary>

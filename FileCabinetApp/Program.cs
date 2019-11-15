@@ -41,7 +41,7 @@ namespace FileCabinetApp
             {
                 Console.WriteLine($"Not parsed command!");
                 recorInputdValidator = new DefaultValidator();
-                recordValidator = new DefaultValidator();
+                recordValidator = new ValidatorBuilder().CreateDefault();
                 fileCabinetService = new FileCabinetMemoryService(recordValidator);
             }
             else
@@ -49,14 +49,7 @@ namespace FileCabinetApp
                 if (options.InputFile == null)
                 {
                     recorInputdValidator = new DefaultValidator();
-                    recordValidator = new ValidatorBuilder().ValidateFirstName(2, 60).
-                                                   ValidateLastName(2, 60).
-                                                   ValidateDateOfBirth(
-                                                   new DateTime(1950, 1, 01),
-                                                   DateTime.Now).ValidateGender('M', 'F').
-                                                   ValidateHeigth(60, 220).
-                                                   ValidateSalary(500, 10000).
-                                                   Create();
+                    recordValidator = new ValidatorBuilder().CreateDefault();
                 }
                 else
                 {
@@ -64,27 +57,13 @@ namespace FileCabinetApp
                     if (compareInputFile == "custom")
                     {
                         recorInputdValidator = new CustomValidator();
-                        recordValidator = new ValidatorBuilder().ValidateFirstName(2, 6).
-                                                    ValidateLastName(2, 6).
-                                                    ValidateDateOfBirth(
-                                                    new DateTime(1950, 1, 01),
-                                                    DateTime.Now).ValidateGender('M', 'F').
-                                                    ValidateHeigth(100, 220).
-                                                    ValidateSalary(500, 5000).
-                                                    Create();
+                        recordValidator = new ValidatorBuilder().CreateCustom();
                         validationRules = "custom";
                     }
                     else
                     {
                         recorInputdValidator = new DefaultValidator();
-                        recordValidator = new ValidatorBuilder().ValidateFirstName(2, 60).
-                                                   ValidateLastName(2, 60).
-                                                   ValidateDateOfBirth(
-                                                   new DateTime(1950, 1, 01),
-                                                   DateTime.Now).ValidateGender('M', 'F').
-                                                   ValidateHeigth(60, 220).
-                                                   ValidateSalary(500, 10000).
-                                                   Create();
+                        recordValidator = new ValidatorBuilder().CreateDefault();
                     }
                 }
 

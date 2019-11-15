@@ -14,6 +14,7 @@ namespace FileCabinetApp
     public class FileCabinetFilesystemService : IFileCabinetService
     {
         private const int MAXSTRINGLENGTH = 120;
+        private const int SETTHIRDBITTRUE = 4;
         private const int RECORDSIZE = 278;
         private readonly IRecordValidator validator;
         private FileStream fileStream;
@@ -25,8 +26,8 @@ namespace FileCabinetApp
         /// <param name="recordValidator">Input parametr in constructor <see cref="IRecordValidator"/>.</param>
         public FileCabinetFilesystemService(FileStream fileStream, IRecordValidator recordValidator)
         {
-            this.fileStream = fileStream;
-            this.validator = recordValidator;
+            this.fileStream = fileStream ?? throw new ArgumentNullException(nameof(fileStream));
+            this.validator = recordValidator ?? throw new ArgumentNullException(nameof(recordValidator));
         }
 
         /// <summary>
@@ -81,7 +82,7 @@ namespace FileCabinetApp
             for (int i = 1; i <= counteRecordInFile; i++)
             {
                 this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
-                if (recordBuffer[0] == 4)
+                if (recordBuffer[0] == SETTHIRDBITTRUE)
                 {
                     continue;
                 }
@@ -114,7 +115,7 @@ namespace FileCabinetApp
             for (int i = 0; i < counteRecordInFile; i++)
             {
                 this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
-                if (recordBuffer[0] == 4)
+                if (recordBuffer[0] == SETTHIRDBITTRUE)
                 {
                     continue;
                 }
@@ -512,7 +513,7 @@ namespace FileCabinetApp
             for (int i = 1; i <= counteRecordInFile; i++)
             {
                 this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
-                if (recordBuffer[0] != 4)
+                if (recordBuffer[0] != SETTHIRDBITTRUE)
                 {
                     var record = BytesToFileCabinetRecord(recordBuffer);
                     notDeletedRecordsList.Add(record);
@@ -532,7 +533,7 @@ namespace FileCabinetApp
             for (int i = 1; i <= counteRecordInFile; i++)
             {
                 this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
-                if (recordBuffer[0] == 4)
+                if (recordBuffer[0] == SETTHIRDBITTRUE)
                 {
                     var record = BytesToFileCabinetRecord(recordBuffer);
                     deletedRecordList.Add(record);
@@ -552,7 +553,7 @@ namespace FileCabinetApp
             for (int i = 1; i <= counteRecordInFile; i++)
             {
                 this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
-                if (recordBuffer[0] == 4)
+                if (recordBuffer[0] == SETTHIRDBITTRUE)
                 {
                     var record = BytesToFileCabinetRecord(recordBuffer);
                     deletedRecordList.Add(record);

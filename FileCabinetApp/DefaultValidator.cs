@@ -1,30 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using FileCabinetApp.CommonValidator;
 
 namespace FileCabinetApp
 {
     /// <summary>
     /// Class DefaultValidator.
     /// </summary>
-    public class DefaultValidator : CompositeValidator, IValidatorOfParemetrs
+    public class DefaultValidator : IValidatorOfParemetrs
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DefaultValidator"/> class.
-        /// </summary>
-        public DefaultValidator()
-            : base(new List<IRecordValidator>
-            {
-                new FirstNameValidator(2, 60),
-                new LastNameValidator(2, 60),
-                new DateOfBirthValidator(new DateTime(1950, 1, 01), DateTime.Now),
-                new GenderValidator('m', 'f'),
-                new HeightValidator(60, 230),
-                new SalaryValidator(500, 10000),
-            })
-        {
-        }
-
         /// <summary>
         /// Implement the method ReadInput.
         /// </summary>

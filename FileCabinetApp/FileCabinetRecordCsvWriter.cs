@@ -18,7 +18,7 @@ namespace FileCabinetApp
         /// <param name="writer">Input parametr in constructor <see cref="StreamWriter"/>.</param>
         public FileCabinetRecordCsvWriter(StreamWriter writer)
         {
-            this.writer = writer;
+            this.writer = writer ?? throw new ArgumentNullException(nameof(writer));
         }
 
         /// <summary>

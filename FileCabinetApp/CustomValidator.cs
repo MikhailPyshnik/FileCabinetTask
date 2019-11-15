@@ -7,24 +7,8 @@ namespace FileCabinetApp
     /// <summary>
     /// Class CustomValidator.
     /// </summary>
-    public class CustomValidator : CompositeValidator, IValidatorOfParemetrs
+    public class CustomValidator : IValidatorOfParemetrs
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CustomValidator"/> class.
-        /// </summary>
-        public CustomValidator()
-            : base(new List<IRecordValidator>
-            {
-                new FirstNameValidator(2, 5),
-                new LastNameValidator(2, 5),
-                new DateOfBirthValidator(new DateTime(1939, 1, 01), DateTime.Now),
-                new GenderValidator('M', 'F'),
-                new HeightValidator(100, 230),
-                new SalaryValidator(500, 5000),
-            })
-        {
-        }
-
         /// <summary>
         /// Implement the method ReadInput.
         /// </summary>

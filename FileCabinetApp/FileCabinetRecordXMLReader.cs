@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Text;
 using System.Xml;
 
 namespace FileCabinetApp
@@ -20,7 +19,7 @@ namespace FileCabinetApp
         /// <param name="reader">Input parametr in constructor <see cref="StreamReader"/>.</param>
         public FileCabinetRecordXMLReader(StreamReader reader)
         {
-            this.reader = reader;
+            this.reader = reader ?? throw new ArgumentNullException(nameof(reader));
         }
 
         /// <summary>
