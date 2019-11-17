@@ -98,6 +98,16 @@ namespace FileCabinetApp
                     }
                 }
 
+                if (options.InputUse != null)
+                {
+                    string useParametr = options.InputUse.ToLower(new CultureInfo("en-US"));
+                    if (useParametr == "stopwatch")
+                    {
+                        fileCabinetService.Validator = recorInputdValidator;
+                        fileCabinetService = new ServiceMeter(fileCabinetService);
+                    }
+                }
+
                 Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}");
                 Console.WriteLine($"Using {validationRules} validation rules.");
                 Console.WriteLine($"Using {storageRules} storage rules.");
@@ -204,6 +214,9 @@ namespace FileCabinetApp
 
             [Option('s', "storage", Separator = ' ', HelpText = "Set output to verbose messages.")]
             public string InputStorage { get; set; }
+
+            [Option('u', "use", Separator = '-', HelpText = "Use stopwatch.")]
+            public string InputUse { get; set; }
         }
     }
 }
