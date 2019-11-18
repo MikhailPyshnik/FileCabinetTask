@@ -112,13 +112,17 @@ namespace FileCabinetApp
         /// <returns>Rerords by firstName <see cref="FileCabinetRecord"/>.</returns>
         public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
         {
-            List<FileCabinetRecord> result = new List<FileCabinetRecord>();
-            if (this.firstNameDictionary.ContainsKey(firstName))
+            List<FileCabinetRecord> firstNameList = new List<FileCabinetRecord>();
+            ReadOnlyCollection<FileCabinetRecord> list = this.GetRecords();
+            foreach (var item in list)
             {
-                result = this.firstNameDictionary[firstName];
+                if (item.FirstName.ToLower(new CultureInfo("en-US")) == firstName.ToLower(new CultureInfo("en-US")))
+                {
+                    firstNameList.Add(item);
+                }
             }
 
-            return new ReadOnlyCollection<FileCabinetRecord>(result);
+            return new ReadOnlyCollection<FileCabinetRecord>(firstNameList);
         }
 
         /// <summary>
@@ -128,14 +132,17 @@ namespace FileCabinetApp
         /// <returns>Rerords by lastName <see cref="FileCabinetRecord"/>.</returns>
         public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
         {
-            List<FileCabinetRecord> result = new List<FileCabinetRecord>();
-
-            if (this.lastNameDictionary.ContainsKey(lastName))
+            List<FileCabinetRecord> lastNameList = new List<FileCabinetRecord>();
+            ReadOnlyCollection<FileCabinetRecord> list = this.GetRecords();
+            foreach (var item in list)
             {
-                result = this.lastNameDictionary[lastName];
+                if (item.LastName.ToLower(new CultureInfo("en-US")) == lastName.ToLower(new CultureInfo("en-US")))
+                {
+                    lastNameList.Add(item);
+                }
             }
 
-            return new ReadOnlyCollection<FileCabinetRecord>(result);
+            return new ReadOnlyCollection<FileCabinetRecord>(lastNameList);
         }
 
         /// <summary>
@@ -145,14 +152,18 @@ namespace FileCabinetApp
         /// <returns>Rerords by dateofbirth <see cref="FileCabinetRecord"/>.</returns>
         public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(string dateofbirth)
         {
-            List<FileCabinetRecord> result = new List<FileCabinetRecord>();
-
-            if (this.dateOfBirthDictionary.ContainsKey(dateofbirth))
+            List<FileCabinetRecord> dayOfBirthList = new List<FileCabinetRecord>();
+            ReadOnlyCollection<FileCabinetRecord> list = this.GetRecords();
+            foreach (var item in list)
             {
-                result = this.dateOfBirthDictionary[dateofbirth];
+                string temp = item.DateOfBirth.ToString("yyyy-MMM-dd", new CultureInfo("en-US"));
+                if (temp.ToLower(new CultureInfo("en-US")) == dateofbirth.ToLower(new CultureInfo("en-US")))
+                {
+                    dayOfBirthList.Add(item);
+                }
             }
 
-            return new ReadOnlyCollection<FileCabinetRecord>(result);
+            return new ReadOnlyCollection<FileCabinetRecord>(dayOfBirthList);
         }
 
         /// <summary>

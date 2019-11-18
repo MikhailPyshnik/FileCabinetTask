@@ -27,6 +27,10 @@ namespace FileCabinetApp
 
         private static string storageRules = "memory";
 
+        private static string stopWatchRules = "Not used stopwatch";
+
+        private static string loggerRules = "Not used logger";
+
         private static string[] existCommands = new string[] { "help", "exit", "stat", "create", "list", "edit", "find", "export", "import", "remove", "purge" };
 
         /// <summary>
@@ -98,19 +102,25 @@ namespace FileCabinetApp
                     }
                 }
 
-                if (options.InputUse != null)
+                if (options.InputStopwatch)
                 {
-                    string useParametr = options.InputUse.ToLower(new CultureInfo("en-US"));
-                    if (useParametr == "stopwatch")
-                    {
-                        fileCabinetService.Validator = recorInputdValidator;
-                        fileCabinetService = new ServiceMeter(fileCabinetService);
-                    }
+                    fileCabinetService.Validator = recorInputdValidator;
+                    fileCabinetService = new ServiceMeter(fileCabinetService);
+                    stopWatchRules = "Use stopwatch";
+                }
+
+                if (options.InputLogger)
+                {
+                    fileCabinetService.Validator = recorInputdValidator;
+                    fileCabinetService = new ServiceLogger(fileCabinetService);
+                    loggerRules = "Use logger";
                 }
 
                 Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}");
                 Console.WriteLine($"Using {validationRules} validation rules.");
                 Console.WriteLine($"Using {storageRules} storage rules.");
+                Console.WriteLine($"{stopWatchRules}.");
+                Console.WriteLine($"{loggerRules}.");
                 Console.WriteLine(Program.HintMessage);
                 Console.WriteLine();
 
@@ -215,8 +225,11 @@ namespace FileCabinetApp
             [Option('s', "storage", Separator = ' ', HelpText = "Set output to verbose messages.")]
             public string InputStorage { get; set; }
 
-            [Option('u', "use", Separator = '-', HelpText = "Use stopwatch.")]
-            public string InputUse { get; set; }
+            [Option("use-logger", Required = false, HelpText = "Use stopwatch.")]
+            public bool InputStopwatch { get; set; }
+
+            [Option("use-stopwatch", Required = false, HelpText = "Use logger.")]
+            public bool InputLogger { get; set; }
         }
     }
 }

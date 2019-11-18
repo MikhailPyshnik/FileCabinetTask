@@ -1169,6 +1169,97 @@
             </summary>
             <param name="args">Input parametr args[] <see cref="T:System.String"/>.</param>
         </member>
+        <member name="T:FileCabinetApp.ServiceLogger">
+            <summary>
+            Work with Logger.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.ServiceLogger"/> class.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.ServiceLogger"/> class.
+            </summary>
+            <param name="fileCabinet">Input parametr in constructor <see cref="T:FileCabinetApp.IFileCabinetService"/>.</param>
+        </member>
+        <member name="P:FileCabinetApp.ServiceLogger.Validator">
+            <summary>
+            Gets or sets the Validator of the Program.
+            </summary>
+            <value>The Validator of the Program.</value>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.CreateRecord(FileCabinetRecord)">
+            <summary>
+            Implementation IFileCabinetService СreateRecod in class ServiceLogger.
+            </summary>
+            <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
+            <returns>Id <see cref="T:System.Int32"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.EditRecord(FileCabinetRecord)">
+            <summary>
+            Implementation IFileCabinetService EditRecord in class ServiceLogger.
+            </summary>
+            <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.FindByDateOfBirth(System.String)">
+            <summary>
+            Implementation IFileCabinetService FindByDateOfBirth in class ServiceLogger.
+            </summary>
+            <param name="dateofbirth">Input parametr FirstName <see cref="T:System.String"/>.</param>
+            <returns>Rerords by dateofbirth <see cref="T:FileCabinetRecord"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.FindByFirstName(System.String)">
+            <summary>
+            Implementation IFileCabinetService FindByFirstName in class ServiceLogger.
+            </summary>
+            <param name="firstName">Input parametr FirstName <see cref="T:System.String"/>.</param>
+            <returns>Rerords by firstName <see cref="T:FileCabinetRecord"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.FindByLastName(System.String)">
+            <summary>
+            Implementation IFileCabinetService FindByLastName in class ServiceLogger.
+            </summary>
+            <param name="lastName">Input parametr FirstName <see cref="T:System.String"/>.</param>
+            <returns>Rerords by lastName <see cref="T:FileCabinetRecord"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.GetRecords">
+            <summary>
+            Implementation IFileCabinetService GetRecords in class ServiceLogger.
+            </summary>
+            <returns>Rerords <see cref="T:FileCabinetRecord"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.GetStat">
+            <summary>
+            Implementation IFileCabinetService GetStat in class ServiceLogger.
+            </summary>
+            <returns>Count records <see cref="T:System.Int32"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.MakeSnapshot">
+            <summary>
+            Implementation IFileCabinetService MakeSnapshot in class ServiceLogger.
+            </summary>
+            <returns>Rerords by dateofbirth <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.Purge">
+            <summary>
+            Implementation IFileCabinetService Purge in class ServiceLogger.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.Remove(System.Int32)">
+            <summary>
+            Implementation IFileCabinetService Remove in class ServiceLogger.
+            </summary>
+            <param name="id">Input parametr id of record <see cref="T:System.Int32"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.ServiceLogger.Restore(FileCabinetApp.FileCabinetServiceSnapshot)">
+            <summary>
+            Implementation IFileCabinetService Restore in class ServiceLogger.
+            </summary>
+            <param name="fileCabinetServiceSnapshot">Input parametr fileCabinetServiceSnapshot <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/>.</param>
+        </member>
         <member name="T:FileCabinetApp.ServiceMeter">
             <summary>
             Work with StopWatch.

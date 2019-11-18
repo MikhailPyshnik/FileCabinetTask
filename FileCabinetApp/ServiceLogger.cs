@@ -1,28 +1,28 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
+using System.IO;
 
 namespace FileCabinetApp
 {
-     /// <summary>
-     /// Work with StopWatch.
-     /// </summary>
-    public class ServiceMeter : IFileCabinetService
+    /// <summary>
+    /// Work with Logger.
+    /// </summary>
+    public class ServiceLogger : IFileCabinetService
     {
         private static IFileCabinetService fileCabinetService;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ServiceMeter"/> class.
+        /// Initializes a new instance of the <see cref="ServiceLogger"/> class.
         /// </summary>
-        public ServiceMeter()
+        public ServiceLogger()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ServiceMeter"/> class.
+        /// Initializes a new instance of the <see cref="ServiceLogger"/> class.
         /// </summary>
         /// <param name="fileCabinet">Input parametr in constructor <see cref="IFileCabinetService"/>.</param>
-        public ServiceMeter(IFileCabinetService fileCabinet)
+        public ServiceLogger(IFileCabinetService fileCabinet)
         {
             fileCabinetService = fileCabinet;
         }
@@ -34,167 +34,181 @@ namespace FileCabinetApp
         public IValidatorOfParemetrs Validator { get; set; }
 
         /// <summary>
-        /// Implementation IFileCabinetService СreateRecod in class StopWatch.
+        /// Implementation IFileCabinetService СreateRecod in class ServiceLogger.
         /// </summary>
         /// <param name="fileCabinetRecord">Input parametr record <see cref="FileCabinetRecord"/>.</param>
         /// <returns>Id <see cref="int"/>.</returns>
         public int CreateRecord(FileCabinetRecord fileCabinetRecord)
         {
-            long ticksThisTime = 0;
-            var sw = Stopwatch.StartNew();
+            if (fileCabinetRecord == null)
+            {
+                throw new ArgumentNullException(nameof(fileCabinetRecord));
+            }
+
             var result = fileCabinetService.CreateRecord(fileCabinetRecord);
-            sw.Stop();
-            ticksThisTime = sw.ElapsedTicks;
-            Console.WriteLine($"CreateRecord method execution duration is {ticksThisTime} ticks.");
+
+            using (StreamWriter w = File.AppendText("log.txt"))
+            {
+                Log($"Calling Create() with FirstName = '{fileCabinetRecord.FirstName}', LastName = '{fileCabinetRecord.LastName}', DateOfBirth = '{fileCabinetRecord.DateOfBirth}' ", w);
+                Log($"Create() returned '{result}'.", w);
+            }
+
             return result;
         }
 
         /// <summary>
-        /// Implementation IFileCabinetService EditRecord in class StopWatch.
+        /// Implementation IFileCabinetService EditRecord in class ServiceLogger.
         /// </summary>
         /// <param name="fileCabinetRecord">Input parametr record <see cref="FileCabinetRecord"/>.</param>
         public void EditRecord(FileCabinetRecord fileCabinetRecord)
         {
-            long ticksThisTime = 0;
-            var sw = Stopwatch.StartNew();
+            if (fileCabinetRecord == null)
+            {
+                throw new ArgumentNullException(nameof(fileCabinetRecord));
+            }
+
             fileCabinetService.EditRecord(fileCabinetRecord);
-            sw.Stop();
-            ticksThisTime = sw.ElapsedTicks;
-            Console.WriteLine($"EditRecord method execution duration is {ticksThisTime} ticks.");
+
+            using (StreamWriter w = File.AppendText("log.txt"))
+            {
+                Log($"Calling Edit() returned  - FirstName = '{fileCabinetRecord.FirstName}', LastName = '{fileCabinetRecord.LastName}', DateOfBirth = '{fileCabinetRecord.DateOfBirth}'", w);
+            }
         }
 
         /// <summary>
-        /// Implementation IFileCabinetService FindByDateOfBirth in class StopWatch.
+        /// Implementation IFileCabinetService FindByDateOfBirth in class ServiceLogger.
         /// </summary>
         /// <param name="dateofbirth">Input parametr FirstName <see cref="string"/>.</param>
         /// <returns>Rerords by dateofbirth <see cref="FileCabinetRecord"/>.</returns>
         public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(string dateofbirth)
         {
-            long ticksThisTime = 0;
-            var sw = Stopwatch.StartNew();
             var result = fileCabinetService.FindByDateOfBirth(dateofbirth);
-            sw.Stop();
-            ticksThisTime = sw.ElapsedTicks;
-            Console.WriteLine($"FindByDateOfBirth method execution duration is {ticksThisTime} ticks.");
+            using (StreamWriter w = File.AppendText("log.txt"))
+            {
+                Log($"Calling FindByDateOfBirth() returned  - {result.Count} records", w);
+            }
+
             return result;
         }
 
         /// <summary>
-        /// Implementation IFileCabinetService FindByFirstName in class StopWatch.
+        /// Implementation IFileCabinetService FindByFirstName in class ServiceLogger.
         /// </summary>
         /// <param name="firstName">Input parametr FirstName <see cref="string"/>.</param>
         /// <returns>Rerords by firstName <see cref="FileCabinetRecord"/>.</returns>
         public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
         {
-            long ticksThisTime = 0;
-            var sw = Stopwatch.StartNew();
             var result = fileCabinetService.FindByFirstName(firstName);
-            sw.Stop();
-            ticksThisTime = sw.ElapsedTicks;
-            Console.WriteLine($"FindByFirstName method execution duration is {ticksThisTime} ticks.");
+            using (StreamWriter w = File.AppendText("log.txt"))
+            {
+                Log($"Calling FindByFirstName() returned  - {result.Count} records", w);
+            }
+
             return result;
         }
 
         /// <summary>
-        /// Implementation IFileCabinetService FindByLastName in class StopWatch.
+        /// Implementation IFileCabinetService FindByLastName in class ServiceLogger.
         /// </summary>
         /// <param name="lastName">Input parametr FirstName <see cref="string"/>.</param>
         /// <returns>Rerords by lastName <see cref="FileCabinetRecord"/>.</returns>
         public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
         {
-            long ticksThisTime = 0;
-            var sw = Stopwatch.StartNew();
             var result = fileCabinetService.FindByLastName(lastName);
-            sw.Stop();
-            ticksThisTime = sw.ElapsedTicks;
-            Console.WriteLine($"FindByLastName method execution duration is {ticksThisTime} ticks.");
+            using (StreamWriter w = File.AppendText("log.txt"))
+            {
+                Log($"Calling FindByLastName() returned  - {result.Count} records", w);
+            }
+
             return result;
         }
 
         /// <summary>
-        /// Implementation IFileCabinetService GetRecords in class StopWatch.
+        /// Implementation IFileCabinetService GetRecords in class ServiceLogger.
         /// </summary>
         /// <returns>Rerords <see cref="FileCabinetRecord"/>.</returns>
         public ReadOnlyCollection<FileCabinetRecord> GetRecords()
         {
-            long ticksThisTime = 0;
-            var sw = Stopwatch.StartNew();
             var result = fileCabinetService.GetRecords();
-            sw.Stop();
-            ticksThisTime = sw.ElapsedTicks;
-            Console.WriteLine($"GetRecords method execution duration is {ticksThisTime} ticks.");
+            using (StreamWriter w = File.AppendText("log.txt"))
+            {
+                Log($"Calling GetRecords() returned  - {result.Count} records", w);
+            }
+
             return result;
         }
 
         /// <summary>
-        /// Implementation IFileCabinetService GetStat in class StopWatch.
+        /// Implementation IFileCabinetService GetStat in class ServiceLogger.
         /// </summary>
         /// <returns>Count records <see cref="int"/>.</returns>
         public Tuple<int, int> GetStat()
         {
-            long ticksThisTime = 0;
-            var sw = Stopwatch.StartNew();
             var result = fileCabinetService.GetStat();
-            sw.Stop();
-            ticksThisTime = sw.ElapsedTicks;
-            Console.WriteLine($"GetStat method execution duration is {ticksThisTime} ticks.");
+            using (StreamWriter w = File.AppendText("log.txt"))
+            {
+                Log($"Calling GetStat() returned  - {result.Item1} records", w);
+            }
+
             return result;
         }
 
         /// <summary>
-        /// Implementation IFileCabinetService MakeSnapshot in class StopWatch.
+        /// Implementation IFileCabinetService MakeSnapshot in class ServiceLogger.
         /// </summary>
         /// <returns>Rerords by dateofbirth <see cref="FileCabinetServiceSnapshot"/>.</returns>
         public FileCabinetServiceSnapshot MakeSnapshot()
         {
-            long ticksThisTime = 0;
-            var sw = Stopwatch.StartNew();
             var result = fileCabinetService.MakeSnapshot();
-            sw.Stop();
-            ticksThisTime = sw.ElapsedTicks;
-            Console.WriteLine($"MakeSnapshot method execution duration is {ticksThisTime} ticks.");
+            using (StreamWriter w = File.AppendText("log.txt"))
+            {
+                Log($"Calling MakeSnapshot(). MakeSnapshot {result.Records.Count} records", w);
+            }
+
             return result;
         }
 
         /// <summary>
-        /// Implementation IFileCabinetService Purge in class StopWatch.
+        /// Implementation IFileCabinetService Purge in class ServiceLogger.
         /// </summary>
         public void Purge()
         {
-            long ticksThisTime = 0;
-            var sw = Stopwatch.StartNew();
             fileCabinetService.Purge();
-            sw.Stop();
-            ticksThisTime = sw.ElapsedTicks;
-            Console.WriteLine($"Purge method execution duration is {ticksThisTime} ticks.");
+            using (StreamWriter w = File.AppendText("log.txt"))
+            {
+                Log($"Calling Purge() returned", w);
+            }
         }
 
         /// <summary>
-        /// Implementation IFileCabinetService Remove in class StopWatch.
+        /// Implementation IFileCabinetService Remove in class ServiceLogger.
         /// </summary>
         /// <param name="id">Input parametr id of record <see cref="int"/>.</param>
         public void Remove(int id)
         {
-            long ticksThisTime = 0;
-            var sw = Stopwatch.StartNew();
             fileCabinetService.Remove(id);
-            sw.Stop();
-            ticksThisTime = sw.ElapsedTicks;
-            Console.WriteLine($"Remove method execution duration is {ticksThisTime} ticks.");
+            using (StreamWriter w = File.AppendText("log.txt"))
+            {
+                Log($"Calling Remove() - revove {id}", w);
+            }
         }
 
         /// <summary>
-        /// Implementation IFileCabinetService Restore in class StopWatch.
+        /// Implementation IFileCabinetService Restore in class ServiceLogger.
         /// </summary>
         /// <param name="fileCabinetServiceSnapshot">Input parametr fileCabinetServiceSnapshot <see cref="FileCabinetServiceSnapshot"/>.</param>
         public void Restore(FileCabinetServiceSnapshot fileCabinetServiceSnapshot)
         {
-            long ticksThisTime = 0;
-            var sw = Stopwatch.StartNew();
             fileCabinetService.Restore(fileCabinetServiceSnapshot);
-            sw.Stop();
-            ticksThisTime = sw.ElapsedTicks;
-            Console.WriteLine($"Restore method execution duration is {ticksThisTime} ticks.");
+            using (StreamWriter w = File.AppendText("log.txt"))
+            {
+                Log($"Calling Restore() - revove", w);
+            }
+        }
+
+        private static void Log(string logMessage, TextWriter w)
+        {
+            w.Write($"\r\n {DateTime.Now.ToLongTimeString()} - {logMessage}.");
         }
     }
 }

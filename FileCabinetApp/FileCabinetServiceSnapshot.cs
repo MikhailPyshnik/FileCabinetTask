@@ -19,6 +19,8 @@ namespace FileCabinetApp
         public FileCabinetServiceSnapshot(FileCabinetRecord[] records)
         {
             this.records = records ?? throw new ArgumentNullException(nameof(records));
+            ReadOnlyCollection<FileCabinetRecord> fileCabinetRecords = new ReadOnlyCollection<FileCabinetRecord>(this.records);
+            this.Records = fileCabinetRecords;
         }
 
         /// <summary>
