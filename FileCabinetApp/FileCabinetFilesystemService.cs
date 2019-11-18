@@ -203,7 +203,7 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Implementation IFileCabinetService FindByDateOfBirth.
+        /// Implementation IFileCabinetService MakeSnapshot.
         /// </summary>
         /// <returns>Rerords by dateofbirth <see cref="FileCabinetServiceSnapshot"/>.</returns>
         public FileCabinetServiceSnapshot MakeSnapshot()
@@ -240,7 +240,7 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Implementation IFileCabinetService Restore.
+        /// Implementation IFileCabinetService Remove.
         /// </summary>
         /// <param name="id">Input parametr id of record <see cref="int"/>.</param>
         public void Remove(int id)

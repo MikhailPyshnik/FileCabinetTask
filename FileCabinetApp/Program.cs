@@ -4,6 +4,8 @@ using System.Globalization;
 using System.IO;
 using CommandLine;
 using FileCabinetApp.CommandHandlers;
+using FileCabinetApp.Configuration;
+using Microsoft.Extensions.Configuration;
 
 namespace FileCabinetApp
 {
@@ -25,6 +27,10 @@ namespace FileCabinetApp
 
         private static string storageRules = "memory";
 
+        private static string stopWatchRules = "Not used stopwatch";
+
+        private static string loggerRules = "Not used logger";
+
         private static string[] existCommands = new string[] { "help", "exit", "stat", "create", "list", "edit", "find", "export", "import", "remove", "purge" };
 
         /// <summary>
@@ -33,6 +39,15 @@ namespace FileCabinetApp
         /// <param name="args">Input parametr args[] <see cref="string"/>.</param>
         public static void Main(string[] args)
         {
+            IConfiguration config = new ConfigurationBuilder()
+                                         .AddJsonFile("validation-rules.json", true, true)
+                                         .Build();
+
+            var validationRulesFromJson = config.Get<ConfigurationFilecabinet>();
+
+            var customValidateRule = validationRulesFromJson.Custom;
+            var defaultValidateRule = validationRulesFromJson.Default;
+
             var options = new Options();
             var result = Parser.Default
                                .ParseArguments<Options>(args)
@@ -40,30 +55,30 @@ namespace FileCabinetApp
             if (result.Tag == ParserResultType.NotParsed)
             {
                 Console.WriteLine($"Not parsed command!");
-                recorInputdValidator = new DefaultValidator();
-                recordValidator = new ValidatorBuilder().CreateDefault();
+                recorInputdValidator = new InputValidator(defaultValidateRule);
+                recordValidator = new ValidatorBuilder().CreateDefault(defaultValidateRule);
                 fileCabinetService = new FileCabinetMemoryService(recordValidator);
             }
             else
             {
                 if (options.InputFile == null)
                 {
-                    recorInputdValidator = new DefaultValidator();
-                    recordValidator = new ValidatorBuilder().CreateDefault();
+                    recorInputdValidator = new InputValidator(defaultValidateRule);
+                    recordValidator = new ValidatorBuilder().CreateDefault(defaultValidateRule);
                 }
                 else
                 {
                     string compareInputFile = options.InputFile.ToLower(new CultureInfo("en-US"));
                     if (compareInputFile == "custom")
                     {
-                        recorInputdValidator = new CustomValidator();
-                        recordValidator = new ValidatorBuilder().CreateCustom();
+                        recorInputdValidator = new InputValidator(customValidateRule);
+                        recordValidator = new ValidatorBuilder().CreateCustom(customValidateRule);
                         validationRules = "custom";
                     }
                     else
                     {
-                        recorInputdValidator = new DefaultValidator();
-                        recordValidator = new ValidatorBuilder().CreateDefault();
+                        recorInputdValidator = new InputValidator(defaultValidateRule);
+                        recordValidator = new ValidatorBuilder().CreateDefault(defaultValidateRule);
                     }
                 }
 
@@ -87,9 +102,25 @@ namespace FileCabinetApp
                     }
                 }
 
+                if (options.InputStopwatch)
+                {
+                    fileCabinetService.Validator = recorInputdValidator;
+                    fileCabinetService = new ServiceMeter(fileCabinetService);
+                    stopWatchRules = "Use stopwatch";
+                }
+
+                if (options.InputLogger)
+                {
+                    fileCabinetService.Validator = recorInputdValidator;
+                    fileCabinetService = new ServiceLogger(fileCabinetService);
+                    loggerRules = "Use logger";
+                }
+
                 Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}");
                 Console.WriteLine($"Using {validationRules} validation rules.");
                 Console.WriteLine($"Using {storageRules} storage rules.");
+                Console.WriteLine($"{stopWatchRules}.");
+                Console.WriteLine($"{loggerRules}.");
                 Console.WriteLine(Program.HintMessage);
                 Console.WriteLine();
 
@@ -193,6 +224,12 @@ namespace FileCabinetApp
 
             [Option('s', "storage", Separator = ' ', HelpText = "Set output to verbose messages.")]
             public string InputStorage { get; set; }
+
+            [Option("use-logger", Required = false, HelpText = "Use stopwatch.")]
+            public bool InputStopwatch { get; set; }
+
+            [Option("use-stopwatch", Required = false, HelpText = "Use logger.")]
+            public bool InputLogger { get; set; }
         }
     }
 }

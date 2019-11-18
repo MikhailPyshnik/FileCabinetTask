@@ -1,12 +1,31 @@
 ﻿using System;
+using FileCabinetApp.Configuration;
 
 namespace FileCabinetApp
 {
     /// <summary>
     /// Class DefaultValidator.
     /// </summary>
-    public class DefaultValidator : IValidatorOfParemetrs
+    public class InputValidator : IValidatorOfParemetrs
     {
+        private static ValidationConfiguration validateConfig;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InputValidator"/> class.
+        /// </summary>
+        public InputValidator()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InputValidator"/> class.
+        /// </summary>
+        /// <param name=" validate">Input parametr min salary.<see cref="ValidationConfiguration"/>.</param>
+        public InputValidator(ValidationConfiguration validate)
+        {
+            validateConfig = validate;
+        }
+
         /// <summary>
         /// Implement the method ReadInput.
         /// </summary>
@@ -138,7 +157,7 @@ namespace FileCabinetApp
                 message = "First name is null";
             }
 
-            if (value.Length < 2 || value.Length > 60)
+            if (value.Length < validateConfig.FirstName.Min || value.Length > validateConfig.FirstName.Max)
             {
                 result = false;
                 message = "First name is incorrect value";
@@ -168,7 +187,7 @@ namespace FileCabinetApp
                 message = "Last  name is null";
             }
 
-            if (value.Length < 2 || value.Length > 60)
+            if (value.Length < validateConfig.LastName.Min || value.Length > validateConfig.LastName.Max)
             {
                 result = false;
                 message = "Last name is incorrect value";
@@ -192,9 +211,8 @@ namespace FileCabinetApp
         {
             bool result = true;
             string message = null;
-            DateTime date1 = new DateTime(1950, 1, 01);
 
-            if (date1 > value || value > DateTime.Now)
+            if (validateConfig.DateOfBirth.From > value || value > validateConfig.DateOfBirth.To)
             {
                 result = false;
                 message = "Date Of Birth is incorrect value";
@@ -212,7 +230,7 @@ namespace FileCabinetApp
         {
             bool result = true;
             string message = null;
-            if (!'F'.Equals(value) & !'f'.Equals(value) & !'M'.Equals(value) & !'m'.Equals(value))
+            if (!'F'.Equals(value) & !validateConfig.Gender.Female.Equals(value) & !'M'.Equals(value) & !validateConfig.Gender.Male.Equals(value))
             {
                 result = false;
                 message = "Sex is incorrect value";
@@ -230,7 +248,7 @@ namespace FileCabinetApp
         {
             bool result = true;
             string message = null;
-            if (value < 60 || value > 230)
+            if (value < validateConfig.Height.Min || value > validateConfig.Height.Max)
             {
                 result = false;
                 message = "Height is incorrect value";
@@ -248,7 +266,7 @@ namespace FileCabinetApp
         {
             bool result = true;
             string message = null;
-            if (value < 500 || value > 10000)
+            if (value < validateConfig.Salary.Min || value > validateConfig.Salary.Max)
             {
                 result = false;
                 message = "Salary is incorrect value";

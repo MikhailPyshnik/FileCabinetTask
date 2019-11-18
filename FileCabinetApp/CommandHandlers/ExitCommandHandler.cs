@@ -20,7 +20,11 @@ namespace FileCabinetApp.CommandHandlers
         public ExitCommandHandler(IFileCabinetService fileCabinetService, FileStream filestream, Action<bool> exit)
              : base(fileCabinetService)
         {
-            fileStream = filestream ?? throw new ArgumentNullException(nameof(filestream));
+            if (fileCabinetService is FileCabinetFilesystemService)
+            {
+                fileStream = filestream ?? throw new ArgumentNullException(nameof(filestream));
+            }
+
             action = exit ?? throw new ArgumentNullException(nameof(exit));
         }
 

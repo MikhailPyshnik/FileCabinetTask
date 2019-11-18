@@ -41,7 +41,7 @@ namespace FileCabinetGenerator
         {
             List<FileCabinetRecord> list = new List<FileCabinetRecord>((int)countId);
 
-            var recordValidator = new DefaultValidator();
+            var recordValidator = new InputValidator();
 
             for (uint i = startId; i < startId + countId; i++)
             {

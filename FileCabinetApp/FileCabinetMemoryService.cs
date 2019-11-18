@@ -90,26 +90,19 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{nameof(fileCabinetRecord)} is null!");
             }
 
-            if (fileCabinetRecord.Id > this.GetStat().Item1)
-            {
-                throw new ArgumentException("Input Id is incorrect value.");
-            }
-
             this.validator.ValidateParametrs(fileCabinetRecord);
 
-            int editId = fileCabinetRecord.Id - 1;
             FileCabinetRecord res = this.list.Find(item1 => item1.Id == fileCabinetRecord.Id);
             string oldFirstName = res.FirstName;
             string oldLastName = res.LastName;
             string oldDateOfBirth = res.DateOfBirth.ToString("yyyy-MMM-dd", new CultureInfo("en-US"));
-            FileCabinetRecord item = this.list[editId];
-            item.FirstName = fileCabinetRecord.FirstName;
-            item.LastName = fileCabinetRecord.LastName;
-            item.DateOfBirth = fileCabinetRecord.DateOfBirth;
-            item.Sex = fileCabinetRecord.Sex;
-            item.Height = fileCabinetRecord.Height;
-            item.Salary = fileCabinetRecord.Salary;
-            this.ChangeRecordToDictionary(item, oldFirstName, oldLastName, oldDateOfBirth);
+            res.FirstName = fileCabinetRecord.FirstName;
+            res.LastName = fileCabinetRecord.LastName;
+            res.DateOfBirth = fileCabinetRecord.DateOfBirth;
+            res.Sex = fileCabinetRecord.Sex;
+            res.Height = fileCabinetRecord.Height;
+            res.Salary = fileCabinetRecord.Salary;
+            this.ChangeRecordToDictionary(res, oldFirstName, oldLastName, oldDateOfBirth);
         }
 
         /// <summary>
@@ -119,13 +112,17 @@ namespace FileCabinetApp
         /// <returns>Rerords by firstName <see cref="FileCabinetRecord"/>.</returns>
         public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
         {
-            List<FileCabinetRecord> result = new List<FileCabinetRecord>();
-            if (this.firstNameDictionary.ContainsKey(firstName))
+            List<FileCabinetRecord> firstNameList = new List<FileCabinetRecord>();
+            ReadOnlyCollection<FileCabinetRecord> list = this.GetRecords();
+            foreach (var item in list)
             {
-                result = this.firstNameDictionary[firstName];
+                if (item.FirstName.ToLower(new CultureInfo("en-US")) == firstName.ToLower(new CultureInfo("en-US")))
+                {
+                    firstNameList.Add(item);
+                }
             }
 
-            return new ReadOnlyCollection<FileCabinetRecord>(result);
+            return new ReadOnlyCollection<FileCabinetRecord>(firstNameList);
         }
 
         /// <summary>
@@ -135,14 +132,17 @@ namespace FileCabinetApp
         /// <returns>Rerords by lastName <see cref="FileCabinetRecord"/>.</returns>
         public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
         {
-            List<FileCabinetRecord> result = new List<FileCabinetRecord>();
-
-            if (this.lastNameDictionary.ContainsKey(lastName))
+            List<FileCabinetRecord> lastNameList = new List<FileCabinetRecord>();
+            ReadOnlyCollection<FileCabinetRecord> list = this.GetRecords();
+            foreach (var item in list)
             {
-                result = this.lastNameDictionary[lastName];
+                if (item.LastName.ToLower(new CultureInfo("en-US")) == lastName.ToLower(new CultureInfo("en-US")))
+                {
+                    lastNameList.Add(item);
+                }
             }
 
-            return new ReadOnlyCollection<FileCabinetRecord>(result);
+            return new ReadOnlyCollection<FileCabinetRecord>(lastNameList);
         }
 
         /// <summary>
@@ -152,14 +152,18 @@ namespace FileCabinetApp
         /// <returns>Rerords by dateofbirth <see cref="FileCabinetRecord"/>.</returns>
         public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(string dateofbirth)
         {
-            List<FileCabinetRecord> result = new List<FileCabinetRecord>();
-
-            if (this.dateOfBirthDictionary.ContainsKey(dateofbirth))
+            List<FileCabinetRecord> dayOfBirthList = new List<FileCabinetRecord>();
+            ReadOnlyCollection<FileCabinetRecord> list = this.GetRecords();
+            foreach (var item in list)
             {
-                result = this.dateOfBirthDictionary[dateofbirth];
+                string temp = item.DateOfBirth.ToString("yyyy-MMM-dd", new CultureInfo("en-US"));
+                if (temp.ToLower(new CultureInfo("en-US")) == dateofbirth.ToLower(new CultureInfo("en-US")))
+                {
+                    dayOfBirthList.Add(item);
+                }
             }
 
-            return new ReadOnlyCollection<FileCabinetRecord>(result);
+            return new ReadOnlyCollection<FileCabinetRecord>(dayOfBirthList);
         }
 
         /// <summary>
@@ -189,6 +193,11 @@ namespace FileCabinetApp
             List<FileCabinetRecord> listImport = new List<FileCabinetRecord>(importRecords);
 
             List<FileCabinetRecord> validatedList = this.GetValidFileCabinetRecords(listImport);
+
+            foreach (var item in validatedList)
+            {
+                this.AddRecordToDictionary(item);
+            }
 
             int countImportRecord = validatedList.Count;
 
@@ -357,6 +366,19 @@ namespace FileCabinetApp
             bool isSexValid = this.ValidateInput(fileCabinetRecord.Sex.ToString(provider), this.Validator.SexConverter, this.Validator.SexValidator);
             bool isHeigthValid = this.ValidateInput(fileCabinetRecord.Height.ToString(provider), this.Validator.HeightConverter, this.Validator.HeightValidator);
             bool isSalaryValid = this.ValidateInput(fileCabinetRecord.Salary.ToString(provider), this.Validator.SalaryConverter, this.Validator.SalaryValidator);
+
+            try
+            {
+                this.validator.ValidateParametrs(fileCabinetRecord);
+            }
+            catch (ArgumentNullException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
             return isFirstNameValid && isLastNameValid && isDateOfBirthValid && isSexValid && isHeigthValid && isSalaryValid;
         }
