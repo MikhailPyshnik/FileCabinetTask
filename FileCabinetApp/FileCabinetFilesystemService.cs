@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using FileCabinetApp.Iterators;
 
 namespace FileCabinetApp
 {
@@ -163,21 +164,20 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="firstName">Input parametr FirstName <see cref="string"/>.</param>
         /// <returns>Rerords by firstName <see cref="FileCabinetRecord"/>.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        public IRecorditerator FindByFirstName(string firstName)
         {
-            List<FileCabinetRecord> firstNameList = new List<FileCabinetRecord>();
-            var recordBuffer = new byte[RECORDSIZE];
-            var result = this.firstNameDictionary[firstName];
-
-            foreach (var item in result)
+            if (firstName == null)
             {
-                this.fileStream.Position = item;
-                this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
-                var record = BytesToFileCabinetRecord(recordBuffer);
-                firstNameList.Add(record);
+                throw new ArgumentNullException(nameof(firstName));
             }
 
-            return new ReadOnlyCollection<FileCabinetRecord>(firstNameList);
+            List<long> resultList = new List<long>();
+            if (this.firstNameDictionary.ContainsKey(firstName.ToLower(new CultureInfo("en-US"))))
+            {
+                resultList = this.firstNameDictionary[firstName];
+            }
+
+            return new FileSystemIterator(resultList, this.fileStream, RECORDSIZE, MAXSTRINGLENGTH);
         }
 
         /// <summary>
@@ -185,21 +185,20 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="lastName">Input parametr FirstName <see cref="string"/>.</param>
         /// <returns>Rerords by lastName <see cref="FileCabinetRecord"/>.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
+        public IRecorditerator FindByLastName(string lastName)
         {
-            List<FileCabinetRecord> lastNameList = new List<FileCabinetRecord>();
-            var recordBuffer = new byte[RECORDSIZE];
-            var result = this.lastNameDictionary[lastName];
-
-            foreach (var item in result)
+            if (lastName == null)
             {
-                this.fileStream.Position = item;
-                this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
-                var record = BytesToFileCabinetRecord(recordBuffer);
-                lastNameList.Add(record);
+                throw new ArgumentNullException(nameof(lastName));
             }
 
-            return new ReadOnlyCollection<FileCabinetRecord>(lastNameList);
+            List<long> resultList = new List<long>();
+            if (this.lastNameDictionary.ContainsKey(lastName.ToLower(new CultureInfo("en-US"))))
+            {
+                resultList = this.lastNameDictionary[lastName];
+            }
+
+            return new FileSystemIterator(resultList, this.fileStream, RECORDSIZE, MAXSTRINGLENGTH);
         }
 
         /// <summary>
@@ -207,21 +206,20 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="dateofbirth">Input parametr FirstName <see cref="string"/>.</param>
         /// <returns>Rerords by dateofbirth <see cref="FileCabinetRecord"/>.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(string dateofbirth)
+        public IRecorditerator FindByDateOfBirth(string dateofbirth)
         {
-            List<FileCabinetRecord> dateofbirthList = new List<FileCabinetRecord>();
-            var recordBuffer = new byte[RECORDSIZE];
-            var result = this.dateOfBirthDictionary[dateofbirth];
-
-            foreach (var item in result)
+            if (dateofbirth == null)
             {
-                this.fileStream.Position = item;
-                this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
-                var record = BytesToFileCabinetRecord(recordBuffer);
-                dateofbirthList.Add(record);
+                throw new ArgumentNullException(nameof(dateofbirth));
             }
 
-            return new ReadOnlyCollection<FileCabinetRecord>(dateofbirthList);
+            List<long> resultList = new List<long>();
+            if (this.dateOfBirthDictionary.ContainsKey(dateofbirth.ToLower(new CultureInfo("en-US"))))
+            {
+                resultList = this.dateOfBirthDictionary[dateofbirth];
+            }
+
+            return new FileSystemIterator(resultList, this.fileStream, RECORDSIZE, MAXSTRINGLENGTH);
         }
 
         /// <summary>
@@ -298,7 +296,6 @@ namespace FileCabinetApp
         /// <summary>
         /// Implementation IFileCabinetService Purge.
         /// </summary>
-        // /// <param name="id">Input parametr id of record <see cref="int"/>.</param>
         public void Purge()
         {
             int countDeletedRecords = this.GetDdeletedRecordList().Count;
@@ -511,6 +508,8 @@ namespace FileCabinetApp
                 this.fileStream.Write(b1, 0, b1.Length);
                 this.fileStream.Flush();
             }
+
+            this.GetPositionOfRecordsList();
         }
 
         private ReadOnlyCollection<FileCabinetRecord> GetAllRecordsFromFile()
@@ -773,14 +772,10 @@ namespace FileCabinetApp
             this.fileStream.Seek(0, SeekOrigin.Begin);
             for (int i = 1; i <= counteRecordInFile; i++)
             {
-                if (recordBuffer[0] == SETTHIRDBITTRUE)
+                long seek = this.fileStream.Position;
+                this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
+                if (recordBuffer[0] != SETTHIRDBITTRUE)
                 {
-                    continue;
-                }
-                else
-                {
-                    long seek = this.fileStream.Position;
-                    this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
                     var record = BytesToFileCabinetRecord(recordBuffer);
                     this.AddRecordToDictionary(record, seek);
                 }

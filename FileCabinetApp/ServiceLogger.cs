@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using FileCabinetApp.Iterators;
 
 namespace FileCabinetApp
 {
@@ -24,7 +25,7 @@ namespace FileCabinetApp
         /// <param name="fileCabinet">Input parametr in constructor <see cref="IFileCabinetService"/>.</param>
         public ServiceLogger(IFileCabinetService fileCabinet)
         {
-            fileCabinetService = fileCabinet;
+            fileCabinetService = fileCabinet ?? throw new ArgumentNullException(nameof(fileCabinet));
         }
 
         /// <summary>
@@ -79,13 +80,13 @@ namespace FileCabinetApp
         /// Implementation IFileCabinetService FindByDateOfBirth in class ServiceLogger.
         /// </summary>
         /// <param name="dateofbirth">Input parametr FirstName <see cref="string"/>.</param>
-        /// <returns>Rerords by dateofbirth <see cref="FileCabinetRecord"/>.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(string dateofbirth)
+        /// <returns>Rerords by dateofbirth <see cref="IRecorditerator"/>.</returns>
+        public IRecorditerator FindByDateOfBirth(string dateofbirth)
         {
             var result = fileCabinetService.FindByDateOfBirth(dateofbirth);
             using (StreamWriter w = File.AppendText("log.txt"))
             {
-                Log($"Calling FindByDateOfBirth() returned  - {result.Count} records", w);
+                Log($"Calling FindByDateOfBirth() returned", w); // Log($"Calling FindByDateOfBirth() returned  - {result.Count} records", w);
             }
 
             return result;
@@ -96,12 +97,12 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="firstName">Input parametr FirstName <see cref="string"/>.</param>
         /// <returns>Rerords by firstName <see cref="FileCabinetRecord"/>.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        public IRecorditerator FindByFirstName(string firstName)
         {
             var result = fileCabinetService.FindByFirstName(firstName);
             using (StreamWriter w = File.AppendText("log.txt"))
             {
-                Log($"Calling FindByFirstName() returned  - {result.Count} records", w);
+                Log($"Calling FindByFirstName() returned", w);
             }
 
             return result;
@@ -111,13 +112,13 @@ namespace FileCabinetApp
         /// Implementation IFileCabinetService FindByLastName in class ServiceLogger.
         /// </summary>
         /// <param name="lastName">Input parametr FirstName <see cref="string"/>.</param>
-        /// <returns>Rerords by lastName <see cref="FileCabinetRecord"/>.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
+        /// <returns>Rerords by lastName <see cref="IRecorditerator"/>.</returns>
+        public IRecorditerator FindByLastName(string lastName)
         {
             var result = fileCabinetService.FindByLastName(lastName);
             using (StreamWriter w = File.AppendText("log.txt"))
             {
-                Log($"Calling FindByLastName() returned  - {result.Count} records", w);
+                Log($"Calling FindByLastName() returned", w);
             }
 
             return result;

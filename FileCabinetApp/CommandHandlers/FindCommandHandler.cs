@@ -61,20 +61,47 @@ namespace FileCabinetApp.CommandHandlers
             if (searchParametr == "firstname")
             {
                 var firstName = parametersArray[1].Trim('"');
-                var records = service.FindByFirstName(firstName);
-                this.PrintRecords(records, searchParametr, value);
+
+                var iterator = service.FindByFirstName(firstName);
+
+                var records = new List<FileCabinetRecord>();
+
+                while (iterator.HasMore())
+                {
+                    records.Add(iterator.GetNext());
+                }
+
+                this.PrintRecords(new ReadOnlyCollection<FileCabinetRecord>(records), searchParametr, value);
             }
             else if (searchParametr == "lastname")
             {
                 var lastName = parametersArray[1].Trim('"');
-                var records = service.FindByLastName(lastName);
-                this.PrintRecords(records, searchParametr, value);
+
+                var iterator = service.FindByLastName(lastName);
+
+                var records = new List<FileCabinetRecord>();
+
+                while (iterator.HasMore())
+                {
+                    records.Add(iterator.GetNext());
+                }
+
+                this.PrintRecords(new ReadOnlyCollection<FileCabinetRecord>(records), searchParametr, value);
             }
             else if (searchParametr == "dateofbirth")
             {
                 var dateofbirth = parametersArray[1].Trim('"');
-                var records = service.FindByDateOfBirth(dateofbirth);
-                this.PrintRecords(records, searchParametr, value);
+
+                var iterator = service.FindByDateOfBirth(dateofbirth);
+
+                var records = new List<FileCabinetRecord>();
+
+                while (iterator.HasMore())
+                {
+                    records.Add(iterator.GetNext());
+                }
+
+                this.PrintRecords(new ReadOnlyCollection<FileCabinetRecord>(records), searchParametr, value);
             }
             else
             {
