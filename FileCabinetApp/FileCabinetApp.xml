@@ -616,21 +616,21 @@
             Implementation IFileCabinetService FindByFirstName.
             </summary>
             <param name="firstName">Input parametr FirstName <see cref="T:System.String"/>.</param>
-            <returns>Rerords by firstName <see cref="T:FileCabinetRecord"/>.</returns>
+            <returns>IEnumerable by firstName <see cref="T:FileCabinetRecord"/>.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByLastName(System.String)">
             <summary>
             Implementation IFileCabinetService FindByLastName.
             </summary>
             <param name="lastName">Input parametr FirstName <see cref="T:System.String"/>.</param>
-            <returns>Rerords by lastName <see cref="T:FileCabinetRecord"/>.</returns>
+            <returns>IEnumerable by lastName <see cref="T:FileCabinetRecord"/>.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByDateOfBirth(System.String)">
             <summary>
             Implementation IFileCabinetService FindByDateOfBirth.
             </summary>
             <param name="dateofbirth">Input parametr FirstName <see cref="T:System.String"/>.</param>
-            <returns>Rerords by dateofbirth <see cref="T:FileCabinetRecord"/>.</returns>
+            <returns>IEnumerable by dateofbirth <see cref="T:FileCabinetRecord"/>.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.MakeSnapshot">
             <summary>
@@ -706,21 +706,21 @@
             Implementation IFileCabinetService FindByFirstName.
             </summary>
             <param name="firstName">Input parametr FirstName <see cref="T:System.String"/>.</param>
-            <returns>Rerords by firstName <see cref="T:FileCabinetRecord"/>.</returns>
+            <returns>IEnumerable by firstName <see cref="T:FileCabinetRecord"/>.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByLastName(System.String)">
             <summary>
             Implementation IFileCabinetService FindByLastName.
             </summary>
             <param name="lastName">Input parametr FirstName <see cref="T:System.String"/>.</param>
-            <returns>Rerords by lastName <see cref="T:FileCabinetRecord"/>.</returns>
+            <returns>IEnumerable by lastName <see cref="T:FileCabinetRecord"/>.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByDateOfBirth(System.String)">
             <summary>
             Implementation IFileCabinetService FindByDateOfBirth.
             </summary>
             <param name="dateofbirth">Input parametr FirstName <see cref="T:System.String"/>.</param>
-            <returns>Rerords by dateofbirth <see cref="T:FileCabinetRecord"/>.</returns>
+            <returns>IEnumerable by dateofbirth <see cref="T:FileCabinetRecord"/>.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.MakeSnapshot">
             <summary>
@@ -901,21 +901,21 @@
             Return records by first name.
             </summary>
             <param name="firstName">Input parametr FirstName <see cref="T:System.String"/>.</param>
-            <returns>Rerords by firstName <see cref="T:FileCabinetRecord"/>.</returns>
+            <returns>IEnumerable by firstName <see cref="T:FileCabinetRecord"/>.</returns>
         </member>
         <member name="M:FileCabinetApp.IFileCabinetService.FindByLastName(System.String)">
             <summary>
             Return records by last name.
             </summary>
             <param name="lastName">Input parametr LastName <see cref="T:System.String"/>.</param>
-            <returns>Rerords by lastName <see cref="T:FileCabinetRecord"/>.</returns>
+            <returns>IEnumerable by lastName <see cref="T:FileCabinetRecord"/>.</returns>
         </member>
         <member name="M:FileCabinetApp.IFileCabinetService.FindByDateOfBirth(System.String)">
             <summary>
             Return records by date of birth.
             </summary>
             <param name="dateofbirth">Input parametr DataOfBitrh <see cref="T:System.String"/>.</param>
-            <returns>Rerords by dateofbirth <see cref="T:FileCabinetRecord"/>.</returns>
+            <returns>IEnumerable by dateofbirth <see cref="T:FileCabinetRecord"/>.</returns>
         </member>
         <member name="M:FileCabinetApp.IFileCabinetService.MakeSnapshot">
             <summary>
@@ -1059,6 +1059,71 @@
              Defines a rule for checking values.
             </summary>
             <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
+        </member>
+        <member name="T:FileCabinetApp.Iterators.EnumerableFilesystemCollection">
+            <summary>
+            Class implement IEnumerable for work with foreach.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Iterators.EnumerableFilesystemCollection.#ctor(System.Collections.Generic.List{System.Int64},System.IO.FileStream,System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Iterators.EnumerableFilesystemCollection"/> class.
+            </summary>
+            <param name="recordsPositions">Input parametr in constructor (list of positions) <see cref="T:System.Int64"/>.</param>
+            <param name="fileStream">Input parametr in constructor Filestream <see cref="T:System.IO.FileStream"/>.</param>
+            <param name="recordsize">Input parametr in constructor size of record <see cref="T:System.Int32"/>.</param>
+            <param name="stringlength">Input parametr in constructor max string length <see cref="T:System.Int32"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.Iterators.EnumerableFilesystemCollection.GetEnumerator">
+            <summary>
+            Method return IEnumerator>.
+            </summary>
+            <returns>IEnumerable by lastName <see cref="T:FileCabinetRecord"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Iterators.EnumerableFilesystemCollection.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Method return IEnumerator.
+            </summary>
+            <returns>Return <see cref="T:System.Collections.IEnumerator"/>.</returns>
+        </member>
+        <member name="T:FileCabinetApp.Iterators.RecordEnumerator">
+            <summary>
+            Class implement IEnumerator for work with foreach.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Iterators.RecordEnumerator.#ctor(System.Collections.Generic.List{FileCabinetRecord})">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Iterators.RecordEnumerator"/> class.
+            </summary>
+            <param name="records">Input parametr in constructor (list of records) <see cref="T:FileCabinetRecord"/>.</param>
+        </member>
+        <member name="P:FileCabinetApp.Iterators.RecordEnumerator.Current">
+            <summary>
+            Gets the record.
+            </summary>
+            <value>The record.</value>
+        </member>
+        <member name="P:FileCabinetApp.Iterators.RecordEnumerator.System#Collections#IEnumerator#Current">
+            <summary>
+            Gets the record to object.
+            </summary>
+            <value>The object.</value>
+        </member>
+        <member name="M:FileCabinetApp.Iterators.RecordEnumerator.Dispose">
+            <summary>
+            Method Dispose.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Iterators.RecordEnumerator.MoveNext">
+            <summary>
+            Get next record.
+            </summary>
+            <returns>Rerord if is exist <see cref="T:System.Boolean"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Iterators.RecordEnumerator.Reset">
+            <summary>
+            Reset.
+            </summary>
         </member>
         <member name="T:FileCabinetApp.IValidatorOfParemetrs">
             <summary>
@@ -1209,21 +1274,21 @@
             Implementation IFileCabinetService FindByDateOfBirth in class ServiceLogger.
             </summary>
             <param name="dateofbirth">Input parametr FirstName <see cref="T:System.String"/>.</param>
-            <returns>Rerords by dateofbirth <see cref="T:FileCabinetRecord"/>.</returns>
+            <returns>IEnumerable by dateofbirth <see cref="T:FileCabinetRecord"/>.</returns>
         </member>
         <member name="M:FileCabinetApp.ServiceLogger.FindByFirstName(System.String)">
             <summary>
             Implementation IFileCabinetService FindByFirstName in class ServiceLogger.
             </summary>
             <param name="firstName">Input parametr FirstName <see cref="T:System.String"/>.</param>
-            <returns>Rerords by firstName <see cref="T:FileCabinetRecord"/>.</returns>
+            <returns>IEnumerable by firstName <see cref="T:FileCabinetRecord"/>.</returns>
         </member>
         <member name="M:FileCabinetApp.ServiceLogger.FindByLastName(System.String)">
             <summary>
             Implementation IFileCabinetService FindByLastName in class ServiceLogger.
             </summary>
             <param name="lastName">Input parametr FirstName <see cref="T:System.String"/>.</param>
-            <returns>Rerords by lastName <see cref="T:FileCabinetRecord"/>.</returns>
+            <returns>IEnumerable by lastName <see cref="T:FileCabinetRecord"/>.</returns>
         </member>
         <member name="M:FileCabinetApp.ServiceLogger.GetRecords">
             <summary>
@@ -1300,21 +1365,21 @@
             Implementation IFileCabinetService FindByDateOfBirth in class StopWatch.
             </summary>
             <param name="dateofbirth">Input parametr FirstName <see cref="T:System.String"/>.</param>
-            <returns>Rerords by dateofbirth <see cref="T:FileCabinetRecord"/>.</returns>
+            <returns>IEnumerable by dateofbirth <see cref="T:FileCabinetRecord"/>.</returns>
         </member>
         <member name="M:FileCabinetApp.ServiceMeter.FindByFirstName(System.String)">
             <summary>
             Implementation IFileCabinetService FindByFirstName in class StopWatch.
             </summary>
             <param name="firstName">Input parametr FirstName <see cref="T:System.String"/>.</param>
-            <returns>Rerords by firstName <see cref="T:FileCabinetRecord"/>.</returns>
+            <returns>IEnumerable by firstName <see cref="T:FileCabinetRecord"/>.</returns>
         </member>
         <member name="M:FileCabinetApp.ServiceMeter.FindByLastName(System.String)">
             <summary>
             Implementation IFileCabinetService FindByLastName in class StopWatch.
             </summary>
             <param name="lastName">Input parametr FirstName <see cref="T:System.String"/>.</param>
-            <returns>Rerords by lastName <see cref="T:FileCabinetRecord"/>.</returns>
+            <returns>IEnumerable by lastName <see cref="T:FileCabinetRecord"/>.</returns>
         </member>
         <member name="M:FileCabinetApp.ServiceMeter.GetRecords">
             <summary>

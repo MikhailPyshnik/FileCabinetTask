@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using FileCabinetApp.Iterators;
 
 namespace FileCabinetApp
 {
@@ -67,8 +69,8 @@ namespace FileCabinetApp
         /// Implementation IFileCabinetService FindByDateOfBirth in class StopWatch.
         /// </summary>
         /// <param name="dateofbirth">Input parametr FirstName <see cref="string"/>.</param>
-        /// <returns>Rerords by dateofbirth <see cref="FileCabinetRecord"/>.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(string dateofbirth)
+        /// <returns>IEnumerable by dateofbirth <see cref="FileCabinetRecord"/>.</returns>
+        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string dateofbirth)
         {
             long ticksThisTime = 0;
             var sw = Stopwatch.StartNew();
@@ -83,8 +85,8 @@ namespace FileCabinetApp
         /// Implementation IFileCabinetService FindByFirstName in class StopWatch.
         /// </summary>
         /// <param name="firstName">Input parametr FirstName <see cref="string"/>.</param>
-        /// <returns>Rerords by firstName <see cref="FileCabinetRecord"/>.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        /// <returns>IEnumerable by firstName <see cref="FileCabinetRecord"/>.</returns>
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
             long ticksThisTime = 0;
             var sw = Stopwatch.StartNew();
@@ -99,8 +101,8 @@ namespace FileCabinetApp
         /// Implementation IFileCabinetService FindByLastName in class StopWatch.
         /// </summary>
         /// <param name="lastName">Input parametr FirstName <see cref="string"/>.</param>
-        /// <returns>Rerords by lastName <see cref="FileCabinetRecord"/>.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
+        /// <returns>IEnumerable by lastName <see cref="FileCabinetRecord"/>.</returns>
+        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
         {
             long ticksThisTime = 0;
             var sw = Stopwatch.StartNew();

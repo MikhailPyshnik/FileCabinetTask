@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
+using FileCabinetApp.Iterators;
 
 namespace FileCabinetApp
 {
@@ -45,22 +45,22 @@ namespace FileCabinetApp
         /// Return records by first name.
         /// </summary>
         /// <param name="firstName">Input parametr FirstName <see cref="string"/>.</param>
-        /// <returns>Rerords by firstName <see cref="FileCabinetRecord"/>.</returns>
-        ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName);
+        /// <returns>IEnumerable by firstName <see cref="FileCabinetRecord"/>.</returns>
+        IEnumerable<FileCabinetRecord> FindByFirstName(string firstName);
 
         /// <summary>
         /// Return records by last name.
         /// </summary>
         /// <param name="lastName">Input parametr LastName <see cref="string"/>.</param>
-        /// <returns>Rerords by lastName <see cref="FileCabinetRecord"/>.</returns>
-        ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName);
+        /// <returns>IEnumerable by lastName <see cref="FileCabinetRecord"/>.</returns>
+        IEnumerable<FileCabinetRecord> FindByLastName(string lastName);
 
         /// <summary>
         /// Return records by date of birth.
         /// </summary>
         /// <param name="dateofbirth">Input parametr DataOfBitrh <see cref="string"/>.</param>
-        /// <returns>Rerords by dateofbirth <see cref="FileCabinetRecord"/>.</returns>
-        ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(string dateofbirth);
+        /// <returns>IEnumerable by dateofbirth <see cref="FileCabinetRecord"/>.</returns>
+        IEnumerable<FileCabinetRecord> FindByDateOfBirth(string dateofbirth);
 
         /// <summary>
         /// Return make snapshot.
@@ -83,7 +83,6 @@ namespace FileCabinetApp
         /// <summary>
         /// Delete record by bit in file.
         /// </summary>
-        // /// <param name="id">Input parametr id of record <see cref="int"/>.</param>
         void Purge();
     }
 }

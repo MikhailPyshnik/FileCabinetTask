@@ -61,20 +61,26 @@ namespace FileCabinetApp.CommandHandlers
             if (searchParametr == "firstname")
             {
                 var firstName = parametersArray[1].Trim('"');
-                var records = service.FindByFirstName(firstName);
-                this.PrintRecords(records, searchParametr, value);
+
+                var inumerable = service.FindByFirstName(firstName);
+
+                this.PrintRecords(inumerable, searchParametr, value);
             }
             else if (searchParametr == "lastname")
             {
                 var lastName = parametersArray[1].Trim('"');
-                var records = service.FindByLastName(lastName);
-                this.PrintRecords(records, searchParametr, value);
+
+                var inumerable = service.FindByLastName(lastName);
+
+                this.PrintRecords(inumerable, searchParametr, value);
             }
             else if (searchParametr == "dateofbirth")
             {
                 var dateofbirth = parametersArray[1].Trim('"');
-                var records = service.FindByDateOfBirth(dateofbirth);
-                this.PrintRecords(records, searchParametr, value);
+
+                var inumerable = service.FindByDateOfBirth(dateofbirth);
+
+                this.PrintRecords(inumerable, searchParametr, value);
             }
             else
             {
@@ -82,9 +88,9 @@ namespace FileCabinetApp.CommandHandlers
             }
         }
 
-        private void PrintRecords(ReadOnlyCollection<FileCabinetRecord> records, string searchparametr, string value)
+        private void PrintRecords(IEnumerable<FileCabinetRecord> records, string searchparametr, string value)
         {
-            if (records.Count == 0)
+            if (records == null)
             {
                 Console.WriteLine($"No records are found for {searchparametr} = {value}!");
             }
