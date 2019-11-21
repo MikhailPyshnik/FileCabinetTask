@@ -62,13 +62,13 @@ namespace FileCabinetApp.CommandHandlers
             {
                 var firstName = parametersArray[1].Trim('"');
 
-                var iterator = service.FindByFirstName(firstName);
+                var inumerable = service.FindByFirstName(firstName);
 
                 var records = new List<FileCabinetRecord>();
 
-                while (iterator.HasMore())
+                foreach (var item in inumerable)
                 {
-                    records.Add(iterator.GetNext());
+                    records.Add(item);
                 }
 
                 this.PrintRecords(new ReadOnlyCollection<FileCabinetRecord>(records), searchParametr, value);
@@ -77,13 +77,13 @@ namespace FileCabinetApp.CommandHandlers
             {
                 var lastName = parametersArray[1].Trim('"');
 
-                var iterator = service.FindByLastName(lastName);
+                var inumerable = service.FindByLastName(lastName);
 
                 var records = new List<FileCabinetRecord>();
 
-                while (iterator.HasMore())
+                foreach (var item in inumerable)
                 {
-                    records.Add(iterator.GetNext());
+                    records.Add(item);
                 }
 
                 this.PrintRecords(new ReadOnlyCollection<FileCabinetRecord>(records), searchParametr, value);
@@ -92,13 +92,13 @@ namespace FileCabinetApp.CommandHandlers
             {
                 var dateofbirth = parametersArray[1].Trim('"');
 
-                var iterator = service.FindByDateOfBirth(dateofbirth);
+                var inumerable = service.FindByDateOfBirth(dateofbirth);
 
                 var records = new List<FileCabinetRecord>();
 
-                while (iterator.HasMore())
+                foreach (var item in inumerable)
                 {
-                    records.Add(iterator.GetNext());
+                    records.Add(item);
                 }
 
                 this.PrintRecords(new ReadOnlyCollection<FileCabinetRecord>(records), searchParametr, value);

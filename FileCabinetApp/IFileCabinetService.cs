@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using FileCabinetApp.Iterators;
 
@@ -44,22 +45,22 @@ namespace FileCabinetApp
         /// Return records by first name.
         /// </summary>
         /// <param name="firstName">Input parametr FirstName <see cref="string"/>.</param>
-        /// <returns>Rerords by firstName <see cref=" IRecorditerator"/>.</returns>
-        IRecorditerator FindByFirstName(string firstName); // IRecorditerator  ReadOnlyCollection<FileCabinetRecord>
+        /// <returns>IEnumerable by firstName <see cref="FileCabinetRecord"/>.</returns>
+        IEnumerable<FileCabinetRecord> FindByFirstName(string firstName);
 
         /// <summary>
         /// Return records by last name.
         /// </summary>
         /// <param name="lastName">Input parametr LastName <see cref="string"/>.</param>
-        /// <returns>Rerords by lastName <see cref="IRecorditerator"/>.</returns>
-        IRecorditerator FindByLastName(string lastName);
+        /// <returns>IEnumerable by lastName <see cref="FileCabinetRecord"/>.</returns>
+        IEnumerable<FileCabinetRecord> FindByLastName(string lastName);
 
         /// <summary>
         /// Return records by date of birth.
         /// </summary>
         /// <param name="dateofbirth">Input parametr DataOfBitrh <see cref="string"/>.</param>
-        /// <returns>Rerords by dateofbirth <see cref="IRecorditerator"/>.</returns>
-        IRecorditerator FindByDateOfBirth(string dateofbirth);
+        /// <returns>IEnumerable by dateofbirth <see cref="FileCabinetRecord"/>.</returns>
+        IEnumerable<FileCabinetRecord> FindByDateOfBirth(string dateofbirth);
 
         /// <summary>
         /// Return make snapshot.

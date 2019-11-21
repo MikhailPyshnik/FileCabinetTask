@@ -163,8 +163,8 @@ namespace FileCabinetApp
         /// Implementation IFileCabinetService FindByFirstName.
         /// </summary>
         /// <param name="firstName">Input parametr FirstName <see cref="string"/>.</param>
-        /// <returns>Rerords by firstName <see cref="FileCabinetRecord"/>.</returns>
-        public IRecorditerator FindByFirstName(string firstName)
+        /// <returns>IEnumerable by firstName <see cref="FileCabinetRecord"/>.</returns>
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
             if (firstName == null)
             {
@@ -177,15 +177,15 @@ namespace FileCabinetApp
                 resultList = this.firstNameDictionary[firstName];
             }
 
-            return new FileSystemIterator(resultList, this.fileStream, RECORDSIZE, MAXSTRINGLENGTH);
+            return new EnumerableFilesystemCollection(resultList, this.fileStream, RECORDSIZE, MAXSTRINGLENGTH);
         }
 
         /// <summary>
         /// Implementation IFileCabinetService FindByLastName.
         /// </summary>
         /// <param name="lastName">Input parametr FirstName <see cref="string"/>.</param>
-        /// <returns>Rerords by lastName <see cref="FileCabinetRecord"/>.</returns>
-        public IRecorditerator FindByLastName(string lastName)
+        /// <returns>IEnumerable by lastName <see cref="FileCabinetRecord"/>.</returns>
+        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
         {
             if (lastName == null)
             {
@@ -198,15 +198,15 @@ namespace FileCabinetApp
                 resultList = this.lastNameDictionary[lastName];
             }
 
-            return new FileSystemIterator(resultList, this.fileStream, RECORDSIZE, MAXSTRINGLENGTH);
+            return new EnumerableFilesystemCollection(resultList, this.fileStream, RECORDSIZE, MAXSTRINGLENGTH);
         }
 
         /// <summary>
         /// Implementation IFileCabinetService FindByDateOfBirth.
         /// </summary>
         /// <param name="dateofbirth">Input parametr FirstName <see cref="string"/>.</param>
-        /// <returns>Rerords by dateofbirth <see cref="FileCabinetRecord"/>.</returns>
-        public IRecorditerator FindByDateOfBirth(string dateofbirth)
+        /// <returns>IEnumerable by dateofbirth <see cref="FileCabinetRecord"/>.</returns>
+        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string dateofbirth)
         {
             if (dateofbirth == null)
             {
@@ -219,7 +219,7 @@ namespace FileCabinetApp
                 resultList = this.dateOfBirthDictionary[dateofbirth];
             }
 
-            return new FileSystemIterator(resultList, this.fileStream, RECORDSIZE, MAXSTRINGLENGTH);
+            return new EnumerableFilesystemCollection(resultList, this.fileStream, RECORDSIZE, MAXSTRINGLENGTH);
         }
 
         /// <summary>
@@ -649,7 +649,7 @@ namespace FileCabinetApp
         {
             if (this.lastNameDictionary.ContainsKey(lastName.ToLower(new CultureInfo("en-US"))))
             {
-                this.firstNameDictionary[lastName].Add(position);
+                this.lastNameDictionary[lastName].Add(position);
             }
             else
             {

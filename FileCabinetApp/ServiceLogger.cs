@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using FileCabinetApp.Iterators;
@@ -80,8 +81,8 @@ namespace FileCabinetApp
         /// Implementation IFileCabinetService FindByDateOfBirth in class ServiceLogger.
         /// </summary>
         /// <param name="dateofbirth">Input parametr FirstName <see cref="string"/>.</param>
-        /// <returns>Rerords by dateofbirth <see cref="IRecorditerator"/>.</returns>
-        public IRecorditerator FindByDateOfBirth(string dateofbirth)
+        /// <returns>IEnumerable by dateofbirth <see cref="FileCabinetRecord"/>.</returns>
+        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string dateofbirth)
         {
             var result = fileCabinetService.FindByDateOfBirth(dateofbirth);
             using (StreamWriter w = File.AppendText("log.txt"))
@@ -96,8 +97,8 @@ namespace FileCabinetApp
         /// Implementation IFileCabinetService FindByFirstName in class ServiceLogger.
         /// </summary>
         /// <param name="firstName">Input parametr FirstName <see cref="string"/>.</param>
-        /// <returns>Rerords by firstName <see cref="FileCabinetRecord"/>.</returns>
-        public IRecorditerator FindByFirstName(string firstName)
+        /// <returns>IEnumerable by firstName <see cref="FileCabinetRecord"/>.</returns>
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
             var result = fileCabinetService.FindByFirstName(firstName);
             using (StreamWriter w = File.AppendText("log.txt"))
@@ -112,8 +113,8 @@ namespace FileCabinetApp
         /// Implementation IFileCabinetService FindByLastName in class ServiceLogger.
         /// </summary>
         /// <param name="lastName">Input parametr FirstName <see cref="string"/>.</param>
-        /// <returns>Rerords by lastName <see cref="IRecorditerator"/>.</returns>
-        public IRecorditerator FindByLastName(string lastName)
+        /// <returns>IEnumerable by lastName <see cref="FileCabinetRecord"/>.</returns>
+        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
         {
             var result = fileCabinetService.FindByLastName(lastName);
             using (StreamWriter w = File.AppendText("log.txt"))
