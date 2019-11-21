@@ -124,7 +124,10 @@ namespace FileCabinetApp
                 resultList = this.firstNameDictionary[firstName];
             }
 
-            return new EnumerableMemoryCollection(resultList);
+            for (int i = 0; i < resultList.Count; i++)
+            {
+                yield return resultList[i];
+            }
         }
 
         /// <summary>
@@ -145,7 +148,10 @@ namespace FileCabinetApp
                 resultList = this.lastNameDictionary[lastName];
             }
 
-            return new EnumerableMemoryCollection(resultList);
+            for (int i = 0; i < resultList.Count; i++)
+            {
+                yield return resultList[i];
+            }
         }
 
         /// <summary>
@@ -166,7 +172,10 @@ namespace FileCabinetApp
                 resultList = this.dateOfBirthDictionary[dateofbirth];
             }
 
-            return new EnumerableMemoryCollection(resultList);
+            for (int i = 0; i < resultList.Count; i++)
+            {
+                yield return resultList[i];
+            }
         }
 
         /// <summary>

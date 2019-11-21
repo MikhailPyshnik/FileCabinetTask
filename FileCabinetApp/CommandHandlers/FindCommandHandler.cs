@@ -64,14 +64,7 @@ namespace FileCabinetApp.CommandHandlers
 
                 var inumerable = service.FindByFirstName(firstName);
 
-                var records = new List<FileCabinetRecord>();
-
-                foreach (var item in inumerable)
-                {
-                    records.Add(item);
-                }
-
-                this.PrintRecords(new ReadOnlyCollection<FileCabinetRecord>(records), searchParametr, value);
+                this.PrintRecords(inumerable, searchParametr, value);
             }
             else if (searchParametr == "lastname")
             {
@@ -79,14 +72,7 @@ namespace FileCabinetApp.CommandHandlers
 
                 var inumerable = service.FindByLastName(lastName);
 
-                var records = new List<FileCabinetRecord>();
-
-                foreach (var item in inumerable)
-                {
-                    records.Add(item);
-                }
-
-                this.PrintRecords(new ReadOnlyCollection<FileCabinetRecord>(records), searchParametr, value);
+                this.PrintRecords(inumerable, searchParametr, value);
             }
             else if (searchParametr == "dateofbirth")
             {
@@ -94,14 +80,7 @@ namespace FileCabinetApp.CommandHandlers
 
                 var inumerable = service.FindByDateOfBirth(dateofbirth);
 
-                var records = new List<FileCabinetRecord>();
-
-                foreach (var item in inumerable)
-                {
-                    records.Add(item);
-                }
-
-                this.PrintRecords(new ReadOnlyCollection<FileCabinetRecord>(records), searchParametr, value);
+                this.PrintRecords(inumerable, searchParametr, value);
             }
             else
             {
@@ -109,9 +88,9 @@ namespace FileCabinetApp.CommandHandlers
             }
         }
 
-        private void PrintRecords(ReadOnlyCollection<FileCabinetRecord> records, string searchparametr, string value)
+        private void PrintRecords(IEnumerable<FileCabinetRecord> records, string searchparametr, string value)
         {
-            if (records.Count == 0)
+            if (records == null)
             {
                 Console.WriteLine($"No records are found for {searchparametr} = {value}!");
             }

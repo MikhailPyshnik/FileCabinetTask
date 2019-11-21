@@ -31,7 +31,7 @@ namespace FileCabinetApp
 
         private static string loggerRules = "Not used logger";
 
-        private static string[] existCommands = new string[] { "help", "exit", "stat", "create", "list", "edit", "find", "export", "import", "remove", "purge" };
+        private static string[] existCommands = new string[] { "help", "exit", "stat", "create", "list", "edit", "find", "export", "import", "remove", "purge", "insert" };
 
         /// <summary>
         ///  Method Main of console application.The poin of enter application.

@@ -177,7 +177,12 @@ namespace FileCabinetApp
                 resultList = this.firstNameDictionary[firstName];
             }
 
-            return new EnumerableFilesystemCollection(resultList, this.fileStream, RECORDSIZE, MAXSTRINGLENGTH);
+            var enumerable = new EnumerableFilesystemCollection(resultList, this.fileStream, RECORDSIZE, MAXSTRINGLENGTH);
+
+            foreach (var item in enumerable)
+            {
+                yield return item;
+            }
         }
 
         /// <summary>
@@ -198,7 +203,12 @@ namespace FileCabinetApp
                 resultList = this.lastNameDictionary[lastName];
             }
 
-            return new EnumerableFilesystemCollection(resultList, this.fileStream, RECORDSIZE, MAXSTRINGLENGTH);
+            var enumerable = new EnumerableFilesystemCollection(resultList, this.fileStream, RECORDSIZE, MAXSTRINGLENGTH);
+
+            foreach (var item in enumerable)
+            {
+                yield return item;
+            }
         }
 
         /// <summary>
@@ -219,7 +229,12 @@ namespace FileCabinetApp
                 resultList = this.dateOfBirthDictionary[dateofbirth];
             }
 
-            return new EnumerableFilesystemCollection(resultList, this.fileStream, RECORDSIZE, MAXSTRINGLENGTH);
+            var enumerable = new EnumerableFilesystemCollection(resultList, this.fileStream, RECORDSIZE, MAXSTRINGLENGTH);
+
+            foreach (var item in enumerable)
+            {
+                yield return item;
+            }
         }
 
         /// <summary>
