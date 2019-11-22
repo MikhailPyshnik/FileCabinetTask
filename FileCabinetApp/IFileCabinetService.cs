@@ -24,6 +24,13 @@ namespace FileCabinetApp
         int CreateRecord(FileCabinetRecord fileCabinetRecord);
 
         /// <summary>
+        /// Inseert new record FileCabinetRecord.
+        /// </summary>
+        /// <param name="fileCabinetRecord">Input parametr record <see cref="FileCabinetRecord"/>.</param>
+        // /// <returns>Id <see cref="int"/>.</returns>
+        void Insert(FileCabinetRecord fileCabinetRecord);
+
+        /// <summary>
         /// Get all record FileCabinetRecord.
         /// </summary>
         /// <returns>Rerords <see cref="FileCabinetRecord"/>.</returns>

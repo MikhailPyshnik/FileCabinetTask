@@ -144,6 +144,20 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Implementation IFileCabinetService СreateRecod.
+        /// </summary>
+        /// <param name="fileCabinetRecord">Input parametr record <see cref="FileCabinetRecord"/>.</param>
+        public void Insert(FileCabinetRecord fileCabinetRecord)
+        {
+            long ticksThisTime = 0;
+            var sw = Stopwatch.StartNew();
+            fileCabinetService.Insert(fileCabinetRecord);
+            sw.Stop();
+            ticksThisTime = sw.ElapsedTicks;
+            Console.WriteLine($"Insert method execution duration is {ticksThisTime} ticks.");
+        }
+
+        /// <summary>
         /// Implementation IFileCabinetService MakeSnapshot in class StopWatch.
         /// </summary>
         /// <returns>Rerords by dateofbirth <see cref="FileCabinetServiceSnapshot"/>.</returns>

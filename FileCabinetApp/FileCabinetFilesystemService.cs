@@ -82,6 +82,67 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Implementation IFileCabinetService СreateRecod.
+        /// </summary>
+        /// <param name="fileCabinetRecord">Input parametr record <see cref="FileCabinetRecord"/>.</param>
+        public void Insert(FileCabinetRecord fileCabinetRecord)
+        {
+            if (fileCabinetRecord == null)
+            {
+                throw new ArgumentNullException($"{nameof(fileCabinetRecord)} is null!");
+            }
+
+            this.validator.ValidateParametrs(fileCabinetRecord);
+            int editIdReord = fileCabinetRecord.Id;
+            var recordBuffer = new byte[RECORDSIZE];
+            int counteRecordInFile = this.GetCountAllRecordssFromFile();
+            this.fileStream.Seek(0, SeekOrigin.Begin);
+            for (int i = 0; i < counteRecordInFile; i++)
+            {
+                this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
+                if (recordBuffer[0] == SETTHIRDBITTRUE)
+                {
+                    continue;
+                }
+                else
+                {
+                    var bytesToRecord = BytesToFileCabinetRecord(recordBuffer);
+                    if (bytesToRecord.Id == editIdReord)
+                    {
+                        string oldFirstName = bytesToRecord.FirstName;
+                        string oldLastName = bytesToRecord.LastName;
+                        string oldDateOfBirth = bytesToRecord.DateOfBirth.ToString("yyyy-MMM-dd", new CultureInfo("en-US"));
+
+                        this.fileStream.Seek(i * 278, SeekOrigin.Begin);
+                        long seek = this.fileStream.Position;
+                        bytesToRecord.FirstName = fileCabinetRecord.FirstName;
+                        bytesToRecord.LastName = fileCabinetRecord.LastName;
+                        bytesToRecord.DateOfBirth = fileCabinetRecord.DateOfBirth;
+                        bytesToRecord.Sex = fileCabinetRecord.Sex;
+                        bytesToRecord.Height = fileCabinetRecord.Height;
+                        bytesToRecord.Salary = fileCabinetRecord.Salary;
+                        this.fileStream.Seek(0, SeekOrigin.Current);
+                        var recordToBytes = FileCabinetRecordToBytes(bytesToRecord);
+                        this.fileStream.Write(recordToBytes, 0, recordToBytes.Length);
+                        this.fileStream.Flush();
+                        this.ChangeRecordToDictionary(seek, bytesToRecord, oldFirstName, oldLastName, oldDateOfBirth);
+                        return;
+                    }
+                    else
+                    {
+                        this.fileStream.Seek(0, SeekOrigin.End);
+                        long seek1 = this.fileStream.Position;
+                        var b2 = FileCabinetRecordToBytes(fileCabinetRecord);
+                        this.fileStream.Write(b2, 0, b2.Length);
+                        this.fileStream.Flush();
+
+                        this.AddRecordToDictionary(fileCabinetRecord, seek1);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Implementation IFileCabinetService GetRecords.
         /// </summary>
         /// <returns>Rerords <see cref="FileCabinetRecord"/>.</returns>

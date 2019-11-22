@@ -59,6 +59,30 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Implementation IFileCabinetService Insert.
+        /// </summary>
+        /// <param name="fileCabinetRecord">Input parametr record <see cref="FileCabinetRecord"/>.</param>
+        /// <exception cref="ArgumentNullException">Throws if <paramref name="fileCabinetRecord"/>, <paramref name="fileCabinetRecord.FirstName"/>,<paramref name="fileCabinetRecord.LastName"/> is null.</exception>
+        /// <exception cref="ArgumentException">Throws if <paramref name="fileCabinetRecord.FirstName"/>,<paramref name="fileCabinetRecord.LastName"/>,<paramref name="fileCabinetRecord.DateOfBirth"/>,<paramref name="fileCabinetRecord.Sex"/>,<paramref name="fileCabinetRecord.Height"/>,<paramref name="fileCabinetRecord.Salary"/> is(are) incorrect value.</exception>
+        public void Insert(FileCabinetRecord fileCabinetRecord)
+        {
+            if (fileCabinetRecord == null)
+            {
+                throw new ArgumentNullException($"{nameof(fileCabinetRecord)} is null!");
+            }
+
+            if (this.list.Exists(x => x.Id == fileCabinetRecord.Id))
+            {
+                this.EditRecord(fileCabinetRecord);
+                return;
+            }
+
+            this.validator.ValidateParametrs(fileCabinetRecord);
+            this.list.Add(fileCabinetRecord);
+            this.AddRecordToDictionary(fileCabinetRecord);
+        }
+
+        /// <summary>
         /// Implementation IFileCabinetService GetRecords.
         /// </summary>
         /// <returns>Rerords <see cref="FileCabinetRecord"/>.</returns>

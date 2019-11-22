@@ -173,6 +173,7 @@ namespace FileCabinetApp
         {
             var helpHandler = new HelpCommandHandler();
             var createHandler = new CreateCommandHandler(fileCabinetService, recorInputdValidator);
+            var insertHandler = new InsertCommandHandler(fileCabinetService);
             var importHandler = new ImportCommandHandler(fileCabinetService, recorInputdValidator);
             var statHandler = new StatCommandHandler(fileCabinetService);
             var listHandler = new ListCommandHandler(fileCabinetService, DefaultRecordPrinter);
@@ -183,6 +184,7 @@ namespace FileCabinetApp
             var exportHandler = new ExportCommandHandler(fileCabinetService);
             var exitHandler = new ExitCommandHandler(fileCabinetService, filestream, ActionIsRunning);
             helpHandler.SetNext(createHandler)
+                       .SetNext(insertHandler)
                        .SetNext(importHandler)
                        .SetNext(statHandler)
                        .SetNext(listHandler)

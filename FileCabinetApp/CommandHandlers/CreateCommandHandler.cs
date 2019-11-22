@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
@@ -51,7 +52,6 @@ namespace FileCabinetApp.CommandHandlers
                 try
                 {
                     FileCabinetRecord fileCabinetRecord = new FileCabinetRecord();
-                    CultureInfo provider = new CultureInfo("en-US");
                     Console.Write("First name:");
                     fileCabinetRecord.FirstName = inputParamsValidator.ReadInput(inputParamsValidator.FirstNameConverter, inputParamsValidator.FirstNameValidator);
                     Console.Write("Last name:");
