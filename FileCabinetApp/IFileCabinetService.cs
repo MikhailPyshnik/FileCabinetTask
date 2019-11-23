@@ -88,6 +88,13 @@ namespace FileCabinetApp
         void Remove(int id);
 
         /// <summary>
+        /// Delete record by predicate.
+        /// </summary>
+        /// <param name="inputValueArray">Input parametr array <see cref="string"/>.</param>
+        /// <returns>ReadOnlyCollection deleted id <see cref="int"/>.</returns>
+        ReadOnlyCollection<int> Delete(string[] inputValueArray);
+
+        /// <summary>
         /// Delete record by bit in file.
         /// </summary>
         void Purge();

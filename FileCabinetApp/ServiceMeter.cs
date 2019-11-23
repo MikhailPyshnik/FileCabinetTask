@@ -200,6 +200,22 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Implementation IFileCabinetService Restore.
+        /// </summary>
+        /// <param name="inputValueArray">Input parametr value <see cref="string"/>.</param>
+        /// <returns>ReadOnlyCollection deleted id <see cref="int"/>.</returns>
+        public ReadOnlyCollection<int> Delete(string[] inputValueArray)
+        {
+            long ticksThisTime = 0;
+            var sw = Stopwatch.StartNew();
+            var result = fileCabinetService.Delete(inputValueArray);
+            sw.Stop();
+            ticksThisTime = sw.ElapsedTicks;
+            Console.WriteLine($"Delete method execution duration is {ticksThisTime} ticks.");
+            return result;
+        }
+
+        /// <summary>
         /// Implementation IFileCabinetService Restore in class StopWatch.
         /// </summary>
         /// <param name="fileCabinetServiceSnapshot">Input parametr fileCabinetServiceSnapshot <see cref="FileCabinetServiceSnapshot"/>.</param>

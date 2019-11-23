@@ -370,6 +370,59 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Implementation IFileCabinetService Restore.
+        /// </summary>
+        /// <param name="inputValueArray">Input parametr value <see cref="string"/>.</param>
+        /// <returns>ReadOnlyCollection deleted id <see cref="int"/>.</returns>
+        public ReadOnlyCollection<int> Delete(string[] inputValueArray)
+        {
+            if (inputValueArray == null)
+            {
+                throw new ArgumentNullException(nameof(inputValueArray));
+            }
+
+            CultureInfo provider = new CultureInfo("en-US");
+
+            List<int> listTemp;
+
+            switch (inputValueArray[0])
+            {
+                case "id":
+                    int id = int.Parse(inputValueArray[1], provider);
+                    listTemp = this.RemoveById(id);
+                    break;
+                case "firstname":
+                    string firstName = inputValueArray[1];
+                    listTemp = this.RemoveByFirstName(firstName);
+                    break;
+                case "lastname":
+                    string lastName = inputValueArray[1];
+                    listTemp = this.RemoveByLastName(lastName);
+                    break;
+                case "dateofbirth":
+                    DateTime dateOfBirth = DateTime.Parse(inputValueArray[1], provider);
+                    listTemp = this.RemoveByDateOfBirth(dateOfBirth);
+                    break;
+                case "sex":
+                    char sex = char.Parse(inputValueArray[1]);
+                    listTemp = this.RemoveByGender(sex);
+                    break;
+                case "height":
+                    short height = short.Parse(inputValueArray[1], provider);
+                    listTemp = this.RemoveByHeight(height);
+                    break;
+                case "salary":
+                    decimal salary = decimal.Parse(inputValueArray[1], provider);
+                    listTemp = this.RemoveBySalary(salary);
+                    break;
+                default:
+                    throw new ArgumentException("Not correct value!!!!");
+            }
+
+            return new ReadOnlyCollection<int>(listTemp);
+        }
+
+        /// <summary>
         /// Implementation IFileCabinetService Purge.
         /// </summary>
         public void Purge()
@@ -856,6 +909,223 @@ namespace FileCabinetApp
                     this.AddRecordToDictionary(record, seek);
                 }
             }
+        }
+
+        private List<int> RemoveById(int id)
+        {
+            List<int> count = new List<int>();
+            var a = this.GetAllRecordsFromFile();
+            List<FileCabinetRecord> recordToList = new List<FileCabinetRecord>(a);
+            int curent = 0;
+            var recordBuffer = new byte[RECORDSIZE];
+            int counteRecordInFile = this.GetCountAllRecordssFromFile();
+            this.fileStream.Seek(0, SeekOrigin.Begin);
+            foreach (var remove in recordToList)
+            {
+                this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
+                if (remove.Id == id)
+                {
+                    this.fileStream.Seek(curent * 278, SeekOrigin.Begin);
+                    this.fileStream.Seek(0, SeekOrigin.Current);
+                    long seek = this.fileStream.Position;
+                    var removeRecord = recordBuffer;
+                    removeRecord[0] = 4;
+                    this.fileStream.Write(removeRecord, 0, removeRecord.Length);
+                    this.fileStream.Flush();
+                    this.RemoveRecordFromDictionary(remove, seek);
+                    count.Add(remove.Id);
+                }
+
+                ++curent;
+            }
+
+            return count;
+        }
+
+        private List<int> RemoveByFirstName(string firstName)
+        {
+            List<int> count = new List<int>();
+            var a = this.GetAllRecordsFromFile();
+            List<FileCabinetRecord> recordToList = new List<FileCabinetRecord>(a);
+            int curent = 0;
+            var recordBuffer = new byte[RECORDSIZE];
+            int counteRecordInFile = this.GetCountAllRecordssFromFile();
+            this.fileStream.Seek(0, SeekOrigin.Begin);
+            foreach (var remove in recordToList)
+            {
+                this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
+                if (remove.FirstName.ToLower(new CultureInfo("en-US")) == firstName)
+                {
+                    this.fileStream.Seek(curent * 278, SeekOrigin.Begin);
+                    this.fileStream.Seek(0, SeekOrigin.Current);
+                    long seek = this.fileStream.Position;
+                    var removeRecord = recordBuffer;
+                    removeRecord[0] = 4;
+                    this.fileStream.Write(removeRecord, 0, removeRecord.Length);
+                    this.fileStream.Flush();
+                    this.RemoveRecordFromDictionary(remove, seek);
+                    count.Add(remove.Id);
+                }
+
+                ++curent;
+            }
+
+            return count;
+        }
+
+        private List<int> RemoveByLastName(string lastName)
+        {
+            List<int> count = new List<int>();
+            var a = this.GetAllRecordsFromFile();
+            List<FileCabinetRecord> recordToList = new List<FileCabinetRecord>(a);
+            int curent = 0;
+            var recordBuffer = new byte[RECORDSIZE];
+            int counteRecordInFile = this.GetCountAllRecordssFromFile();
+            this.fileStream.Seek(0, SeekOrigin.Begin);
+            foreach (var remove in recordToList)
+            {
+                this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
+                if (remove.LastName.ToLower(new CultureInfo("en-US")) == lastName)
+                {
+                    this.fileStream.Seek(curent * 278, SeekOrigin.Begin);
+                    this.fileStream.Seek(0, SeekOrigin.Current);
+                    long seek = this.fileStream.Position;
+                    var removeRecord = recordBuffer;
+                    removeRecord[0] = 4;
+                    this.fileStream.Write(removeRecord, 0, removeRecord.Length);
+                    this.fileStream.Flush();
+                    this.RemoveRecordFromDictionary(remove, seek);
+                    count.Add(remove.Id);
+                }
+
+                ++curent;
+            }
+
+            return count;
+        }
+
+        private List<int> RemoveByDateOfBirth(DateTime dateOfBirth)
+        {
+            List<int> count = new List<int>();
+            var a = this.GetAllRecordsFromFile();
+            List<FileCabinetRecord> recordToList = new List<FileCabinetRecord>(a);
+            int curent = 0;
+            var recordBuffer = new byte[RECORDSIZE];
+            int counteRecordInFile = this.GetCountAllRecordssFromFile();
+            this.fileStream.Seek(0, SeekOrigin.Begin);
+            foreach (var remove in recordToList)
+            {
+                this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
+                if (remove.DateOfBirth == dateOfBirth)
+                {
+                    this.fileStream.Seek(curent * 278, SeekOrigin.Begin);
+                    this.fileStream.Seek(0, SeekOrigin.Current);
+                    long seek = this.fileStream.Position;
+                    var removeRecord = recordBuffer;
+                    removeRecord[0] = 4;
+                    this.fileStream.Write(removeRecord, 0, removeRecord.Length);
+                    this.fileStream.Flush();
+                    this.RemoveRecordFromDictionary(remove, seek);
+                    count.Add(remove.Id);
+                }
+
+                ++curent;
+            }
+
+            return count;
+        }
+
+        private List<int> RemoveByGender(char sex)
+        {
+            List<int> count = new List<int>();
+            var a = this.GetAllRecordsFromFile();
+            List<FileCabinetRecord> recordToList = new List<FileCabinetRecord>(a);
+            int curent = 0;
+            var recordBuffer = new byte[RECORDSIZE];
+            int counteRecordInFile = this.GetCountAllRecordssFromFile();
+            this.fileStream.Seek(0, SeekOrigin.Begin);
+            foreach (var remove in recordToList)
+            {
+                this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
+                if (remove.Sex == sex)
+                {
+                    this.fileStream.Seek(curent * 278, SeekOrigin.Begin);
+                    this.fileStream.Seek(0, SeekOrigin.Current);
+                    long seek = this.fileStream.Position;
+                    var removeRecord = recordBuffer;
+                    removeRecord[0] = 4;
+                    this.fileStream.Write(removeRecord, 0, removeRecord.Length);
+                    this.fileStream.Flush();
+                    this.RemoveRecordFromDictionary(remove, seek);
+                    count.Add(remove.Id);
+                }
+
+                ++curent;
+            }
+
+            return count;
+        }
+
+        private List<int> RemoveByHeight(short height)
+        {
+            List<int> count = new List<int>();
+            var a = this.GetAllRecordsFromFile();
+            List<FileCabinetRecord> recordToList = new List<FileCabinetRecord>(a);
+            int curent = 0;
+            var recordBuffer = new byte[RECORDSIZE];
+            int counteRecordInFile = this.GetCountAllRecordssFromFile();
+            this.fileStream.Seek(0, SeekOrigin.Begin);
+            foreach (var remove in recordToList)
+            {
+                this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
+                if (remove.Height == height)
+                {
+                    this.fileStream.Seek(curent * 278, SeekOrigin.Begin);
+                    this.fileStream.Seek(0, SeekOrigin.Current);
+                    long seek = this.fileStream.Position;
+                    var removeRecord = recordBuffer;
+                    removeRecord[0] = 4;
+                    this.fileStream.Write(removeRecord, 0, removeRecord.Length);
+                    this.fileStream.Flush();
+                    this.RemoveRecordFromDictionary(remove, seek);
+                    count.Add(remove.Id);
+                }
+
+                ++curent;
+            }
+
+            return count;
+        }
+
+        private List<int> RemoveBySalary(decimal salary)
+        {
+            List<int> count = new List<int>();
+            var a = this.GetAllRecordsFromFile();
+            List<FileCabinetRecord> recordToList = new List<FileCabinetRecord>(a);
+            int curent = 0;
+            var recordBuffer = new byte[RECORDSIZE];
+            int counteRecordInFile = this.GetCountAllRecordssFromFile();
+            this.fileStream.Seek(0, SeekOrigin.Begin);
+            foreach (var remove in recordToList)
+            {
+                this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
+                if (remove.Salary == salary)
+                {
+                    this.fileStream.Seek(curent * 278, SeekOrigin.Begin);
+                    this.fileStream.Seek(0, SeekOrigin.Current);
+                    long seek = this.fileStream.Position;
+                    var removeRecord = recordBuffer;
+                    removeRecord[0] = 4;
+                    this.fileStream.Write(removeRecord, 0, removeRecord.Length);
+                    this.fileStream.Flush();
+                    this.RemoveRecordFromDictionary(remove, seek);
+                    count.Add(remove.Id);
+                }
+
+                ++curent;
+            }
+
+            return count;
         }
     }
 }

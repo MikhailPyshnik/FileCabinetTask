@@ -215,6 +215,22 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Implementation IFileCabinetService Restore.
+        /// </summary>
+        /// <param name="inputValueArray">Input parametr value <see cref="string"/>.</param>
+        /// <returns>ReadOnlyCollection deleted id <see cref="int"/>.</returns>
+        public ReadOnlyCollection<int> Delete(string[] inputValueArray)
+        {
+            var result = fileCabinetService.Delete(inputValueArray);
+            using (StreamWriter w = File.AppendText("log.txt"))
+            {
+                Log($"Calling Delete() - deleted {result.Count} record(s).", w);
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Implementation IFileCabinetService Restore in class ServiceLogger.
         /// </summary>
         /// <param name="fileCabinetServiceSnapshot">Input parametr fileCabinetServiceSnapshot <see cref="FileCabinetServiceSnapshot"/>.</param>

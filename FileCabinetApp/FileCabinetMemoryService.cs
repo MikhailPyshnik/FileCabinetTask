@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
-using FileCabinetApp.Iterators;
 
 namespace FileCabinetApp
 {
@@ -52,7 +51,7 @@ namespace FileCabinetApp
             }
 
             this.validator.ValidateParametrs(fileCabinetRecord);
-            fileCabinetRecord.Id = this.list.Count + 1;
+            fileCabinetRecord.Id = this.list[this.list.Count - 1].Id + 1;
             this.list.Add(fileCabinetRecord);
             this.AddRecordToDictionary(fileCabinetRecord);
             return fileCabinetRecord.Id;
@@ -252,6 +251,59 @@ namespace FileCabinetApp
                     break;
                 }
             }
+        }
+
+        /// <summary>
+        /// Implementation IFileCabinetService Restore.
+        /// </summary>
+        /// <param name="inputValueArray">Input parametr value <see cref="string"/>.</param>
+        /// <returns>ReadOnlyCollection deleted id <see cref="int"/>.</returns>
+        public ReadOnlyCollection<int> Delete(string[] inputValueArray)
+        {
+            if (inputValueArray == null)
+            {
+                throw new ArgumentNullException(nameof(inputValueArray));
+            }
+
+            CultureInfo provider = new CultureInfo("en-US");
+
+            List<int> listTemp;
+
+            switch (inputValueArray[0])
+            {
+                case "id":
+                    int id = int.Parse(inputValueArray[1], provider);
+                    listTemp = this.RemoveById(id);
+                    break;
+                case "firstname":
+                    string firstName = inputValueArray[1];
+                    listTemp = this.RemoveByFirstName(firstName);
+                    break;
+                case "lastname":
+                    string lastName = inputValueArray[1];
+                    listTemp = this.RemoveByLastName(lastName);
+                    break;
+                case "dateofbirth":
+                    DateTime dateOfBirth = DateTime.Parse(inputValueArray[1], provider);
+                    listTemp = this.RemoveByDateOfBirth(dateOfBirth);
+                    break;
+                case "sex":
+                    char sex = char.Parse(inputValueArray[1]);
+                    listTemp = this.RemoveByGender(sex);
+                    break;
+                case "height":
+                    short height = short.Parse(inputValueArray[1], provider);
+                    listTemp = this.RemoveByHeight(height);
+                    break;
+                case "salary":
+                    decimal salary = decimal.Parse(inputValueArray[1], provider);
+                    listTemp = this.RemoveBySalary(salary);
+                    break;
+                default:
+                    throw new ArgumentException("Not correct value!!!!");
+            }
+
+            return new ReadOnlyCollection<int>(listTemp);
         }
 
         /// <summary>
@@ -485,6 +537,125 @@ namespace FileCabinetApp
             {
                 this.firstNameDictionary[tempDateOfBirh].Remove(record);
             }
+        }
+
+        private List<int> RemoveById(int id)
+        {
+            List<int> count = new List<int>();
+            FileCabinetRecord[] temp = this.list.ToArray();
+            foreach (var removeId in temp)
+            {
+                if (removeId.Id == id)
+                {
+                    this.list.Remove(removeId);
+                    this.RemoveRecordFromDictionary(removeId);
+                    count.Add(removeId.Id);
+                }
+            }
+
+            return count;
+        }
+
+        private List<int> RemoveByFirstName(string firstName)
+        {
+            List<int> count = new List<int>();
+            FileCabinetRecord[] temp = this.list.ToArray();
+            foreach (var removeFirstName in temp)
+            {
+                if (removeFirstName.FirstName.ToLower(new CultureInfo("en-US")) == firstName)
+                {
+                    this.list.Remove(removeFirstName);
+                    this.RemoveRecordFromDictionary(removeFirstName);
+                    count.Add(removeFirstName.Id);
+                }
+            }
+
+            return count;
+        }
+
+        private List<int> RemoveByLastName(string lastName)
+        {
+            List<int> count = new List<int>();
+            FileCabinetRecord[] temp = this.list.ToArray();
+            foreach (var removeLastName in temp)
+            {
+                if (removeLastName.LastName.ToLower(new CultureInfo("en-US")) == lastName)
+                {
+                    this.list.Remove(removeLastName);
+                    this.RemoveRecordFromDictionary(removeLastName);
+                    count.Add(removeLastName.Id);
+                }
+            }
+
+            return count;
+        }
+
+        private List<int> RemoveByDateOfBirth(DateTime dateOfBirth)
+        {
+            List<int> count = new List<int>();
+            FileCabinetRecord[] temp = this.list.ToArray();
+            foreach (var removeDate in temp)
+            {
+                if (removeDate.DateOfBirth == dateOfBirth)
+                {
+                    this.list.Remove(removeDate);
+                    this.RemoveRecordFromDictionary(removeDate);
+                    count.Add(removeDate.Id);
+                }
+            }
+
+            return count;
+        }
+
+        private List<int> RemoveByGender(char sex)
+        {
+            List<int> count = new List<int>();
+            FileCabinetRecord[] temp = this.list.ToArray();
+            foreach (var removeSex in temp)
+            {
+                if (removeSex.Sex == sex)
+                {
+                    this.list.Remove(removeSex);
+                    this.RemoveRecordFromDictionary(removeSex);
+                    count.Add(removeSex.Id);
+                }
+            }
+
+            return count;
+        }
+
+        private List<int> RemoveByHeight(short height)
+        {
+            List<int> count = new List<int>();
+            FileCabinetRecord[] temp = this.list.ToArray();
+            foreach (var removeHeight in temp)
+            {
+                if (removeHeight.Height == height)
+                {
+                    this.list.Remove(removeHeight);
+                    this.RemoveRecordFromDictionary(removeHeight);
+                    count.Add(removeHeight.Id);
+                }
+            }
+
+            return count;
+        }
+
+        private List<int> RemoveBySalary(decimal salary)
+        {
+            List<int> count = new List<int>();
+            FileCabinetRecord[] temp = this.list.ToArray();
+            foreach (var removeSalary in temp)
+            {
+                if (removeSalary.Salary == salary)
+                {
+                    this.list.Remove(removeSalary);
+                    this.RemoveRecordFromDictionary(removeSalary);
+                    count.Add(removeSalary.Id);
+                }
+            }
+
+            return count;
         }
     }
 }
