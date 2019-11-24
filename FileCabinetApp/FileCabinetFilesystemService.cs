@@ -221,6 +221,27 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Implementation IFileCabinetService UpdateRecord.
+        /// </summary>
+        /// <param name="inputValueArray">Input value array <see cref="string"/>.</param>
+        /// <param name="inputParamentArray">Input parametr array <see cref="string"/>.</param>
+        public void Update(string[] inputValueArray, string[] inputParamentArray)
+        {
+            if (inputValueArray == null)
+            {
+                throw new ArgumentNullException($"{nameof(inputValueArray)} is null!");
+            }
+
+            if (inputParamentArray == null)
+            {
+                throw new ArgumentNullException($"{nameof(inputParamentArray)} is null!");
+            }
+
+            List<FileCabinetRecord> result = this.FindRecordsByParameters(inputParamentArray);
+            this.UpdateRecords(result, inputValueArray);
+        }
+
+        /// <summary>
         /// Implementation IFileCabinetService FindByFirstName.
         /// </summary>
         /// <param name="firstName">Input parametr FirstName <see cref="string"/>.</param>
@@ -1126,6 +1147,128 @@ namespace FileCabinetApp
             }
 
             return count;
+        }
+
+        private List<FileCabinetRecord> FindRecordsByParameters(string[] parameter)
+        {
+            CultureInfo provider = new CultureInfo("en-US");
+
+            List<FileCabinetRecord> listTemp = new List<FileCabinetRecord>(this.GetNotDeletedRecordsList());
+
+            foreach (var item in parameter)
+            {
+                string[] split = item.Split("=");
+                listTemp = this.FindRecordsByParameterInList(listTemp, split[0], split[1]);
+            }
+
+            return listTemp;
+        }
+
+        private List<FileCabinetRecord> FindRecordsByParameterInList(List<FileCabinetRecord> list, string parameter, string value)
+        {
+            CultureInfo provider = new CultureInfo("en-US");
+
+            List<FileCabinetRecord> listTemp = new List<FileCabinetRecord>();
+
+            switch (parameter)
+            {
+                case "id":
+                    int id = int.Parse(value, provider);
+                    listTemp = list.FindAll(item1 => item1.Id == id);
+                    break;
+                case "firstname":
+                    string firstName = value;
+                    listTemp = list.FindAll(item1 => item1.FirstName.ToLower(provider) == firstName);
+                    break;
+                case "lastname":
+                    string lastName = value;
+                    listTemp = list.FindAll(item1 => item1.LastName.ToLower(provider) == lastName);
+                    break;
+                case "dateofbirth":
+                    DateTime dateOfBirth = DateTime.Parse(value, provider);
+                    listTemp = list.FindAll(item1 => item1.DateOfBirth == dateOfBirth);
+                    break;
+                case "sex":
+                    char sex = char.Parse(value);
+                    listTemp = list.FindAll(item1 => item1.Sex == sex);
+                    break;
+                case "height":
+                    short height = short.Parse(value, provider);
+                    listTemp = list.FindAll(item1 => item1.Height == height);
+                    break;
+                case "salary":
+                    decimal salary = decimal.Parse(value, provider);
+                    listTemp = list.FindAll(item1 => item1.Salary == salary);
+                    break;
+                default:
+                    throw new ArgumentException("Not correct value!!!!");
+            }
+
+            if (listTemp.Count == 0)
+            {
+                throw new ArgumentException("Don't find records for update by conditional!");
+            }
+
+            return listTemp;
+        }
+
+        private void UpdateRecords(List<FileCabinetRecord> listRecords, string[] inputValueArray)
+        {
+            CultureInfo provider = new CultureInfo("en-US");
+
+            foreach (var record in listRecords)
+            {
+                FileCabinetRecord item = new FileCabinetRecord();
+                item.Id = record.Id;
+                item.FirstName = record.FirstName;
+                item.LastName = record.LastName;
+                item.DateOfBirth = record.DateOfBirth;
+                item.Sex = record.Sex;
+                item.Height = record.Height;
+                item.Salary = record.Salary;
+
+                foreach (var parametr in inputValueArray)
+                {
+                    string[] split = parametr.Split("=");
+                    string parameter = split[0];
+                    string value = split[1];
+                    switch (parameter)
+                    {
+                        case "id":
+                            int id = int.Parse(value, provider);
+                            item.Id = id;
+                            break;
+                        case "firstname":
+                            string firstName = value;
+                            item.FirstName = firstName;
+                            break;
+                        case "lastname":
+                            string lastName = value;
+                            item.LastName = lastName;
+                            break;
+                        case "dateofbirth":
+                            DateTime dateOfBirth = DateTime.Parse(value, provider);
+                            item.DateOfBirth = dateOfBirth;
+                            break;
+                        case "sex":
+                            char sex = char.Parse(value);
+                            item.Sex = sex;
+                            break;
+                        case "height":
+                            short height = short.Parse(value, provider);
+                            item.Height = height;
+                            break;
+                        case "salary":
+                            decimal salary = decimal.Parse(value, provider);
+                            item.Salary = salary;
+                            break;
+                        default:
+                            throw new ArgumentException("Not correct value!!!!");
+                    }
+                }
+
+                this.EditRecord(item);
+            }
         }
     }
 }

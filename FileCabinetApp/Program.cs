@@ -31,7 +31,7 @@ namespace FileCabinetApp
 
         private static string loggerRules = "Not used logger";
 
-        private static string[] existCommands = new string[] { "help", "exit", "stat", "create", "list", "edit", "find", "export", "import", "remove", "purge", "insert", "delete" };
+        private static string[] existCommands = new string[] { "help", "exit", "stat", "create", "list", "edit", "find", "export", "import", "remove", "purge", "insert", "delete", "update" };
 
         /// <summary>
         ///  Method Main of console application.The poin of enter application.
@@ -180,6 +180,7 @@ namespace FileCabinetApp
             var listHandler = new ListCommandHandler(fileCabinetService, DefaultRecordPrinter);
             var findHandler = new FindCommandHandler(fileCabinetService, DefaultRecordPrinter);
             var editHandler = new EditCommandHandler(fileCabinetService, recorInputdValidator);
+            var updateHandler = new UpdateCommandHandler(fileCabinetService);
             var removeHandler = new RemoveCommandHandler(fileCabinetService);
             var purgeHandler = new PurgeCommandHandler(fileCabinetService);
             var exportHandler = new ExportCommandHandler(fileCabinetService);
@@ -192,6 +193,7 @@ namespace FileCabinetApp
                        .SetNext(listHandler)
                        .SetNext(findHandler)
                        .SetNext(editHandler)
+                       .SetNext(updateHandler)
                        .SetNext(removeHandler)
                        .SetNext(purgeHandler)
                        .SetNext(exportHandler)
@@ -214,10 +216,17 @@ namespace FileCabinetApp
                 throw new ArgumentNullException(nameof(records));
             }
 
-            CultureInfo provider = new CultureInfo("en-US");
-            foreach (var record in records)
+            if (!records.GetEnumerator().MoveNext())
             {
-                Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", provider)}, {record.Sex}, {record.Height}, {record.Salary}");
+                Console.WriteLine("Don't find records!");
+            }
+            else
+            {
+                CultureInfo provider = new CultureInfo("en-US");
+                foreach (var record in records)
+                {
+                    Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", provider)}, {record.Sex}, {record.Height}, {record.Salary}");
+                }
             }
         }
 
@@ -229,10 +238,10 @@ namespace FileCabinetApp
             [Option('s', "storage", Separator = ' ', HelpText = "Set output to verbose messages.")]
             public string InputStorage { get; set; }
 
-            [Option("use-logger", Required = false, HelpText = "Use stopwatch.")]
+            [Option("use-stopwatch", Required = false, HelpText = "Use stopwatch.")]
             public bool InputStopwatch { get; set; }
 
-            [Option("use-stopwatch", Required = false, HelpText = "Use logger.")]
+            [Option("use-logger", Required = false, HelpText = "Use logger.")]
             public bool InputLogger { get; set; }
         }
     }

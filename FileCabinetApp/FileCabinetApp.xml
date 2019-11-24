@@ -299,6 +299,23 @@
             </summary>
             <param name="appCommandRequest">Input parametr record <see cref="T:FileCabinetApp.AppCommandRequest"/>.</param>
         </member>
+        <member name="T:FileCabinetApp.CommandHandlers.UpdateCommandHandler">
+            <summary>
+            Update command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.UpdateCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.UpdateCommandHandler"/> class.
+            </summary>
+            <param name="fileCabinetService">Input parametr start id.<see cref="T:FileCabinetApp.IFileCabinetService"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.UpdateCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
+            <summary>
+            Override method Handle by CommandHandlerBase in EditCommandHandler.
+            </summary>
+            <param name="appCommandRequest">Input parametr record <see cref="T:FileCabinetApp.AppCommandRequest"/>.</param>
+        </member>
         <member name="T:FileCabinetApp.ICommandHandler">
             <summary>
              Contains methods SetNext and Handle.
@@ -651,6 +668,13 @@
             </summary>
             <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.Update(System.String[],System.String[])">
+            <summary>
+            Implementation IFileCabinetService UpdateRecord.
+            </summary>
+            <param name="inputValueArray">Input value array <see cref="T:System.String"/>.</param>
+            <param name="inputParamentArray">Input parametr array <see cref="T:System.String"/>.</param>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByFirstName(System.String)">
             <summary>
             Implementation IFileCabinetService FindByFirstName.
@@ -755,6 +779,13 @@
             <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
             <exception cref="T:System.ArgumentNullException">Throws if <paramref name="fileCabinetRecord"/>, <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/> is null.</exception>
             <exception cref="T:System.ArgumentException">Throws if <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/>,<paramref name="fileCabinetRecord.DateOfBirth.DateOfBirth"/>,<paramref name="fileCabinetRecord.Sex.Sex"/>,<paramref name="fileCabinetRecord.Height.Height"/>,<paramref name="fileCabinetRecord.Salary.Salary"/> is(are) incorrect value.</exception>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.Update(System.String[],System.String[])">
+            <summary>
+            Implementation IFileCabinetService UpdateRecord.
+            </summary>
+            <param name="inputValueArray">Input value array <see cref="T:System.String"/>.</param>
+            <param name="inputParamentArray">Input parametr array <see cref="T:System.String"/>.</param>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByFirstName(System.String)">
             <summary>
@@ -1009,6 +1040,13 @@
             </summary>
             <param name="inputValueArray">Input parametr array <see cref="T:System.String"/>.</param>
             <returns>ReadOnlyCollection deleted id <see cref="T:System.Int32"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.Update(System.String[],System.String[])">
+            <summary>
+            Update record by.
+            </summary>
+            <param name="inputValueArray">Input value array <see cref="T:System.String"/>.</param>
+            <param name="inputParamentArray">Input parametr array <see cref="T:System.String"/>.</param>
         </member>
         <member name="M:FileCabinetApp.IFileCabinetService.Purge">
             <summary>
@@ -1350,6 +1388,13 @@
             </summary>
             <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
         </member>
+        <member name="M:FileCabinetApp.ServiceLogger.Update(System.String[],System.String[])">
+            <summary>
+            Implementation IFileCabinetService UpdateRecord.
+            </summary>
+            <param name="inputValueArray">Input value array <see cref="T:System.String"/>.</param>
+            <param name="inputParamentArray">Input parametr array <see cref="T:System.String"/>.</param>
+        </member>
         <member name="M:FileCabinetApp.ServiceLogger.FindByDateOfBirth(System.String)">
             <summary>
             Implementation IFileCabinetService FindByDateOfBirth in class ServiceLogger.
@@ -1447,6 +1492,13 @@
             Implementation IFileCabinetService EditRecord in class StopWatch.
             </summary>
             <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.Update(System.String[],System.String[])">
+            <summary>
+            Implementation IFileCabinetService UpdateRecord.
+            </summary>
+            <param name="inputValueArray">Input value array <see cref="T:System.String"/>.</param>
+            <param name="inputParamentArray">Input parametr array <see cref="T:System.String"/>.</param>
         </member>
         <member name="M:FileCabinetApp.ServiceMeter.FindByDateOfBirth(System.String)">
             <summary>

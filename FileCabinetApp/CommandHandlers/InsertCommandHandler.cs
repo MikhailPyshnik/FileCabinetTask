@@ -51,7 +51,7 @@ namespace FileCabinetApp.CommandHandlers
 
                     string[] value = new string[] { "id", "firstname", "lastname", "dateofbirth", "sex", "height", "salary" };
 
-                    Regex regex = new Regex(@"(.*) values (.*)", RegexOptions.IgnoreCase);
+                    Regex regex = new Regex(@"(.*)values(.*)", RegexOptions.IgnoreCase);
 
                     MatchCollection matches = regex.Matches(parameters);
 

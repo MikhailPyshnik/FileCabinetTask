@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using FileCabinetApp.Iterators;
 
 namespace FileCabinetApp
 {
@@ -63,6 +62,31 @@ namespace FileCabinetApp
             sw.Stop();
             ticksThisTime = sw.ElapsedTicks;
             Console.WriteLine($"EditRecord method execution duration is {ticksThisTime} ticks.");
+        }
+
+        /// <summary>
+        /// Implementation IFileCabinetService UpdateRecord.
+        /// </summary>
+        /// <param name="inputValueArray">Input value array <see cref="string"/>.</param>
+        /// <param name="inputParamentArray">Input parametr array <see cref="string"/>.</param>
+        public void Update(string[] inputValueArray, string[] inputParamentArray)
+        {
+            if (inputValueArray == null)
+            {
+                throw new ArgumentNullException($"{nameof(inputValueArray)} is null!");
+            }
+
+            if (inputParamentArray == null)
+            {
+                throw new ArgumentNullException($"{nameof(inputParamentArray)} is null!");
+            }
+
+            long ticksThisTime = 0;
+            var sw = Stopwatch.StartNew();
+            fileCabinetService.Update(inputValueArray, inputParamentArray);
+            sw.Stop();
+            ticksThisTime = sw.ElapsedTicks;
+            Console.WriteLine($"UpdateRecord method execution duration is {ticksThisTime} ticks.");
         }
 
         /// <summary>

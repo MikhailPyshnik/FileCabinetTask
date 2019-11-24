@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using FileCabinetApp.Iterators;
 
 namespace FileCabinetApp
 {
@@ -93,6 +92,13 @@ namespace FileCabinetApp
         /// <param name="inputValueArray">Input parametr array <see cref="string"/>.</param>
         /// <returns>ReadOnlyCollection deleted id <see cref="int"/>.</returns>
         ReadOnlyCollection<int> Delete(string[] inputValueArray);
+
+        /// <summary>
+        /// Update record by.
+        /// </summary>
+        /// <param name="inputValueArray">Input value array <see cref="string"/>.</param>
+        /// <param name="inputParamentArray">Input parametr array <see cref="string"/>.</param>
+        void Update(string[] inputValueArray, string[] inputParamentArray);
 
         /// <summary>
         /// Delete record by bit in file.

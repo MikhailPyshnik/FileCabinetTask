@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -58,7 +57,7 @@ namespace FileCabinetApp.CommandHandlers
 
                     string nameParametr = matches[0].Groups[1].Value.ToLower(provider);
 
-                    var inputParametr = matches[0].Groups[2].Value.ToLower(provider);
+                    string inputParametr = matches[0].Groups[2].Value.ToLower(provider);
 
                     var command = GetStringArray(nameParametr);
 
