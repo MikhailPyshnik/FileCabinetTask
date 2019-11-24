@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using FileCabinetApp.Iterators;
 
 namespace FileCabinetApp
 {
@@ -22,6 +21,13 @@ namespace FileCabinetApp
         /// <param name="fileCabinetRecord">Input parametr record <see cref="FileCabinetRecord"/>.</param>
         /// <returns>Id <see cref="int"/>.</returns>
         int CreateRecord(FileCabinetRecord fileCabinetRecord);
+
+        /// <summary>
+        /// Inseert new record FileCabinetRecord.
+        /// </summary>
+        /// <param name="fileCabinetRecord">Input parametr record <see cref="FileCabinetRecord"/>.</param>
+        // /// <returns>Id <see cref="int"/>.</returns>
+        void Insert(FileCabinetRecord fileCabinetRecord);
 
         /// <summary>
         /// Get all record FileCabinetRecord.
@@ -79,6 +85,20 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="id">Input parametr id of record <see cref="int"/>.</param>
         void Remove(int id);
+
+        /// <summary>
+        /// Delete record by predicate.
+        /// </summary>
+        /// <param name="inputValueArray">Input parametr array <see cref="string"/>.</param>
+        /// <returns>ReadOnlyCollection deleted id <see cref="int"/>.</returns>
+        ReadOnlyCollection<int> Delete(string[] inputValueArray);
+
+        /// <summary>
+        /// Update record by.
+        /// </summary>
+        /// <param name="inputValueArray">Input value array <see cref="string"/>.</param>
+        /// <param name="inputParamentArray">Input parametr array <see cref="string"/>.</param>
+        void Update(string[] inputValueArray, string[] inputParamentArray);
 
         /// <summary>
         /// Delete record by bit in file.

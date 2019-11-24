@@ -82,6 +82,67 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Implementation IFileCabinetService СreateRecod.
+        /// </summary>
+        /// <param name="fileCabinetRecord">Input parametr record <see cref="FileCabinetRecord"/>.</param>
+        public void Insert(FileCabinetRecord fileCabinetRecord)
+        {
+            if (fileCabinetRecord == null)
+            {
+                throw new ArgumentNullException($"{nameof(fileCabinetRecord)} is null!");
+            }
+
+            this.validator.ValidateParametrs(fileCabinetRecord);
+            int editIdReord = fileCabinetRecord.Id;
+            var recordBuffer = new byte[RECORDSIZE];
+            int counteRecordInFile = this.GetCountAllRecordssFromFile();
+            this.fileStream.Seek(0, SeekOrigin.Begin);
+            for (int i = 0; i < counteRecordInFile; i++)
+            {
+                this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
+                if (recordBuffer[0] == SETTHIRDBITTRUE)
+                {
+                    continue;
+                }
+                else
+                {
+                    var bytesToRecord = BytesToFileCabinetRecord(recordBuffer);
+                    if (bytesToRecord.Id == editIdReord)
+                    {
+                        string oldFirstName = bytesToRecord.FirstName;
+                        string oldLastName = bytesToRecord.LastName;
+                        string oldDateOfBirth = bytesToRecord.DateOfBirth.ToString("yyyy-MMM-dd", new CultureInfo("en-US"));
+
+                        this.fileStream.Seek(i * 278, SeekOrigin.Begin);
+                        long seek = this.fileStream.Position;
+                        bytesToRecord.FirstName = fileCabinetRecord.FirstName;
+                        bytesToRecord.LastName = fileCabinetRecord.LastName;
+                        bytesToRecord.DateOfBirth = fileCabinetRecord.DateOfBirth;
+                        bytesToRecord.Sex = fileCabinetRecord.Sex;
+                        bytesToRecord.Height = fileCabinetRecord.Height;
+                        bytesToRecord.Salary = fileCabinetRecord.Salary;
+                        this.fileStream.Seek(0, SeekOrigin.Current);
+                        var recordToBytes = FileCabinetRecordToBytes(bytesToRecord);
+                        this.fileStream.Write(recordToBytes, 0, recordToBytes.Length);
+                        this.fileStream.Flush();
+                        this.ChangeRecordToDictionary(seek, bytesToRecord, oldFirstName, oldLastName, oldDateOfBirth);
+                        return;
+                    }
+                    else
+                    {
+                        this.fileStream.Seek(0, SeekOrigin.End);
+                        long seek1 = this.fileStream.Position;
+                        var b2 = FileCabinetRecordToBytes(fileCabinetRecord);
+                        this.fileStream.Write(b2, 0, b2.Length);
+                        this.fileStream.Flush();
+
+                        this.AddRecordToDictionary(fileCabinetRecord, seek1);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Implementation IFileCabinetService GetRecords.
         /// </summary>
         /// <returns>Rerords <see cref="FileCabinetRecord"/>.</returns>
@@ -157,6 +218,27 @@ namespace FileCabinetApp
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Implementation IFileCabinetService UpdateRecord.
+        /// </summary>
+        /// <param name="inputValueArray">Input value array <see cref="string"/>.</param>
+        /// <param name="inputParamentArray">Input parametr array <see cref="string"/>.</param>
+        public void Update(string[] inputValueArray, string[] inputParamentArray)
+        {
+            if (inputValueArray == null)
+            {
+                throw new ArgumentNullException($"{nameof(inputValueArray)} is null!");
+            }
+
+            if (inputParamentArray == null)
+            {
+                throw new ArgumentNullException($"{nameof(inputParamentArray)} is null!");
+            }
+
+            List<FileCabinetRecord> result = this.FindRecordsByParameters(inputParamentArray);
+            this.UpdateRecords(result, inputValueArray);
         }
 
         /// <summary>
@@ -306,6 +388,59 @@ namespace FileCabinetApp
 
                 ++curent;
             }
+        }
+
+        /// <summary>
+        /// Implementation IFileCabinetService Restore.
+        /// </summary>
+        /// <param name="inputValueArray">Input parametr value <see cref="string"/>.</param>
+        /// <returns>ReadOnlyCollection deleted id <see cref="int"/>.</returns>
+        public ReadOnlyCollection<int> Delete(string[] inputValueArray)
+        {
+            if (inputValueArray == null)
+            {
+                throw new ArgumentNullException(nameof(inputValueArray));
+            }
+
+            CultureInfo provider = new CultureInfo("en-US");
+
+            List<int> listTemp;
+
+            switch (inputValueArray[0])
+            {
+                case "id":
+                    int id = int.Parse(inputValueArray[1], provider);
+                    listTemp = this.RemoveById(id);
+                    break;
+                case "firstname":
+                    string firstName = inputValueArray[1];
+                    listTemp = this.RemoveByFirstName(firstName);
+                    break;
+                case "lastname":
+                    string lastName = inputValueArray[1];
+                    listTemp = this.RemoveByLastName(lastName);
+                    break;
+                case "dateofbirth":
+                    DateTime dateOfBirth = DateTime.Parse(inputValueArray[1], provider);
+                    listTemp = this.RemoveByDateOfBirth(dateOfBirth);
+                    break;
+                case "sex":
+                    char sex = char.Parse(inputValueArray[1]);
+                    listTemp = this.RemoveByGender(sex);
+                    break;
+                case "height":
+                    short height = short.Parse(inputValueArray[1], provider);
+                    listTemp = this.RemoveByHeight(height);
+                    break;
+                case "salary":
+                    decimal salary = decimal.Parse(inputValueArray[1], provider);
+                    listTemp = this.RemoveBySalary(salary);
+                    break;
+                default:
+                    throw new ArgumentException("Not correct value!!!!");
+            }
+
+            return new ReadOnlyCollection<int>(listTemp);
         }
 
         /// <summary>
@@ -794,6 +929,345 @@ namespace FileCabinetApp
                     var record = BytesToFileCabinetRecord(recordBuffer);
                     this.AddRecordToDictionary(record, seek);
                 }
+            }
+        }
+
+        private List<int> RemoveById(int id)
+        {
+            List<int> count = new List<int>();
+            var a = this.GetAllRecordsFromFile();
+            List<FileCabinetRecord> recordToList = new List<FileCabinetRecord>(a);
+            int curent = 0;
+            var recordBuffer = new byte[RECORDSIZE];
+            int counteRecordInFile = this.GetCountAllRecordssFromFile();
+            this.fileStream.Seek(0, SeekOrigin.Begin);
+            foreach (var remove in recordToList)
+            {
+                this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
+                if (remove.Id == id)
+                {
+                    this.fileStream.Seek(curent * 278, SeekOrigin.Begin);
+                    this.fileStream.Seek(0, SeekOrigin.Current);
+                    long seek = this.fileStream.Position;
+                    var removeRecord = recordBuffer;
+                    removeRecord[0] = 4;
+                    this.fileStream.Write(removeRecord, 0, removeRecord.Length);
+                    this.fileStream.Flush();
+                    this.RemoveRecordFromDictionary(remove, seek);
+                    count.Add(remove.Id);
+                }
+
+                ++curent;
+            }
+
+            return count;
+        }
+
+        private List<int> RemoveByFirstName(string firstName)
+        {
+            List<int> count = new List<int>();
+            var a = this.GetAllRecordsFromFile();
+            List<FileCabinetRecord> recordToList = new List<FileCabinetRecord>(a);
+            int curent = 0;
+            var recordBuffer = new byte[RECORDSIZE];
+            int counteRecordInFile = this.GetCountAllRecordssFromFile();
+            this.fileStream.Seek(0, SeekOrigin.Begin);
+            foreach (var remove in recordToList)
+            {
+                this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
+                if (remove.FirstName.ToLower(new CultureInfo("en-US")) == firstName)
+                {
+                    this.fileStream.Seek(curent * 278, SeekOrigin.Begin);
+                    this.fileStream.Seek(0, SeekOrigin.Current);
+                    long seek = this.fileStream.Position;
+                    var removeRecord = recordBuffer;
+                    removeRecord[0] = 4;
+                    this.fileStream.Write(removeRecord, 0, removeRecord.Length);
+                    this.fileStream.Flush();
+                    this.RemoveRecordFromDictionary(remove, seek);
+                    count.Add(remove.Id);
+                }
+
+                ++curent;
+            }
+
+            return count;
+        }
+
+        private List<int> RemoveByLastName(string lastName)
+        {
+            List<int> count = new List<int>();
+            var a = this.GetAllRecordsFromFile();
+            List<FileCabinetRecord> recordToList = new List<FileCabinetRecord>(a);
+            int curent = 0;
+            var recordBuffer = new byte[RECORDSIZE];
+            int counteRecordInFile = this.GetCountAllRecordssFromFile();
+            this.fileStream.Seek(0, SeekOrigin.Begin);
+            foreach (var remove in recordToList)
+            {
+                this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
+                if (remove.LastName.ToLower(new CultureInfo("en-US")) == lastName)
+                {
+                    this.fileStream.Seek(curent * 278, SeekOrigin.Begin);
+                    this.fileStream.Seek(0, SeekOrigin.Current);
+                    long seek = this.fileStream.Position;
+                    var removeRecord = recordBuffer;
+                    removeRecord[0] = 4;
+                    this.fileStream.Write(removeRecord, 0, removeRecord.Length);
+                    this.fileStream.Flush();
+                    this.RemoveRecordFromDictionary(remove, seek);
+                    count.Add(remove.Id);
+                }
+
+                ++curent;
+            }
+
+            return count;
+        }
+
+        private List<int> RemoveByDateOfBirth(DateTime dateOfBirth)
+        {
+            List<int> count = new List<int>();
+            var a = this.GetAllRecordsFromFile();
+            List<FileCabinetRecord> recordToList = new List<FileCabinetRecord>(a);
+            int curent = 0;
+            var recordBuffer = new byte[RECORDSIZE];
+            int counteRecordInFile = this.GetCountAllRecordssFromFile();
+            this.fileStream.Seek(0, SeekOrigin.Begin);
+            foreach (var remove in recordToList)
+            {
+                this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
+                if (remove.DateOfBirth == dateOfBirth)
+                {
+                    this.fileStream.Seek(curent * 278, SeekOrigin.Begin);
+                    this.fileStream.Seek(0, SeekOrigin.Current);
+                    long seek = this.fileStream.Position;
+                    var removeRecord = recordBuffer;
+                    removeRecord[0] = 4;
+                    this.fileStream.Write(removeRecord, 0, removeRecord.Length);
+                    this.fileStream.Flush();
+                    this.RemoveRecordFromDictionary(remove, seek);
+                    count.Add(remove.Id);
+                }
+
+                ++curent;
+            }
+
+            return count;
+        }
+
+        private List<int> RemoveByGender(char sex)
+        {
+            List<int> count = new List<int>();
+            var a = this.GetAllRecordsFromFile();
+            List<FileCabinetRecord> recordToList = new List<FileCabinetRecord>(a);
+            int curent = 0;
+            var recordBuffer = new byte[RECORDSIZE];
+            int counteRecordInFile = this.GetCountAllRecordssFromFile();
+            this.fileStream.Seek(0, SeekOrigin.Begin);
+            foreach (var remove in recordToList)
+            {
+                this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
+                if (remove.Sex == sex)
+                {
+                    this.fileStream.Seek(curent * 278, SeekOrigin.Begin);
+                    this.fileStream.Seek(0, SeekOrigin.Current);
+                    long seek = this.fileStream.Position;
+                    var removeRecord = recordBuffer;
+                    removeRecord[0] = 4;
+                    this.fileStream.Write(removeRecord, 0, removeRecord.Length);
+                    this.fileStream.Flush();
+                    this.RemoveRecordFromDictionary(remove, seek);
+                    count.Add(remove.Id);
+                }
+
+                ++curent;
+            }
+
+            return count;
+        }
+
+        private List<int> RemoveByHeight(short height)
+        {
+            List<int> count = new List<int>();
+            var a = this.GetAllRecordsFromFile();
+            List<FileCabinetRecord> recordToList = new List<FileCabinetRecord>(a);
+            int curent = 0;
+            var recordBuffer = new byte[RECORDSIZE];
+            int counteRecordInFile = this.GetCountAllRecordssFromFile();
+            this.fileStream.Seek(0, SeekOrigin.Begin);
+            foreach (var remove in recordToList)
+            {
+                this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
+                if (remove.Height == height)
+                {
+                    this.fileStream.Seek(curent * 278, SeekOrigin.Begin);
+                    this.fileStream.Seek(0, SeekOrigin.Current);
+                    long seek = this.fileStream.Position;
+                    var removeRecord = recordBuffer;
+                    removeRecord[0] = 4;
+                    this.fileStream.Write(removeRecord, 0, removeRecord.Length);
+                    this.fileStream.Flush();
+                    this.RemoveRecordFromDictionary(remove, seek);
+                    count.Add(remove.Id);
+                }
+
+                ++curent;
+            }
+
+            return count;
+        }
+
+        private List<int> RemoveBySalary(decimal salary)
+        {
+            List<int> count = new List<int>();
+            var a = this.GetAllRecordsFromFile();
+            List<FileCabinetRecord> recordToList = new List<FileCabinetRecord>(a);
+            int curent = 0;
+            var recordBuffer = new byte[RECORDSIZE];
+            int counteRecordInFile = this.GetCountAllRecordssFromFile();
+            this.fileStream.Seek(0, SeekOrigin.Begin);
+            foreach (var remove in recordToList)
+            {
+                this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
+                if (remove.Salary == salary)
+                {
+                    this.fileStream.Seek(curent * 278, SeekOrigin.Begin);
+                    this.fileStream.Seek(0, SeekOrigin.Current);
+                    long seek = this.fileStream.Position;
+                    var removeRecord = recordBuffer;
+                    removeRecord[0] = 4;
+                    this.fileStream.Write(removeRecord, 0, removeRecord.Length);
+                    this.fileStream.Flush();
+                    this.RemoveRecordFromDictionary(remove, seek);
+                    count.Add(remove.Id);
+                }
+
+                ++curent;
+            }
+
+            return count;
+        }
+
+        private List<FileCabinetRecord> FindRecordsByParameters(string[] parameter)
+        {
+            CultureInfo provider = new CultureInfo("en-US");
+
+            List<FileCabinetRecord> listTemp = new List<FileCabinetRecord>(this.GetNotDeletedRecordsList());
+
+            foreach (var item in parameter)
+            {
+                string[] split = item.Split("=");
+                listTemp = this.FindRecordsByParameterInList(listTemp, split[0], split[1]);
+            }
+
+            return listTemp;
+        }
+
+        private List<FileCabinetRecord> FindRecordsByParameterInList(List<FileCabinetRecord> list, string parameter, string value)
+        {
+            CultureInfo provider = new CultureInfo("en-US");
+
+            List<FileCabinetRecord> listTemp = new List<FileCabinetRecord>();
+
+            switch (parameter)
+            {
+                case "id":
+                    int id = int.Parse(value, provider);
+                    listTemp = list.FindAll(item1 => item1.Id == id);
+                    break;
+                case "firstname":
+                    string firstName = value;
+                    listTemp = list.FindAll(item1 => item1.FirstName.ToLower(provider) == firstName);
+                    break;
+                case "lastname":
+                    string lastName = value;
+                    listTemp = list.FindAll(item1 => item1.LastName.ToLower(provider) == lastName);
+                    break;
+                case "dateofbirth":
+                    DateTime dateOfBirth = DateTime.Parse(value, provider);
+                    listTemp = list.FindAll(item1 => item1.DateOfBirth == dateOfBirth);
+                    break;
+                case "sex":
+                    char sex = char.Parse(value);
+                    listTemp = list.FindAll(item1 => item1.Sex == sex);
+                    break;
+                case "height":
+                    short height = short.Parse(value, provider);
+                    listTemp = list.FindAll(item1 => item1.Height == height);
+                    break;
+                case "salary":
+                    decimal salary = decimal.Parse(value, provider);
+                    listTemp = list.FindAll(item1 => item1.Salary == salary);
+                    break;
+                default:
+                    throw new ArgumentException("Not correct value!!!!");
+            }
+
+            if (listTemp.Count == 0)
+            {
+                throw new ArgumentException("Don't find records for update by conditional!");
+            }
+
+            return listTemp;
+        }
+
+        private void UpdateRecords(List<FileCabinetRecord> listRecords, string[] inputValueArray)
+        {
+            CultureInfo provider = new CultureInfo("en-US");
+
+            foreach (var record in listRecords)
+            {
+                FileCabinetRecord item = new FileCabinetRecord();
+                item.Id = record.Id;
+                item.FirstName = record.FirstName;
+                item.LastName = record.LastName;
+                item.DateOfBirth = record.DateOfBirth;
+                item.Sex = record.Sex;
+                item.Height = record.Height;
+                item.Salary = record.Salary;
+
+                foreach (var parametr in inputValueArray)
+                {
+                    string[] split = parametr.Split("=");
+                    string parameter = split[0];
+                    string value = split[1];
+                    switch (parameter)
+                    {
+                        case "id":
+                            int id = int.Parse(value, provider);
+                            item.Id = id;
+                            break;
+                        case "firstname":
+                            string firstName = value;
+                            item.FirstName = firstName;
+                            break;
+                        case "lastname":
+                            string lastName = value;
+                            item.LastName = lastName;
+                            break;
+                        case "dateofbirth":
+                            DateTime dateOfBirth = DateTime.Parse(value, provider);
+                            item.DateOfBirth = dateOfBirth;
+                            break;
+                        case "sex":
+                            char sex = char.Parse(value);
+                            item.Sex = sex;
+                            break;
+                        case "height":
+                            short height = short.Parse(value, provider);
+                            item.Height = height;
+                            break;
+                        case "salary":
+                            decimal salary = decimal.Parse(value, provider);
+                            item.Salary = salary;
+                            break;
+                        default:
+                            throw new ArgumentException("Not correct value!!!!");
+                    }
+                }
+
+                this.EditRecord(item);
             }
         }
     }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using FileCabinetApp.Iterators;
 
 namespace FileCabinetApp
 {
@@ -63,6 +62,31 @@ namespace FileCabinetApp
             sw.Stop();
             ticksThisTime = sw.ElapsedTicks;
             Console.WriteLine($"EditRecord method execution duration is {ticksThisTime} ticks.");
+        }
+
+        /// <summary>
+        /// Implementation IFileCabinetService UpdateRecord.
+        /// </summary>
+        /// <param name="inputValueArray">Input value array <see cref="string"/>.</param>
+        /// <param name="inputParamentArray">Input parametr array <see cref="string"/>.</param>
+        public void Update(string[] inputValueArray, string[] inputParamentArray)
+        {
+            if (inputValueArray == null)
+            {
+                throw new ArgumentNullException($"{nameof(inputValueArray)} is null!");
+            }
+
+            if (inputParamentArray == null)
+            {
+                throw new ArgumentNullException($"{nameof(inputParamentArray)} is null!");
+            }
+
+            long ticksThisTime = 0;
+            var sw = Stopwatch.StartNew();
+            fileCabinetService.Update(inputValueArray, inputParamentArray);
+            sw.Stop();
+            ticksThisTime = sw.ElapsedTicks;
+            Console.WriteLine($"UpdateRecord method execution duration is {ticksThisTime} ticks.");
         }
 
         /// <summary>
@@ -144,6 +168,20 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Implementation IFileCabinetService СreateRecod.
+        /// </summary>
+        /// <param name="fileCabinetRecord">Input parametr record <see cref="FileCabinetRecord"/>.</param>
+        public void Insert(FileCabinetRecord fileCabinetRecord)
+        {
+            long ticksThisTime = 0;
+            var sw = Stopwatch.StartNew();
+            fileCabinetService.Insert(fileCabinetRecord);
+            sw.Stop();
+            ticksThisTime = sw.ElapsedTicks;
+            Console.WriteLine($"Insert method execution duration is {ticksThisTime} ticks.");
+        }
+
+        /// <summary>
         /// Implementation IFileCabinetService MakeSnapshot in class StopWatch.
         /// </summary>
         /// <returns>Rerords by dateofbirth <see cref="FileCabinetServiceSnapshot"/>.</returns>
@@ -183,6 +221,22 @@ namespace FileCabinetApp
             sw.Stop();
             ticksThisTime = sw.ElapsedTicks;
             Console.WriteLine($"Remove method execution duration is {ticksThisTime} ticks.");
+        }
+
+        /// <summary>
+        /// Implementation IFileCabinetService Restore.
+        /// </summary>
+        /// <param name="inputValueArray">Input parametr value <see cref="string"/>.</param>
+        /// <returns>ReadOnlyCollection deleted id <see cref="int"/>.</returns>
+        public ReadOnlyCollection<int> Delete(string[] inputValueArray)
+        {
+            long ticksThisTime = 0;
+            var sw = Stopwatch.StartNew();
+            var result = fileCabinetService.Delete(inputValueArray);
+            sw.Stop();
+            ticksThisTime = sw.ElapsedTicks;
+            Console.WriteLine($"Delete method execution duration is {ticksThisTime} ticks.");
+            return result;
         }
 
         /// <summary>

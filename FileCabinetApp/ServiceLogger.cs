@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using FileCabinetApp.Iterators;
 
 namespace FileCabinetApp
 {
@@ -59,6 +58,25 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Implementation IFileCabinetService СreateRecod.
+        /// </summary>
+        /// <param name="fileCabinetRecord">Input parametr record <see cref="FileCabinetRecord"/>.</param>
+        public void Insert(FileCabinetRecord fileCabinetRecord)
+        {
+            if (fileCabinetRecord == null)
+            {
+                throw new ArgumentNullException(nameof(fileCabinetRecord));
+            }
+
+            fileCabinetService.Insert(fileCabinetRecord);
+
+            using (StreamWriter w = File.AppendText("log.txt"))
+            {
+                Log($"Calling Insert() with  Id = '{fileCabinetRecord.Id}', FirstName = '{fileCabinetRecord.FirstName}', LastName = '{fileCabinetRecord.LastName}', DateOfBirth = '{fileCabinetRecord.DateOfBirth}' ", w);
+            }
+        }
+
+        /// <summary>
         /// Implementation IFileCabinetService EditRecord in class ServiceLogger.
         /// </summary>
         /// <param name="fileCabinetRecord">Input parametr record <see cref="FileCabinetRecord"/>.</param>
@@ -74,6 +92,30 @@ namespace FileCabinetApp
             using (StreamWriter w = File.AppendText("log.txt"))
             {
                 Log($"Calling Edit() returned  - FirstName = '{fileCabinetRecord.FirstName}', LastName = '{fileCabinetRecord.LastName}', DateOfBirth = '{fileCabinetRecord.DateOfBirth}'", w);
+            }
+        }
+
+        /// <summary>
+        /// Implementation IFileCabinetService UpdateRecord.
+        /// </summary>
+        /// <param name="inputValueArray">Input value array <see cref="string"/>.</param>
+        /// <param name="inputParamentArray">Input parametr array <see cref="string"/>.</param>
+        public void Update(string[] inputValueArray, string[] inputParamentArray)
+        {
+            if (inputValueArray == null)
+            {
+                throw new ArgumentNullException($"{nameof(inputValueArray)} is null!");
+            }
+
+            if (inputParamentArray == null)
+            {
+                throw new ArgumentNullException($"{nameof(inputParamentArray)} is null!");
+            }
+
+            fileCabinetService.Update(inputValueArray, inputParamentArray);
+            using (StreamWriter w = File.AppendText("log.txt"))
+            {
+                Log("Calling Update() records", w);
             }
         }
 
@@ -193,6 +235,22 @@ namespace FileCabinetApp
             {
                 Log($"Calling Remove() - revove {id}", w);
             }
+        }
+
+        /// <summary>
+        /// Implementation IFileCabinetService Restore.
+        /// </summary>
+        /// <param name="inputValueArray">Input parametr value <see cref="string"/>.</param>
+        /// <returns>ReadOnlyCollection deleted id <see cref="int"/>.</returns>
+        public ReadOnlyCollection<int> Delete(string[] inputValueArray)
+        {
+            var result = fileCabinetService.Delete(inputValueArray);
+            using (StreamWriter w = File.AppendText("log.txt"))
+            {
+                Log($"Calling Delete() - deleted {result.Count} record(s).", w);
+            }
+
+            return result;
         }
 
         /// <summary>

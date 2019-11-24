@@ -31,7 +31,7 @@ namespace FileCabinetApp
 
         private static string loggerRules = "Not used logger";
 
-        private static string[] existCommands = new string[] { "help", "exit", "stat", "create", "list", "edit", "find", "export", "import", "remove", "purge", "insert" };
+        private static string[] existCommands = new string[] { "help", "exit", "stat", "create", "list", "find", "export", "import", "purge", "insert", "delete", "update" };
 
         /// <summary>
         ///  Method Main of console application.The poin of enter application.
@@ -139,7 +139,10 @@ namespace FileCabinetApp
 
                     if (!Array.Exists(existCommands, element => element == command))
                     {
-                        PrintMissedCommandInfo(command);
+                        List<string> foundWords = Search(command, existCommands, 0.4);
+                        Console.WriteLine($"{command} is not a command.See command - help.");
+                        Console.WriteLine("The most similar commands:");
+                        foundWords.ForEach(i => Console.WriteLine(i));
                         continue;
                     }
 
@@ -173,22 +176,24 @@ namespace FileCabinetApp
         {
             var helpHandler = new HelpCommandHandler();
             var createHandler = new CreateCommandHandler(fileCabinetService, recorInputdValidator);
+            var insertHandler = new InsertCommandHandler(fileCabinetService);
             var importHandler = new ImportCommandHandler(fileCabinetService, recorInputdValidator);
+            var deleteHandler = new DeleteCommandHandler(fileCabinetService);
             var statHandler = new StatCommandHandler(fileCabinetService);
             var listHandler = new ListCommandHandler(fileCabinetService, DefaultRecordPrinter);
             var findHandler = new FindCommandHandler(fileCabinetService, DefaultRecordPrinter);
-            var editHandler = new EditCommandHandler(fileCabinetService, recorInputdValidator);
-            var removeHandler = new RemoveCommandHandler(fileCabinetService);
+            var updateHandler = new UpdateCommandHandler(fileCabinetService);
             var purgeHandler = new PurgeCommandHandler(fileCabinetService);
             var exportHandler = new ExportCommandHandler(fileCabinetService);
             var exitHandler = new ExitCommandHandler(fileCabinetService, filestream, ActionIsRunning);
             helpHandler.SetNext(createHandler)
+                       .SetNext(insertHandler)
+                       .SetNext(deleteHandler)
                        .SetNext(importHandler)
                        .SetNext(statHandler)
                        .SetNext(listHandler)
                        .SetNext(findHandler)
-                       .SetNext(editHandler)
-                       .SetNext(removeHandler)
+                       .SetNext(updateHandler)
                        .SetNext(purgeHandler)
                        .SetNext(exportHandler)
                        .SetNext(exitHandler);
@@ -210,11 +215,94 @@ namespace FileCabinetApp
                 throw new ArgumentNullException(nameof(records));
             }
 
-            CultureInfo provider = new CultureInfo("en-US");
-            foreach (var record in records)
+            if (!records.GetEnumerator().MoveNext())
             {
-                Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", provider)}, {record.Sex}, {record.Height}, {record.Salary}");
+                Console.WriteLine("Don't find records!");
             }
+            else
+            {
+                CultureInfo provider = new CultureInfo("en-US");
+                foreach (var record in records)
+                {
+                    Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", provider)}, {record.Sex}, {record.Height}, {record.Salary}");
+                }
+            }
+        }
+
+        private static List<string> Search(string word, string[] wordList, double fuzzyness)
+        {
+            List<string> foundWords = new List<string>();
+
+            foreach (string s in wordList)
+            {
+                // Calculate the Levenshtein-distance:
+                int levenshteinDistance =
+                    LevenshteinDistance(word, s);
+
+                // Length of the longer string:
+                int length = Math.Max(word.Length, s.Length);
+
+                // Calculate the score:
+                double score = 1.0 - ((double)levenshteinDistance / length);
+
+                // Match?
+                if (score > fuzzyness)
+                {
+                    foundWords.Add(s);
+                }
+            }
+
+            return foundWords;
+        }
+
+        private static int LevenshteinDistance(string src, string dest)
+        {
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+            int[,] d = new int[src.Length + 1, dest.Length + 1];
+#pragma warning restore CA1814 // Prefer jagged arrays over multidimensional
+            int i, j, cost;
+            char[] str1 = src.ToCharArray();
+            char[] str2 = dest.ToCharArray();
+
+            for (i = 0; i <= str1.Length; i++)
+            {
+                d[i, 0] = i;
+            }
+
+            for (j = 0; j <= str2.Length; j++)
+            {
+                d[0, j] = j;
+            }
+
+            for (i = 1; i <= str1.Length; i++)
+            {
+                for (j = 1; j <= str2.Length; j++)
+                {
+                    if (str1[i - 1] == str2[j - 1])
+                    {
+                        cost = 0;
+                    }
+                    else
+                    {
+                        cost = 1;
+                    }
+
+                    d[i, j] =
+                        Math.Min(
+                            d[i - 1, j] + 1,              // Deletion
+                            Math.Min(
+                                d[i, j - 1] + 1,          // Insertion
+                                d[i - 1, j - 1] + cost)); // Substitution
+
+                    if ((i > 1) && (j > 1) && (str1[i - 1] ==
+                        str2[j - 2]) && (str1[i - 2] == str2[j - 1]))
+                    {
+                        d[i, j] = Math.Min(d[i, j], d[i - 2, j - 2] + cost);
+                    }
+                }
+            }
+
+            return d[str1.Length, str2.Length];
         }
 
         private class Options
@@ -225,10 +313,10 @@ namespace FileCabinetApp
             [Option('s', "storage", Separator = ' ', HelpText = "Set output to verbose messages.")]
             public string InputStorage { get; set; }
 
-            [Option("use-logger", Required = false, HelpText = "Use stopwatch.")]
+            [Option("use-stopwatch", Required = false, HelpText = "Use stopwatch.")]
             public bool InputStopwatch { get; set; }
 
-            [Option("use-stopwatch", Required = false, HelpText = "Use logger.")]
+            [Option("use-logger", Required = false, HelpText = "Use logger.")]
             public bool InputLogger { get; set; }
         }
     }

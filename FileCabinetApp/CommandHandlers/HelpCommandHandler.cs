@@ -18,11 +18,11 @@ namespace FileCabinetApp.CommandHandlers
             new string[] { "stat", "stat of the record", "The 'stat' command return info about the record." },
             new string[] { "create", "create a new record", "The 'create' command add info int the service." },
             new string[] { "list", "list return a copy of record", "The 'list' command return copy all records." },
-            new string[] { "edit", "edit record", "The 'edit' edit record by id." },
-            new string[] { "find", "find record(s)", "The 'find' return all record by условие." },
+            new string[] { "update", "updaterecord", "The 'update' edit record by conditional." },
+            new string[] { "find", "find record(s)", "The 'find' return all record by conditional." },
             new string[] { "export", "export file", "The 'export' export records to file." },
             new string[] { "import", "import file", "The 'import' import type of file." },
-            new string[] { "remove", "remove record by id", "The 'remove' delete record." },
+            new string[] { "delete", "delete record(s) by conditional", "The 'delete' delete record(s)." },
             new string[] { "purge", "purge records in FileCabinetFilesystemService", "The 'purge' records in FileCabinetFilesystemService." },
         };
 
