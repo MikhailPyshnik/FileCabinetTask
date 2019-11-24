@@ -31,7 +31,7 @@ namespace FileCabinetApp
 
         private static string loggerRules = "Not used logger";
 
-        private static string[] existCommands = new string[] { "help", "exit", "stat", "create", "list", "edit", "find", "export", "import", "remove", "purge", "insert", "delete", "update" };
+        private static string[] existCommands = new string[] { "help", "exit", "stat", "create", "list", "find", "export", "import", "purge", "insert", "delete", "update" };
 
         /// <summary>
         ///  Method Main of console application.The poin of enter application.
@@ -179,9 +179,7 @@ namespace FileCabinetApp
             var statHandler = new StatCommandHandler(fileCabinetService);
             var listHandler = new ListCommandHandler(fileCabinetService, DefaultRecordPrinter);
             var findHandler = new FindCommandHandler(fileCabinetService, DefaultRecordPrinter);
-            var editHandler = new EditCommandHandler(fileCabinetService, recorInputdValidator);
             var updateHandler = new UpdateCommandHandler(fileCabinetService);
-            var removeHandler = new RemoveCommandHandler(fileCabinetService);
             var purgeHandler = new PurgeCommandHandler(fileCabinetService);
             var exportHandler = new ExportCommandHandler(fileCabinetService);
             var exitHandler = new ExitCommandHandler(fileCabinetService, filestream, ActionIsRunning);
@@ -192,9 +190,7 @@ namespace FileCabinetApp
                        .SetNext(statHandler)
                        .SetNext(listHandler)
                        .SetNext(findHandler)
-                       .SetNext(editHandler)
                        .SetNext(updateHandler)
-                       .SetNext(removeHandler)
                        .SetNext(purgeHandler)
                        .SetNext(exportHandler)
                        .SetNext(exitHandler);
