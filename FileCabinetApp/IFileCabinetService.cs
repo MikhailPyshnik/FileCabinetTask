@@ -42,39 +42,12 @@ namespace FileCabinetApp
         Tuple<int, int> GetStat();
 
         /// <summary>
-        /// Edit record by id.
-        /// </summary>
-        /// <param name="fileCabinetRecord">Input parametr record <see cref="FileCabinetRecord"/>.</param>
-        void EditRecord(FileCabinetRecord fileCabinetRecord);
-
-        /// <summary>
         /// Return records by select.
         /// </summary>
         /// <param name="inputParamentArray">Input parametr array <see cref="string"/>.</param>
         /// <param name="logicalOperator">Input parametr for conditional <see cref="string"/>.</param>
         /// <returns>IEnumerable by firstName <see cref="FileCabinetRecord"/>.</returns>
         IEnumerable<FileCabinetRecord> SelectByCondition(string[] inputParamentArray, string logicalOperator);
-
-        /// <summary>
-        /// Return records by first name.
-        /// </summary>
-        /// <param name="firstName">Input parametr FirstName <see cref="string"/>.</param>
-        /// <returns>IEnumerable by firstName <see cref="FileCabinetRecord"/>.</returns>
-        IEnumerable<FileCabinetRecord> FindByFirstName(string firstName);
-
-        /// <summary>
-        /// Return records by last name.
-        /// </summary>
-        /// <param name="lastName">Input parametr LastName <see cref="string"/>.</param>
-        /// <returns>IEnumerable by lastName <see cref="FileCabinetRecord"/>.</returns>
-        IEnumerable<FileCabinetRecord> FindByLastName(string lastName);
-
-        /// <summary>
-        /// Return records by date of birth.
-        /// </summary>
-        /// <param name="dateofbirth">Input parametr DataOfBitrh <see cref="string"/>.</param>
-        /// <returns>IEnumerable by dateofbirth <see cref="FileCabinetRecord"/>.</returns>
-        IEnumerable<FileCabinetRecord> FindByDateOfBirth(string dateofbirth);
 
         /// <summary>
         /// Return make snapshot.
@@ -87,12 +60,6 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="fileCabinetServiceSnapshot">Input parametr fileCabinetServiceSnapshot <see cref="FileCabinetServiceSnapshot"/>.</param>
         void Restore(FileCabinetServiceSnapshot fileCabinetServiceSnapshot);
-
-        /// <summary>
-        /// Delete record by id.
-        /// </summary>
-        /// <param name="id">Input parametr id of record <see cref="int"/>.</param>
-        void Remove(int id);
 
         /// <summary>
         /// Delete record by predicate.

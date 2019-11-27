@@ -85,24 +85,6 @@
             </summary>
             <param name="appCommandRequest">Input parametr record <see cref="T:FileCabinetApp.AppCommandRequest"/>.</param>
         </member>
-        <member name="T:FileCabinetApp.CommandHandlers.EditCommandHandler">
-            <summary>
-            Edit command.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.EditCommandHandler.#ctor(FileCabinetApp.IFileCabinetService,FileCabinetApp.IValidatorOfParemetrs)">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.EditCommandHandler"/> class.
-            </summary>
-            <param name="fileCabinetService">Input parametr start id.<see cref="T:FileCabinetApp.IFileCabinetService"/>.</param>
-            <param name="recordValidator">Input parametr amount of records.<see cref="T:FileCabinetApp.IValidatorOfParemetrs"/>.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.EditCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
-            <summary>
-            Override method Handle by CommandHandlerBase in EditCommandHandler.
-            </summary>
-            <param name="appCommandRequest">Input parametr record <see cref="T:FileCabinetApp.AppCommandRequest"/>.</param>
-        </member>
         <member name="T:FileCabinetApp.CommandHandlers.ExitCommandHandler">
             <summary>
             Exit command.
@@ -136,24 +118,6 @@
         <member name="M:FileCabinetApp.CommandHandlers.ExportCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
             <summary>
             Override method Handle by CommandHandlerBase in ExportCommandHandler.
-            </summary>
-            <param name="appCommandRequest">Input parametr record <see cref="T:FileCabinetApp.AppCommandRequest"/>.</param>
-        </member>
-        <member name="T:FileCabinetApp.CommandHandlers.FindCommandHandler">
-            <summary>
-            Find command.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.FindCommandHandler.#ctor(FileCabinetApp.IFileCabinetService,System.Action{System.Collections.Generic.IEnumerable{FileCabinetRecord}})">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.FindCommandHandler"/> class.
-            </summary>
-            <param name="fileCabinetService">Input parametr start id.<see cref="T:FileCabinetApp.IFileCabinetService"/>.</param>
-            <param name="inputPrinter">Input parametr start id.<see cref="T:FileCabinetApp.CommandHandlers.IRecordPrinter"/>.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.FindCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
-            <summary>
-            Override method Handle by CommandHandlerBase in FindCommandHandler.
             </summary>
             <param name="appCommandRequest">Input parametr record <see cref="T:FileCabinetApp.AppCommandRequest"/>.</param>
         </member>
@@ -214,24 +178,6 @@
             </summary>
             <param name="records">Input parametr record <see cref="T:System.Collections.IEnumerable"/>.</param>
         </member>
-        <member name="T:FileCabinetApp.CommandHandlers.ListCommandHandler">
-            <summary>
-            List command.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.ListCommandHandler.#ctor(FileCabinetApp.IFileCabinetService,System.Action{System.Collections.Generic.IEnumerable{FileCabinetRecord}})">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.ListCommandHandler"/> class.
-            </summary>
-            <param name="fileCabinetService">Input parametr start id.<see cref="T:FileCabinetApp.IFileCabinetService"/>.</param>
-            <param name="inputPrinter">Input parametr start id.<see cref="T:FileCabinetApp.CommandHandlers.IRecordPrinter"/>.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.ListCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
-            <summary>
-            Override method Handle by CommandHandlerBase in ListCommandHandler.
-            </summary>
-            <param name="appCommandRequest">Input parametr record <see cref="T:FileCabinetApp.AppCommandRequest"/>.</param>
-        </member>
         <member name="T:FileCabinetApp.CommandHandlers.PurgeCommandHandler">
             <summary>
             Purge command.
@@ -246,23 +192,6 @@
         <member name="M:FileCabinetApp.CommandHandlers.PurgeCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
             <summary>
             Override method Handle by CommandHandlerBase in PurgeCommandHandler.
-            </summary>
-            <param name="appCommandRequest">Input parametr record <see cref="T:FileCabinetApp.AppCommandRequest"/>.</param>
-        </member>
-        <member name="T:FileCabinetApp.CommandHandlers.RemoveCommandHandler">
-            <summary>
-            Remove command.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.RemoveCommandHandler.#ctor(FileCabinetApp.IFileCabinetService)">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.RemoveCommandHandler"/> class.
-            </summary>
-            <param name="fileCabinetService">Input parametr start id.<see cref="T:FileCabinetApp.IFileCabinetService"/>.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.RemoveCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
-            <summary>
-            Override method Handle by CommandHandlerBase in RemoveCommandHandler.
             </summary>
             <param name="appCommandRequest">Input parametr record <see cref="T:FileCabinetApp.AppCommandRequest"/>.</param>
         </member>
@@ -680,12 +609,6 @@
             </summary>
             <returns>Rerords <see cref="T:FileCabinetRecord"/>.</returns>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.EditRecord(FileCabinetRecord)">
-            <summary>
-            Implementation IFileCabinetService EditRecord.
-            </summary>
-            <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
-        </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.Update(System.String[],System.String[])">
             <summary>
             Implementation IFileCabinetService UpdateRecord.
@@ -701,27 +624,6 @@
             <param name="logicalOperator">Input parametr for conditional <see cref="T:System.String"/>.</param>
             <returns>IEnumerable by firstName <see cref="T:FileCabinetRecord"/>.</returns>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByFirstName(System.String)">
-            <summary>
-            Implementation IFileCabinetService FindByFirstName.
-            </summary>
-            <param name="firstName">Input parametr FirstName <see cref="T:System.String"/>.</param>
-            <returns>IEnumerable by firstName <see cref="T:FileCabinetRecord"/>.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByLastName(System.String)">
-            <summary>
-            Implementation IFileCabinetService FindByLastName.
-            </summary>
-            <param name="lastName">Input parametr FirstName <see cref="T:System.String"/>.</param>
-            <returns>IEnumerable by lastName <see cref="T:FileCabinetRecord"/>.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByDateOfBirth(System.String)">
-            <summary>
-            Implementation IFileCabinetService FindByDateOfBirth.
-            </summary>
-            <param name="dateofbirth">Input parametr FirstName <see cref="T:System.String"/>.</param>
-            <returns>IEnumerable by dateofbirth <see cref="T:FileCabinetRecord"/>.</returns>
-        </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.MakeSnapshot">
             <summary>
             Implementation IFileCabinetService MakeSnapshot.
@@ -733,12 +635,6 @@
             Implementation IFileCabinetService Restore.
             </summary>
             <param name="fileCabinetServiceSnapshot">Input parametr fileCabinetServiceSnapshot <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/>.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetFilesystemService.Remove(System.Int32)">
-            <summary>
-            Implementation IFileCabinetService Remove.
-            </summary>
-            <param name="id">Input parametr id of record <see cref="T:System.Int32"/>.</param>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.Delete(System.String[])">
             <summary>
@@ -798,14 +694,6 @@
             </summary>
             <returns>Count records <see cref="T:System.Int32"/>.</returns>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.EditRecord(FileCabinetRecord)">
-            <summary>
-            Implementation IFileCabinetService EditRecord.
-            </summary>
-            <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
-            <exception cref="T:System.ArgumentNullException">Throws if <paramref name="fileCabinetRecord"/>, <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/> is null.</exception>
-            <exception cref="T:System.ArgumentException">Throws if <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/>,<paramref name="fileCabinetRecord.DateOfBirth.DateOfBirth"/>,<paramref name="fileCabinetRecord.Sex.Sex"/>,<paramref name="fileCabinetRecord.Height.Height"/>,<paramref name="fileCabinetRecord.Salary.Salary"/> is(are) incorrect value.</exception>
-        </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.Update(System.String[],System.String[])">
             <summary>
             Implementation IFileCabinetService UpdateRecord.
@@ -821,27 +709,6 @@
             <param name="logicalOperator">Input parametr for conditional <see cref="T:System.String"/>.</param>
             <returns>IEnumerable by firstName <see cref="T:FileCabinetRecord"/>.</returns>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByFirstName(System.String)">
-            <summary>
-            Implementation IFileCabinetService FindByFirstName.
-            </summary>
-            <param name="firstName">Input parametr FirstName <see cref="T:System.String"/>.</param>
-            <returns>IEnumerable by firstName <see cref="T:FileCabinetRecord"/>.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByLastName(System.String)">
-            <summary>
-            Implementation IFileCabinetService FindByLastName.
-            </summary>
-            <param name="lastName">Input parametr FirstName <see cref="T:System.String"/>.</param>
-            <returns>IEnumerable by lastName <see cref="T:FileCabinetRecord"/>.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByDateOfBirth(System.String)">
-            <summary>
-            Implementation IFileCabinetService FindByDateOfBirth.
-            </summary>
-            <param name="dateofbirth">Input parametr FirstName <see cref="T:System.String"/>.</param>
-            <returns>IEnumerable by dateofbirth <see cref="T:FileCabinetRecord"/>.</returns>
-        </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.MakeSnapshot">
             <summary>
             Implementation IFileCabinetService MakeSnapshot.
@@ -853,12 +720,6 @@
             Implementation IFileCabinetService Restore.
             </summary>
             <param name="fileCabinetServiceSnapshot">Input parametr fileCabinetServiceSnapshot <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/>.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetMemoryService.Remove(System.Int32)">
-            <summary>
-            Implementation IFileCabinetService Restore.
-            </summary>
-            <param name="id">Input parametr id of record <see cref="T:System.Int32"/>.</param>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.Delete(System.String[])">
             <summary>
@@ -1023,12 +884,6 @@
             </summary>
             <returns>Count records <see cref="T:System.Tuple"/>.</returns>
         </member>
-        <member name="M:FileCabinetApp.IFileCabinetService.EditRecord(FileCabinetRecord)">
-            <summary>
-            Edit record by id.
-            </summary>
-            <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
-        </member>
         <member name="M:FileCabinetApp.IFileCabinetService.SelectByCondition(System.String[],System.String)">
             <summary>
             Return records by select.
@@ -1036,27 +891,6 @@
             <param name="inputParamentArray">Input parametr array <see cref="T:System.String"/>.</param>
             <param name="logicalOperator">Input parametr for conditional <see cref="T:System.String"/>.</param>
             <returns>IEnumerable by firstName <see cref="T:FileCabinetRecord"/>.</returns>
-        </member>
-        <member name="M:FileCabinetApp.IFileCabinetService.FindByFirstName(System.String)">
-            <summary>
-            Return records by first name.
-            </summary>
-            <param name="firstName">Input parametr FirstName <see cref="T:System.String"/>.</param>
-            <returns>IEnumerable by firstName <see cref="T:FileCabinetRecord"/>.</returns>
-        </member>
-        <member name="M:FileCabinetApp.IFileCabinetService.FindByLastName(System.String)">
-            <summary>
-            Return records by last name.
-            </summary>
-            <param name="lastName">Input parametr LastName <see cref="T:System.String"/>.</param>
-            <returns>IEnumerable by lastName <see cref="T:FileCabinetRecord"/>.</returns>
-        </member>
-        <member name="M:FileCabinetApp.IFileCabinetService.FindByDateOfBirth(System.String)">
-            <summary>
-            Return records by date of birth.
-            </summary>
-            <param name="dateofbirth">Input parametr DataOfBitrh <see cref="T:System.String"/>.</param>
-            <returns>IEnumerable by dateofbirth <see cref="T:FileCabinetRecord"/>.</returns>
         </member>
         <member name="M:FileCabinetApp.IFileCabinetService.MakeSnapshot">
             <summary>
@@ -1069,12 +903,6 @@
             Return make snapshot for restore.
             </summary>
             <param name="fileCabinetServiceSnapshot">Input parametr fileCabinetServiceSnapshot <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/>.</param>
-        </member>
-        <member name="M:FileCabinetApp.IFileCabinetService.Remove(System.Int32)">
-            <summary>
-            Delete record by id.
-            </summary>
-            <param name="id">Input parametr id of record <see cref="T:System.Int32"/>.</param>
         </member>
         <member name="M:FileCabinetApp.IFileCabinetService.Delete(System.String[])">
             <summary>
@@ -1424,12 +1252,6 @@
             </summary>
             <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
         </member>
-        <member name="M:FileCabinetApp.ServiceLogger.EditRecord(FileCabinetRecord)">
-            <summary>
-            Implementation IFileCabinetService EditRecord in class ServiceLogger.
-            </summary>
-            <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
-        </member>
         <member name="M:FileCabinetApp.ServiceLogger.Update(System.String[],System.String[])">
             <summary>
             Implementation IFileCabinetService UpdateRecord.
@@ -1444,27 +1266,6 @@
             <param name="inputParamentArray">Input parametr array <see cref="T:System.String"/>.</param>
             <param name="logicalOperator">Input parametr for conditional <see cref="T:System.String"/>.</param>
             <returns>IEnumerable by firstName <see cref="T:FileCabinetRecord"/>.</returns>
-        </member>
-        <member name="M:FileCabinetApp.ServiceLogger.FindByDateOfBirth(System.String)">
-            <summary>
-            Implementation IFileCabinetService FindByDateOfBirth in class ServiceLogger.
-            </summary>
-            <param name="dateofbirth">Input parametr FirstName <see cref="T:System.String"/>.</param>
-            <returns>IEnumerable by dateofbirth <see cref="T:FileCabinetRecord"/>.</returns>
-        </member>
-        <member name="M:FileCabinetApp.ServiceLogger.FindByFirstName(System.String)">
-            <summary>
-            Implementation IFileCabinetService FindByFirstName in class ServiceLogger.
-            </summary>
-            <param name="firstName">Input parametr FirstName <see cref="T:System.String"/>.</param>
-            <returns>IEnumerable by firstName <see cref="T:FileCabinetRecord"/>.</returns>
-        </member>
-        <member name="M:FileCabinetApp.ServiceLogger.FindByLastName(System.String)">
-            <summary>
-            Implementation IFileCabinetService FindByLastName in class ServiceLogger.
-            </summary>
-            <param name="lastName">Input parametr FirstName <see cref="T:System.String"/>.</param>
-            <returns>IEnumerable by lastName <see cref="T:FileCabinetRecord"/>.</returns>
         </member>
         <member name="M:FileCabinetApp.ServiceLogger.GetRecords">
             <summary>
@@ -1488,12 +1289,6 @@
             <summary>
             Implementation IFileCabinetService Purge in class ServiceLogger.
             </summary>
-        </member>
-        <member name="M:FileCabinetApp.ServiceLogger.Remove(System.Int32)">
-            <summary>
-            Implementation IFileCabinetService Remove in class ServiceLogger.
-            </summary>
-            <param name="id">Input parametr id of record <see cref="T:System.Int32"/>.</param>
         </member>
         <member name="M:FileCabinetApp.ServiceLogger.Delete(System.String[])">
             <summary>
@@ -1537,25 +1332,12 @@
             <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
             <returns>Id <see cref="T:System.Int32"/>.</returns>
         </member>
-        <member name="M:FileCabinetApp.ServiceMeter.EditRecord(FileCabinetRecord)">
-            <summary>
-            Implementation IFileCabinetService EditRecord in class StopWatch.
-            </summary>
-            <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
-        </member>
         <member name="M:FileCabinetApp.ServiceMeter.Update(System.String[],System.String[])">
             <summary>
             Implementation IFileCabinetService UpdateRecord.
             </summary>
             <param name="inputValueArray">Input value array <see cref="T:System.String"/>.</param>
             <param name="inputParamentArray">Input parametr array <see cref="T:System.String"/>.</param>
-        </member>
-        <member name="M:FileCabinetApp.ServiceMeter.FindByDateOfBirth(System.String)">
-            <summary>
-            Implementation IFileCabinetService FindByDateOfBirth in class StopWatch.
-            </summary>
-            <param name="dateofbirth">Input parametr FirstName <see cref="T:System.String"/>.</param>
-            <returns>IEnumerable by dateofbirth <see cref="T:FileCabinetRecord"/>.</returns>
         </member>
         <member name="M:FileCabinetApp.ServiceMeter.SelectByCondition(System.String[],System.String)">
             <summary>
@@ -1564,20 +1346,6 @@
             <param name="inputParamentArray">Input parametr array <see cref="T:System.String"/>.</param>
             <param name="logicalOperator">Input parametr for conditional <see cref="T:System.String"/>.</param>
             <returns>IEnumerable by firstName <see cref="T:FileCabinetRecord"/>.</returns>
-        </member>
-        <member name="M:FileCabinetApp.ServiceMeter.FindByFirstName(System.String)">
-            <summary>
-            Implementation IFileCabinetService FindByFirstName in class StopWatch.
-            </summary>
-            <param name="firstName">Input parametr FirstName <see cref="T:System.String"/>.</param>
-            <returns>IEnumerable by firstName <see cref="T:FileCabinetRecord"/>.</returns>
-        </member>
-        <member name="M:FileCabinetApp.ServiceMeter.FindByLastName(System.String)">
-            <summary>
-            Implementation IFileCabinetService FindByLastName in class StopWatch.
-            </summary>
-            <param name="lastName">Input parametr FirstName <see cref="T:System.String"/>.</param>
-            <returns>IEnumerable by lastName <see cref="T:FileCabinetRecord"/>.</returns>
         </member>
         <member name="M:FileCabinetApp.ServiceMeter.GetRecords">
             <summary>
@@ -1607,12 +1375,6 @@
             <summary>
             Implementation IFileCabinetService Purge in class StopWatch.
             </summary>
-        </member>
-        <member name="M:FileCabinetApp.ServiceMeter.Remove(System.Int32)">
-            <summary>
-            Implementation IFileCabinetService Remove in class StopWatch.
-            </summary>
-            <param name="id">Input parametr id of record <see cref="T:System.Int32"/>.</param>
         </member>
         <member name="M:FileCabinetApp.ServiceMeter.Delete(System.String[])">
             <summary>

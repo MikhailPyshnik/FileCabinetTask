@@ -77,25 +77,6 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Implementation IFileCabinetService EditRecord in class ServiceLogger.
-        /// </summary>
-        /// <param name="fileCabinetRecord">Input parametr record <see cref="FileCabinetRecord"/>.</param>
-        public void EditRecord(FileCabinetRecord fileCabinetRecord)
-        {
-            if (fileCabinetRecord == null)
-            {
-                throw new ArgumentNullException(nameof(fileCabinetRecord));
-            }
-
-            fileCabinetService.EditRecord(fileCabinetRecord);
-
-            using (StreamWriter w = File.AppendText("log.txt"))
-            {
-                Log($"Calling Edit() returned  - FirstName = '{fileCabinetRecord.FirstName}', LastName = '{fileCabinetRecord.LastName}', DateOfBirth = '{fileCabinetRecord.DateOfBirth}'", w);
-            }
-        }
-
-        /// <summary>
         /// Implementation IFileCabinetService UpdateRecord.
         /// </summary>
         /// <param name="inputValueArray">Input value array <see cref="string"/>.</param>
@@ -131,54 +112,6 @@ namespace FileCabinetApp
             using (StreamWriter w = File.AppendText("log.txt"))
             {
                 Log($"Calling SelectByCondition()", w);
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Implementation IFileCabinetService FindByDateOfBirth in class ServiceLogger.
-        /// </summary>
-        /// <param name="dateofbirth">Input parametr FirstName <see cref="string"/>.</param>
-        /// <returns>IEnumerable by dateofbirth <see cref="FileCabinetRecord"/>.</returns>
-        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string dateofbirth)
-        {
-            var result = fileCabinetService.FindByDateOfBirth(dateofbirth);
-            using (StreamWriter w = File.AppendText("log.txt"))
-            {
-                Log($"Calling FindByDateOfBirth() returned", w);
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Implementation IFileCabinetService FindByFirstName in class ServiceLogger.
-        /// </summary>
-        /// <param name="firstName">Input parametr FirstName <see cref="string"/>.</param>
-        /// <returns>IEnumerable by firstName <see cref="FileCabinetRecord"/>.</returns>
-        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
-        {
-            var result = fileCabinetService.FindByFirstName(firstName);
-            using (StreamWriter w = File.AppendText("log.txt"))
-            {
-                Log($"Calling FindByFirstName() returned", w);
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Implementation IFileCabinetService FindByLastName in class ServiceLogger.
-        /// </summary>
-        /// <param name="lastName">Input parametr FirstName <see cref="string"/>.</param>
-        /// <returns>IEnumerable by lastName <see cref="FileCabinetRecord"/>.</returns>
-        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
-        {
-            var result = fileCabinetService.FindByLastName(lastName);
-            using (StreamWriter w = File.AppendText("log.txt"))
-            {
-                Log($"Calling FindByLastName() returned", w);
             }
 
             return result;
@@ -238,19 +171,6 @@ namespace FileCabinetApp
             using (StreamWriter w = File.AppendText("log.txt"))
             {
                 Log($"Calling Purge() returned", w);
-            }
-        }
-
-        /// <summary>
-        /// Implementation IFileCabinetService Remove in class ServiceLogger.
-        /// </summary>
-        /// <param name="id">Input parametr id of record <see cref="int"/>.</param>
-        public void Remove(int id)
-        {
-            fileCabinetService.Remove(id);
-            using (StreamWriter w = File.AppendText("log.txt"))
-            {
-                Log($"Calling Remove() - revove {id}", w);
             }
         }
 

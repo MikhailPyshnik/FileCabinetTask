@@ -51,20 +51,6 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Implementation IFileCabinetService EditRecord in class StopWatch.
-        /// </summary>
-        /// <param name="fileCabinetRecord">Input parametr record <see cref="FileCabinetRecord"/>.</param>
-        public void EditRecord(FileCabinetRecord fileCabinetRecord)
-        {
-            long ticksThisTime = 0;
-            var sw = Stopwatch.StartNew();
-            fileCabinetService.EditRecord(fileCabinetRecord);
-            sw.Stop();
-            ticksThisTime = sw.ElapsedTicks;
-            Console.WriteLine($"EditRecord method execution duration is {ticksThisTime} ticks.");
-        }
-
-        /// <summary>
         /// Implementation IFileCabinetService UpdateRecord.
         /// </summary>
         /// <param name="inputValueArray">Input value array <see cref="string"/>.</param>
@@ -90,22 +76,6 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Implementation IFileCabinetService FindByDateOfBirth in class StopWatch.
-        /// </summary>
-        /// <param name="dateofbirth">Input parametr FirstName <see cref="string"/>.</param>
-        /// <returns>IEnumerable by dateofbirth <see cref="FileCabinetRecord"/>.</returns>
-        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string dateofbirth)
-        {
-            long ticksThisTime = 0;
-            var sw = Stopwatch.StartNew();
-            var result = fileCabinetService.FindByDateOfBirth(dateofbirth);
-            sw.Stop();
-            ticksThisTime = sw.ElapsedTicks;
-            Console.WriteLine($"FindByDateOfBirth method execution duration is {ticksThisTime} ticks.");
-            return result;
-        }
-
-        /// <summary>
         /// Return records by select in ServiceMeter.
         /// </summary>
         /// <param name="inputParamentArray">Input parametr array <see cref="string"/>.</param>
@@ -119,38 +89,6 @@ namespace FileCabinetApp
             sw.Stop();
             ticksThisTime = sw.ElapsedTicks;
             Console.WriteLine($"SelectByCondition method execution duration is {ticksThisTime} ticks.");
-            return result;
-        }
-
-        /// <summary>
-        /// Implementation IFileCabinetService FindByFirstName in class StopWatch.
-        /// </summary>
-        /// <param name="firstName">Input parametr FirstName <see cref="string"/>.</param>
-        /// <returns>IEnumerable by firstName <see cref="FileCabinetRecord"/>.</returns>
-        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
-        {
-            long ticksThisTime = 0;
-            var sw = Stopwatch.StartNew();
-            var result = fileCabinetService.FindByFirstName(firstName);
-            sw.Stop();
-            ticksThisTime = sw.ElapsedTicks;
-            Console.WriteLine($"FindByFirstName method execution duration is {ticksThisTime} ticks.");
-            return result;
-        }
-
-        /// <summary>
-        /// Implementation IFileCabinetService FindByLastName in class StopWatch.
-        /// </summary>
-        /// <param name="lastName">Input parametr FirstName <see cref="string"/>.</param>
-        /// <returns>IEnumerable by lastName <see cref="FileCabinetRecord"/>.</returns>
-        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
-        {
-            long ticksThisTime = 0;
-            var sw = Stopwatch.StartNew();
-            var result = fileCabinetService.FindByLastName(lastName);
-            sw.Stop();
-            ticksThisTime = sw.ElapsedTicks;
-            Console.WriteLine($"FindByLastName method execution duration is {ticksThisTime} ticks.");
             return result;
         }
 
@@ -224,20 +162,6 @@ namespace FileCabinetApp
             sw.Stop();
             ticksThisTime = sw.ElapsedTicks;
             Console.WriteLine($"Purge method execution duration is {ticksThisTime} ticks.");
-        }
-
-        /// <summary>
-        /// Implementation IFileCabinetService Remove in class StopWatch.
-        /// </summary>
-        /// <param name="id">Input parametr id of record <see cref="int"/>.</param>
-        public void Remove(int id)
-        {
-            long ticksThisTime = 0;
-            var sw = Stopwatch.StartNew();
-            fileCabinetService.Remove(id);
-            sw.Stop();
-            ticksThisTime = sw.ElapsedTicks;
-            Console.WriteLine($"Remove method execution duration is {ticksThisTime} ticks.");
         }
 
         /// <summary>
