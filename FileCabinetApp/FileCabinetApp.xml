@@ -266,6 +266,24 @@
             </summary>
             <param name="appCommandRequest">Input parametr record <see cref="T:FileCabinetApp.AppCommandRequest"/>.</param>
         </member>
+        <member name="T:FileCabinetApp.CommandHandlers.SelectCommandHandler">
+            <summary>
+            Select command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.SelectCommandHandler.#ctor(FileCabinetApp.IFileCabinetService,System.Action{System.Collections.Generic.IEnumerable{FileCabinetRecord},System.String[]})">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.SelectCommandHandler"/> class.
+            </summary>
+            <param name="fileCabinetService">Input parametr start id.<see cref="T:FileCabinetApp.IFileCabinetService"/>.</param>
+            <param name="inputPrinter">Input parametr start id.<see cref="T:FileCabinetApp.CommandHandlers.IRecordPrinter"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.SelectCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">
+            <summary>
+            Override method Handle by CommandHandlerBase in FindCommandHandler.
+            </summary>
+            <param name="appCommandRequest">Input parametr record <see cref="T:FileCabinetApp.AppCommandRequest"/>.</param>
+        </member>
         <member name="T:FileCabinetApp.CommandHandlers.ServiceCommandHandlerBase">
             <summary>
             Base class ServiceCommandHandlerBase.
@@ -675,6 +693,14 @@
             <param name="inputValueArray">Input value array <see cref="T:System.String"/>.</param>
             <param name="inputParamentArray">Input parametr array <see cref="T:System.String"/>.</param>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.SelectByCondition(System.String[],System.String)">
+            <summary>
+            Return records by select in FileSystemService.
+            </summary>
+            <param name="inputParamentArray">Input parametr array <see cref="T:System.String"/>.</param>
+            <param name="logicalOperator">Input parametr for conditional <see cref="T:System.String"/>.</param>
+            <returns>IEnumerable by firstName <see cref="T:FileCabinetRecord"/>.</returns>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByFirstName(System.String)">
             <summary>
             Implementation IFileCabinetService FindByFirstName.
@@ -786,6 +812,14 @@
             </summary>
             <param name="inputValueArray">Input value array <see cref="T:System.String"/>.</param>
             <param name="inputParamentArray">Input parametr array <see cref="T:System.String"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.SelectByCondition(System.String[],System.String)">
+            <summary>
+            Return records by select in MemoryService.
+            </summary>
+            <param name="inputParamentArray">Input parametr array <see cref="T:System.String"/>.</param>
+            <param name="logicalOperator">Input parametr for conditional <see cref="T:System.String"/>.</param>
+            <returns>IEnumerable by firstName <see cref="T:FileCabinetRecord"/>.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByFirstName(System.String)">
             <summary>
@@ -994,6 +1028,14 @@
             Edit record by id.
             </summary>
             <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.SelectByCondition(System.String[],System.String)">
+            <summary>
+            Return records by select.
+            </summary>
+            <param name="inputParamentArray">Input parametr array <see cref="T:System.String"/>.</param>
+            <param name="logicalOperator">Input parametr for conditional <see cref="T:System.String"/>.</param>
+            <returns>IEnumerable by firstName <see cref="T:FileCabinetRecord"/>.</returns>
         </member>
         <member name="M:FileCabinetApp.IFileCabinetService.FindByFirstName(System.String)">
             <summary>
@@ -1395,6 +1437,14 @@
             <param name="inputValueArray">Input value array <see cref="T:System.String"/>.</param>
             <param name="inputParamentArray">Input parametr array <see cref="T:System.String"/>.</param>
         </member>
+        <member name="M:FileCabinetApp.ServiceLogger.SelectByCondition(System.String[],System.String)">
+            <summary>
+            Return records by select in ServiceLogger.
+            </summary>
+            <param name="inputParamentArray">Input parametr array <see cref="T:System.String"/>.</param>
+            <param name="logicalOperator">Input parametr for conditional <see cref="T:System.String"/>.</param>
+            <returns>IEnumerable by firstName <see cref="T:FileCabinetRecord"/>.</returns>
+        </member>
         <member name="M:FileCabinetApp.ServiceLogger.FindByDateOfBirth(System.String)">
             <summary>
             Implementation IFileCabinetService FindByDateOfBirth in class ServiceLogger.
@@ -1506,6 +1556,14 @@
             </summary>
             <param name="dateofbirth">Input parametr FirstName <see cref="T:System.String"/>.</param>
             <returns>IEnumerable by dateofbirth <see cref="T:FileCabinetRecord"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ServiceMeter.SelectByCondition(System.String[],System.String)">
+            <summary>
+            Return records by select in ServiceMeter.
+            </summary>
+            <param name="inputParamentArray">Input parametr array <see cref="T:System.String"/>.</param>
+            <param name="logicalOperator">Input parametr for conditional <see cref="T:System.String"/>.</param>
+            <returns>IEnumerable by firstName <see cref="T:FileCabinetRecord"/>.</returns>
         </member>
         <member name="M:FileCabinetApp.ServiceMeter.FindByFirstName(System.String)">
             <summary>

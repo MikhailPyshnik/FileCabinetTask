@@ -16,6 +16,8 @@ namespace FileCabinetApp.CommandHandlers
             new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
             new string[] { "stat", "stat of the record", "The 'stat' command return info about the record." },
+            new string[] { "insert", "create a new record", "The 'insert' add record by conditional." },
+            new string[] { "select", "get the record", "The 'select' command return record(s) by conditional." },
             new string[] { "create", "create a new record", "The 'create' command add info int the service." },
             new string[] { "list", "list return a copy of record", "The 'list' command return copy all records." },
             new string[] { "update", "updaterecord", "The 'update' edit record by conditional." },

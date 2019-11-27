@@ -120,6 +120,23 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Return records by select in ServiceLogger.
+        /// </summary>
+        /// <param name="inputParamentArray">Input parametr array <see cref="string"/>.</param>
+        /// <param name="logicalOperator">Input parametr for conditional <see cref="string"/>.</param>
+        /// <returns>IEnumerable by firstName <see cref="FileCabinetRecord"/>.</returns>
+        public IEnumerable<FileCabinetRecord> SelectByCondition(string[] inputParamentArray, string logicalOperator)
+        {
+            var result = fileCabinetService.SelectByCondition(inputParamentArray, logicalOperator);
+            using (StreamWriter w = File.AppendText("log.txt"))
+            {
+                Log($"Calling SelectByCondition()", w);
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Implementation IFileCabinetService FindByDateOfBirth in class ServiceLogger.
         /// </summary>
         /// <param name="dateofbirth">Input parametr FirstName <see cref="string"/>.</param>
@@ -129,7 +146,7 @@ namespace FileCabinetApp
             var result = fileCabinetService.FindByDateOfBirth(dateofbirth);
             using (StreamWriter w = File.AppendText("log.txt"))
             {
-                Log($"Calling FindByDateOfBirth() returned", w); // Log($"Calling FindByDateOfBirth() returned  - {result.Count} records", w);
+                Log($"Calling FindByDateOfBirth() returned", w);
             }
 
             return result;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using CommandLine;
 using FileCabinetApp.CommandHandlers;
 using FileCabinetApp.Configuration;
@@ -31,7 +32,7 @@ namespace FileCabinetApp
 
         private static string loggerRules = "Not used logger";
 
-        private static string[] existCommands = new string[] { "help", "exit", "stat", "create", "list", "find", "export", "import", "purge", "insert", "delete", "update" };
+        private static string[] existCommands = new string[] { "help", "exit", "stat", "create", "list", "find", "export", "import", "purge", "insert", "delete", "update", "select" };
 
         /// <summary>
         ///  Method Main of console application.The poin of enter application.
@@ -182,6 +183,7 @@ namespace FileCabinetApp
             var statHandler = new StatCommandHandler(fileCabinetService);
             var listHandler = new ListCommandHandler(fileCabinetService, DefaultRecordPrinter);
             var findHandler = new FindCommandHandler(fileCabinetService, DefaultRecordPrinter);
+            var selectHandler = new SelectCommandHandler(fileCabinetService, RecordPrinter);
             var updateHandler = new UpdateCommandHandler(fileCabinetService);
             var purgeHandler = new PurgeCommandHandler(fileCabinetService);
             var exportHandler = new ExportCommandHandler(fileCabinetService);
@@ -193,6 +195,7 @@ namespace FileCabinetApp
                        .SetNext(statHandler)
                        .SetNext(listHandler)
                        .SetNext(findHandler)
+                       .SetNext(selectHandler)
                        .SetNext(updateHandler)
                        .SetNext(purgeHandler)
                        .SetNext(exportHandler)
@@ -227,6 +230,173 @@ namespace FileCabinetApp
                     Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", provider)}, {record.Sex}, {record.Height}, {record.Salary}");
                 }
             }
+        }
+
+        private static void RecordPrinter(IEnumerable<FileCabinetRecord> records, string[] fields)
+        {
+            if (records == null)
+            {
+                throw new ArgumentNullException(nameof(records));
+            }
+
+            if (!records.GetEnumerator().MoveNext())
+            {
+                Console.WriteLine("Don't find records!");
+            }
+            else
+            {
+                CultureInfo provider = new CultureInfo("en-US");
+                List<int> lengths;
+                List<string[]> rows = new List<string[]>();
+
+                int fieldsLengthArray = fields.Length;
+
+                lengths = fields.Select(t => t.Length).ToList();
+
+                for (int i = 0; i < fields.Length; i++)
+                {
+                    int lenghtMax = GetFilecabinetRecordParametrToStringMaxLenght(records, fields[i]);
+                    if (lengths[i] < lenghtMax)
+                    {
+                        lengths[i] = lenghtMax;
+                    }
+                }
+
+                foreach (var record in records)
+                {
+                    string[] temp = new string[fieldsLengthArray];
+                    for (int i = 0; i < fields.Length; i++)
+                    {
+                        temp[i] = GetFilecabinetRecordParametrToString(record, fields[i]);
+                    }
+
+                    rows.Add(temp);
+                }
+
+                lengths.ForEach(l => System.Console.Write("+-" + new string('-', l) + '-'));
+                Console.WriteLine("+");
+
+                string line = string.Empty;
+                for (int i = 0; i < fields.Length; i++)
+                {
+                    line += "| " + fields[i].PadRight(lengths[i]) + ' ';
+                }
+
+                Console.WriteLine(line + "|");
+
+                lengths.ForEach(l => System.Console.Write("+-" + new string('-', l) + '-'));
+                Console.WriteLine("+");
+
+                foreach (var row in rows)
+                {
+                    line = string.Empty;
+                    for (int i = 0; i < row.Length; i++)
+                    {
+                        if (int.TryParse(row[i], out int n))
+                        {
+                            line += "| " + row[i].PadLeft(lengths[i]) + ' ';  // numbers are padded to the left
+                        }
+                        else
+                        {
+                            line += "| " + row[i].PadRight(lengths[i]) + ' ';
+                        }
+                    }
+
+                    Console.WriteLine(line + "|");
+                }
+
+                lengths.ForEach(l => System.Console.Write("+-" + new string('-', l) + '-'));
+                Console.WriteLine("+");
+            }
+        }
+
+        private static string GetFilecabinetRecordParametrToString(FileCabinetRecord record, string parameter)
+        {
+            if (record == null)
+            {
+                throw new ArgumentNullException(nameof(record));
+            }
+
+            CultureInfo provider = new CultureInfo("en-US");
+
+            string result;
+            switch (parameter)
+            {
+                case "id":
+                    result = record.Id.ToString(provider);
+                    break;
+                case "firstname":
+                    result = record.FirstName.ToString(provider);
+                    break;
+                case "lastname":
+                    result = record.LastName.ToString(provider);
+                    break;
+                case "dateofbirth":
+                    result = record.DateOfBirth.ToString("yyyy-MMM-dd", provider);
+                    break;
+                case "sex":
+                    result = record.Sex.ToString(provider);
+                    break;
+                case "height":
+                    result = record.Height.ToString(provider);
+                    break;
+                case "salary":
+                    result = record.Salary.ToString(provider);
+                    break;
+                default:
+                    throw new ArgumentException("Not correct value!!!!");
+            }
+
+            return result;
+        }
+
+        private static int GetFilecabinetRecordParametrToStringMaxLenght(IEnumerable<FileCabinetRecord> records, string parameter)
+        {
+            if (records == null)
+            {
+                throw new ArgumentNullException(nameof(records));
+            }
+
+            CultureInfo provider = new CultureInfo("en-US");
+            int resulMaxtStart = 0;
+            int result;
+
+            foreach (var record in records)
+            {
+                switch (parameter)
+                {
+                    case "id":
+                        result = record.Id.ToString(provider).Length;
+                        break;
+                    case "firstname":
+                        result = record.FirstName.ToString(provider).Length;
+                        break;
+                    case "lastname":
+                        result = record.LastName.ToString(provider).Length;
+                        break;
+                    case "dateofbirth":
+                        result = record.DateOfBirth.ToString("yyyy-MMM-dd", provider).Length;
+                        break;
+                    case "sex":
+                        result = record.Sex.ToString(provider).Length;
+                        break;
+                    case "height":
+                        result = record.Height.ToString(provider).Length;
+                        break;
+                    case "salary":
+                        result = record.Salary.ToString(provider).Length;
+                        break;
+                    default:
+                        throw new ArgumentException("Not correct length value!!!!");
+                }
+
+                if (result > resulMaxtStart)
+                {
+                    resulMaxtStart = result;
+                }
+            }
+
+            return resulMaxtStart;
         }
 
         private static List<string> Search(string word, string[] wordList, double fuzzyness)

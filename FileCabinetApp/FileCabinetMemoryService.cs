@@ -146,8 +146,30 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{nameof(inputParamentArray)} is null!");
             }
 
-            List<FileCabinetRecord> result = this.FindRecordsByParameters(inputParamentArray);
+            List<FileCabinetRecord> result = this.FindRecordsByParameters(inputParamentArray, "and");
             this.UpdateRecords(result, inputValueArray);
+        }
+
+        /// <summary>
+        /// Return records by select in MemoryService.
+        /// </summary>
+        /// <param name="inputParamentArray">Input parametr array <see cref="string"/>.</param>
+        /// <param name="logicalOperator">Input parametr for conditional <see cref="string"/>.</param>
+        /// <returns>IEnumerable by firstName <see cref="FileCabinetRecord"/>.</returns>
+        public IEnumerable<FileCabinetRecord> SelectByCondition(string[] inputParamentArray, string logicalOperator)
+        {
+            if (inputParamentArray == null)
+            {
+                throw new ArgumentNullException($"{nameof(inputParamentArray)} is null!");
+            }
+
+            if (logicalOperator == null)
+            {
+                throw new ArgumentNullException($"{nameof(logicalOperator)} is null!");
+            }
+
+            List<FileCabinetRecord> result = this.FindRecordsByParameters(inputParamentArray, logicalOperator);
+            return result;
         }
 
         /// <summary>
@@ -679,22 +701,37 @@ namespace FileCabinetApp
             return count;
         }
 
-        private List<FileCabinetRecord> FindRecordsByParameters(string[] parameter)
+        private List<FileCabinetRecord> FindRecordsByParameters(string[] parameter, string logicParametr)
         {
             CultureInfo provider = new CultureInfo("en-US");
 
             List<FileCabinetRecord> listTemp = new List<FileCabinetRecord>(this.list);
 
-            foreach (var item in parameter)
+            if (logicParametr == "and")
             {
-                string[] split = item.Split("=");
-                listTemp = this.FindRecordsByParameterInList(listTemp, split[0], split[1]);
+                foreach (var item in parameter)
+                {
+                    string[] split = item.Split("=");
+                    listTemp = this.FindRecordsByParameterInListAnd(listTemp, split[0], split[1]);
+                }
+            }
+
+            if (logicParametr == "or")
+            {
+                HashSet<FileCabinetRecord> set = new HashSet<FileCabinetRecord>();
+                foreach (var item in parameter)
+                {
+                    string[] split = item.Split("=");
+                    set = this.FindRecordsByParameterInListOr(set, split[0], split[1]);
+                }
+
+                listTemp = new List<FileCabinetRecord>(set);
             }
 
             return listTemp;
         }
 
-        private List<FileCabinetRecord> FindRecordsByParameterInList(List<FileCabinetRecord> list, string parameter, string value)
+        private List<FileCabinetRecord> FindRecordsByParameterInListAnd(List<FileCabinetRecord> list, string parameter, string value)
         {
             CultureInfo provider = new CultureInfo("en-US");
 
@@ -740,6 +777,52 @@ namespace FileCabinetApp
             }
 
             return listTemp;
+        }
+
+        private HashSet<FileCabinetRecord> FindRecordsByParameterInListOr(HashSet<FileCabinetRecord> set, string parameter, string value)
+        {
+            CultureInfo provider = new CultureInfo("en-US");
+
+            switch (parameter)
+            {
+                case "id":
+                    int id = int.Parse(value, provider);
+                    set.UnionWith(this.list.FindAll(item1 => item1.Id == id));
+                    break;
+                case "firstname":
+                    string firstName = value;
+                    set.UnionWith(this.list.FindAll(item1 => item1.FirstName.ToLower(provider) == firstName));
+                    break;
+                case "lastname":
+                    string lastName = value;
+                    set.UnionWith(this.list.FindAll(item1 => item1.LastName.ToLower(provider) == lastName));
+                    break;
+                case "dateofbirth":
+                    DateTime dateOfBirth = DateTime.Parse(value, provider);
+                    set.UnionWith(this.list.FindAll(item1 => item1.DateOfBirth == dateOfBirth));
+                    break;
+                case "sex":
+                    char sex = char.Parse(value);
+                    set.UnionWith(this.list.FindAll(item1 => item1.Sex == sex));
+                    break;
+                case "height":
+                    short height = short.Parse(value, provider);
+                    set.UnionWith(this.list.FindAll(item1 => item1.Height == height));
+                    break;
+                case "salary":
+                    decimal salary = decimal.Parse(value, provider);
+                    set.UnionWith(this.list.FindAll(item1 => item1.Salary == salary));
+                    break;
+                default:
+                    throw new ArgumentException("Not correct value!!!!");
+            }
+
+            if (false)
+            {
+                throw new ArgumentException("Don't find records for update by conditional!");
+            }
+
+            return set;
         }
 
         private void UpdateRecords(List<FileCabinetRecord> listRecords, string[] inputValueArray)
