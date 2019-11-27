@@ -106,6 +106,23 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Return records by select in ServiceMeter.
+        /// </summary>
+        /// <param name="inputParamentArray">Input parametr array <see cref="string"/>.</param>
+        /// <param name="logicalOperator">Input parametr for conditional <see cref="string"/>.</param>
+        /// <returns>IEnumerable by firstName <see cref="FileCabinetRecord"/>.</returns>
+        public IEnumerable<FileCabinetRecord> SelectByCondition(string[] inputParamentArray, string logicalOperator)
+        {
+            long ticksThisTime = 0;
+            var sw = Stopwatch.StartNew();
+            var result = fileCabinetService.SelectByCondition(inputParamentArray, logicalOperator);
+            sw.Stop();
+            ticksThisTime = sw.ElapsedTicks;
+            Console.WriteLine($"SelectByCondition method execution duration is {ticksThisTime} ticks.");
+            return result;
+        }
+
+        /// <summary>
         /// Implementation IFileCabinetService FindByFirstName in class StopWatch.
         /// </summary>
         /// <param name="firstName">Input parametr FirstName <see cref="string"/>.</param>

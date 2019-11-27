@@ -48,6 +48,14 @@ namespace FileCabinetApp
         void EditRecord(FileCabinetRecord fileCabinetRecord);
 
         /// <summary>
+        /// Return records by select.
+        /// </summary>
+        /// <param name="inputParamentArray">Input parametr array <see cref="string"/>.</param>
+        /// <param name="logicalOperator">Input parametr for conditional <see cref="string"/>.</param>
+        /// <returns>IEnumerable by firstName <see cref="FileCabinetRecord"/>.</returns>
+        IEnumerable<FileCabinetRecord> SelectByCondition(string[] inputParamentArray, string logicalOperator);
+
+        /// <summary>
         /// Return records by first name.
         /// </summary>
         /// <param name="firstName">Input parametr FirstName <see cref="string"/>.</param>
