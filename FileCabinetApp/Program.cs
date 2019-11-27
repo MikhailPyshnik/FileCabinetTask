@@ -181,8 +181,6 @@ namespace FileCabinetApp
             var importHandler = new ImportCommandHandler(fileCabinetService, recorInputdValidator);
             var deleteHandler = new DeleteCommandHandler(fileCabinetService);
             var statHandler = new StatCommandHandler(fileCabinetService);
-            var listHandler = new ListCommandHandler(fileCabinetService, DefaultRecordPrinter);
-            var findHandler = new FindCommandHandler(fileCabinetService, DefaultRecordPrinter);
             var selectHandler = new SelectCommandHandler(fileCabinetService, RecordPrinter);
             var updateHandler = new UpdateCommandHandler(fileCabinetService);
             var purgeHandler = new PurgeCommandHandler(fileCabinetService);
@@ -193,8 +191,6 @@ namespace FileCabinetApp
                        .SetNext(deleteHandler)
                        .SetNext(importHandler)
                        .SetNext(statHandler)
-                       .SetNext(listHandler)
-                       .SetNext(findHandler)
                        .SetNext(selectHandler)
                        .SetNext(updateHandler)
                        .SetNext(purgeHandler)
