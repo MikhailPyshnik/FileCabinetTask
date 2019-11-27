@@ -21,6 +21,8 @@ namespace FileCabinetApp
 
         private readonly Dictionary<string, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<string, List<FileCabinetRecord>>(StringComparer.OrdinalIgnoreCase);
 
+        private readonly Dictionary<string, List<FileCabinetRecord>> memoizationDictionary = new Dictionary<string, List<FileCabinetRecord>>(StringComparer.OrdinalIgnoreCase);
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetMemoryService"/> class.
         /// </summary>
@@ -54,6 +56,7 @@ namespace FileCabinetApp
             fileCabinetRecord.Id = this.list[this.list.Count - 1].Id + 1;
             this.list.Add(fileCabinetRecord);
             this.AddRecordToDictionary(fileCabinetRecord);
+            this.memoizationDictionary.Clear();
             return fileCabinetRecord.Id;
         }
 
@@ -79,6 +82,7 @@ namespace FileCabinetApp
             this.validator.ValidateParametrs(fileCabinetRecord);
             this.list.Add(fileCabinetRecord);
             this.AddRecordToDictionary(fileCabinetRecord);
+            this.memoizationDictionary.Clear();
         }
 
         /// <summary>
@@ -127,6 +131,7 @@ namespace FileCabinetApp
             res.Height = fileCabinetRecord.Height;
             res.Salary = fileCabinetRecord.Salary;
             this.ChangeRecordToDictionary(res, oldFirstName, oldLastName, oldDateOfBirth);
+            this.memoizationDictionary.Clear();
         }
 
         /// <summary>
@@ -148,6 +153,7 @@ namespace FileCabinetApp
 
             List<FileCabinetRecord> result = this.FindRecordsByParameters(inputParamentArray, "and");
             this.UpdateRecords(result, inputValueArray);
+            this.memoizationDictionary.Clear();
         }
 
         /// <summary>
@@ -168,7 +174,21 @@ namespace FileCabinetApp
                 throw new ArgumentNullException($"{nameof(logicalOperator)} is null!");
             }
 
-            List<FileCabinetRecord> result = this.FindRecordsByParameters(inputParamentArray, logicalOperator);
+            string parametrSearch = string.Join(",", inputParamentArray);
+
+            List<FileCabinetRecord> result = new List<FileCabinetRecord>();
+
+            if (this.memoizationDictionary.ContainsKey(parametrSearch))
+            {
+                result = this.memoizationDictionary[parametrSearch];
+                this.memoizationDictionary.Clear();
+            }
+            else
+            {
+                result = this.FindRecordsByParameters(inputParamentArray, logicalOperator);
+                this.memoizationDictionary.Add(parametrSearch, result);
+            }
+
             return result;
         }
 
@@ -276,6 +296,8 @@ namespace FileCabinetApp
 
             this.UpdateListAfterImport(validatedList);
 
+            this.memoizationDictionary.Clear();
+
             Console.WriteLine($"{countImportRecord} records were add to FileCabinetMemoryService");
         }
 
@@ -294,6 +316,8 @@ namespace FileCabinetApp
                     break;
                 }
             }
+
+            this.memoizationDictionary.Clear();
         }
 
         /// <summary>
@@ -345,6 +369,8 @@ namespace FileCabinetApp
                 default:
                     throw new ArgumentException("Not correct value!!!!");
             }
+
+            this.memoizationDictionary.Clear();
 
             return new ReadOnlyCollection<int>(listTemp);
         }

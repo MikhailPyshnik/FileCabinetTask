@@ -104,21 +104,33 @@ namespace FileCabinetApp.CommandHandlers
 
                 MatchCollection matches = regex.Matches(parameters);
 
-                string nameParametr = matches[0].Groups[1].Value.ToLower(provider);
+                if (matches.Count == 0)
+                    {
+                    Regex regexList = new Regex(@"(.*)", RegexOptions.IgnoreCase);
+                    MatchCollection matchesList = regexList.Matches(parameters);
+                    var nameParametrList = matchesList[0].Groups[1].Value.ToLower(provider);
+                    var command = GetStringArray(nameParametrList);
+                    var selectList = service.GetRecords();
+                    this.PrintRecords(selectList, command);
+                    }
+                    else
+                    {
+                    string nameParametr = matches[0].Groups[1].Value.ToLower(provider);
 
-                string inputParametr = matches[0].Groups[2].Value.ToLower(provider);
+                    string inputParametr = matches[0].Groups[2].Value.ToLower(provider);
 
-                var command = GetStringArray(nameParametr);
+                    var command = GetStringArray(nameParametr);
 
-                string logicalOperator;
+                    string logicalOperator;
 
-                var inputValue = GetStringArrayForAndAndOr(inputParametr, out logicalOperator);
+                    var inputValue = GetStringArrayForAndAndOr(inputParametr, out logicalOperator);
 
-                var t = service.SelectByCondition(inputValue, logicalOperator);
+                    var selectRecords = service.SelectByCondition(inputValue, logicalOperator);
 
-                this.PrintRecords(t, command);
+                    this.PrintRecords(selectRecords, command);
 
-                Console.WriteLine("The command Select finished correctly.");
+                    Console.WriteLine("The command Select finished correctly.");
+                    }
                 }
                 catch (Exception ex)
                 {
