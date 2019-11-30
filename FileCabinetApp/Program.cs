@@ -62,7 +62,7 @@ namespace FileCabinetApp
             }
             else
             {
-                if (options.InputFile == null)
+                if (options.InputFile is null)
                 {
                     recorInputdValidator = new InputValidator(defaultValidateRule);
                     recordValidator = new ValidatorBuilder().CreateDefault(defaultValidateRule);
@@ -83,7 +83,7 @@ namespace FileCabinetApp
                     }
                 }
 
-                if (options.InputStorage == null)
+                if (options.InputStorage is null)
                 {
                     fileCabinetService = new FileCabinetMemoryService(recordValidator);
                 }
@@ -106,7 +106,7 @@ namespace FileCabinetApp
                 if (options.InputStopwatch)
                 {
                     fileCabinetService.Validator = recorInputdValidator;
-                    fileCabinetService = new ServiceMeter(fileCabinetService);
+                    fileCabinetService = new ServiceMeter(fileCabinetService, ConsolePrinter);
                     stopWatchRules = "Use stopwatch";
                 }
 
@@ -176,16 +176,16 @@ namespace FileCabinetApp
         private static ICommandHandler CreateCommandHandlers()
         {
             var helpHandler = new HelpCommandHandler();
-            var createHandler = new CreateCommandHandler(fileCabinetService, recorInputdValidator);
-            var insertHandler = new InsertCommandHandler(fileCabinetService);
-            var importHandler = new ImportCommandHandler(fileCabinetService, recorInputdValidator);
-            var deleteHandler = new DeleteCommandHandler(fileCabinetService);
-            var statHandler = new StatCommandHandler(fileCabinetService);
-            var selectHandler = new SelectCommandHandler(fileCabinetService, RecordPrinter);
-            var updateHandler = new UpdateCommandHandler(fileCabinetService);
-            var purgeHandler = new PurgeCommandHandler(fileCabinetService);
-            var exportHandler = new ExportCommandHandler(fileCabinetService);
-            var exitHandler = new ExitCommandHandler(fileCabinetService, filestream, ActionIsRunning);
+            var createHandler = new CreateCommandHandler(fileCabinetService, ConsolePrinter, recorInputdValidator);
+            var insertHandler = new InsertCommandHandler(fileCabinetService, ConsolePrinter);
+            var importHandler = new ImportCommandHandler(fileCabinetService, ConsolePrinter);
+            var deleteHandler = new DeleteCommandHandler(fileCabinetService, ConsolePrinter);
+            var statHandler = new StatCommandHandler(fileCabinetService, ConsolePrinter);
+            var selectHandler = new SelectCommandHandler(fileCabinetService, ConsolePrinter, RecordPrinter);
+            var updateHandler = new UpdateCommandHandler(fileCabinetService, ConsolePrinter);
+            var purgeHandler = new PurgeCommandHandler(fileCabinetService, ConsolePrinter);
+            var exportHandler = new ExportCommandHandler(fileCabinetService, ConsolePrinter);
+            var exitHandler = new ExitCommandHandler(fileCabinetService, filestream, ActionIsRunning, ConsolePrinter);
             helpHandler.SetNext(createHandler)
                        .SetNext(insertHandler)
                        .SetNext(deleteHandler)
@@ -207,9 +207,19 @@ namespace FileCabinetApp
             }
         }
 
+        private static void ConsolePrinter(string textMessage)
+        {
+            if (textMessage is null)
+            {
+                throw new ArgumentNullException(nameof(textMessage));
+            }
+
+            Console.WriteLine(textMessage);
+        }
+
         private static void DefaultRecordPrinter(IEnumerable<FileCabinetRecord> records)
         {
-            if (records == null)
+            if (records is null)
             {
                 throw new ArgumentNullException(nameof(records));
             }
@@ -230,7 +240,7 @@ namespace FileCabinetApp
 
         private static void RecordPrinter(IEnumerable<FileCabinetRecord> records, string[] fields)
         {
-            if (records == null)
+            if (records is null)
             {
                 throw new ArgumentNullException(nameof(records));
             }
@@ -308,7 +318,7 @@ namespace FileCabinetApp
 
         private static string GetFilecabinetRecordParametrToString(FileCabinetRecord record, string parameter)
         {
-            if (record == null)
+            if (record is null)
             {
                 throw new ArgumentNullException(nameof(record));
             }
@@ -348,7 +358,7 @@ namespace FileCabinetApp
 
         private static int GetFilecabinetRecordParametrToStringMaxLenght(IEnumerable<FileCabinetRecord> records, string parameter)
         {
-            if (records == null)
+            if (records is null)
             {
                 throw new ArgumentNullException(nameof(records));
             }

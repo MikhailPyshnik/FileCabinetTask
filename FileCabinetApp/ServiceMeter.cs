@@ -11,6 +11,7 @@ namespace FileCabinetApp
     public class ServiceMeter : IFileCabinetService
     {
         private static IFileCabinetService fileCabinetService;
+        private static Action<string> action;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceMeter"/> class.
@@ -23,9 +24,11 @@ namespace FileCabinetApp
         /// Initializes a new instance of the <see cref="ServiceMeter"/> class.
         /// </summary>
         /// <param name="fileCabinet">Input parametr in constructor <see cref="IFileCabinetService"/>.</param>
-        public ServiceMeter(IFileCabinetService fileCabinet)
+        /// <param name="printMethod">Input delegate Action for print messages.<see cref="Action"/>.</param>
+        public ServiceMeter(IFileCabinetService fileCabinet, Action<string> printMethod)
         {
-            fileCabinetService = fileCabinet;
+            fileCabinetService = fileCabinet ?? throw new ArgumentNullException(nameof(fileCabinet));
+            action = printMethod ?? throw new ArgumentNullException(nameof(printMethod));
         }
 
         /// <summary>
@@ -46,7 +49,7 @@ namespace FileCabinetApp
             var result = fileCabinetService.CreateRecord(fileCabinetRecord);
             sw.Stop();
             ticksThisTime = sw.ElapsedTicks;
-            Console.WriteLine($"CreateRecord method execution duration is {ticksThisTime} ticks.");
+            action($"CreateRecord method execution duration is {ticksThisTime} ticks.");
             return result;
         }
 
@@ -72,7 +75,7 @@ namespace FileCabinetApp
             fileCabinetService.Update(inputValueArray, inputParamentArray);
             sw.Stop();
             ticksThisTime = sw.ElapsedTicks;
-            Console.WriteLine($"UpdateRecord method execution duration is {ticksThisTime} ticks.");
+            action($"UpdateRecord method execution duration is {ticksThisTime} ticks.");
         }
 
         /// <summary>
@@ -88,7 +91,7 @@ namespace FileCabinetApp
             var result = fileCabinetService.SelectByCondition(inputParamentArray, logicalOperator);
             sw.Stop();
             ticksThisTime = sw.ElapsedTicks;
-            Console.WriteLine($"SelectByCondition method execution duration is {ticksThisTime} ticks.");
+            action($"SelectByCondition method execution duration is {ticksThisTime} ticks.");
             return result;
         }
 
@@ -103,7 +106,7 @@ namespace FileCabinetApp
             var result = fileCabinetService.GetRecords();
             sw.Stop();
             ticksThisTime = sw.ElapsedTicks;
-            Console.WriteLine($"GetRecords method execution duration is {ticksThisTime} ticks.");
+            action($"GetRecords method execution duration is {ticksThisTime} ticks.");
             return result;
         }
 
@@ -118,7 +121,7 @@ namespace FileCabinetApp
             var result = fileCabinetService.GetStat();
             sw.Stop();
             ticksThisTime = sw.ElapsedTicks;
-            Console.WriteLine($"GetStat method execution duration is {ticksThisTime} ticks.");
+            action($"GetStat method execution duration is {ticksThisTime} ticks.");
             return result;
         }
 
@@ -133,7 +136,7 @@ namespace FileCabinetApp
             fileCabinetService.Insert(fileCabinetRecord);
             sw.Stop();
             ticksThisTime = sw.ElapsedTicks;
-            Console.WriteLine($"Insert method execution duration is {ticksThisTime} ticks.");
+            action($"Insert method execution duration is {ticksThisTime} ticks.");
         }
 
         /// <summary>
@@ -147,21 +150,23 @@ namespace FileCabinetApp
             var result = fileCabinetService.MakeSnapshot();
             sw.Stop();
             ticksThisTime = sw.ElapsedTicks;
-            Console.WriteLine($"MakeSnapshot method execution duration is {ticksThisTime} ticks.");
+            action($"MakeSnapshot method execution duration is {ticksThisTime} ticks.");
             return result;
         }
 
         /// <summary>
         /// Implementation IFileCabinetService Purge in class StopWatch.
         /// </summary>
-        public void Purge()
+        /// <returns>Count records for delete <see cref="Tuple"/>.</returns>
+        public Tuple<int, int> Purge()
         {
             long ticksThisTime = 0;
             var sw = Stopwatch.StartNew();
-            fileCabinetService.Purge();
+            var result = fileCabinetService.Purge();
             sw.Stop();
             ticksThisTime = sw.ElapsedTicks;
-            Console.WriteLine($"Purge method execution duration is {ticksThisTime} ticks.");
+            action($"Purge method execution duration is {ticksThisTime} ticks.");
+            return result;
         }
 
         /// <summary>
@@ -176,7 +181,7 @@ namespace FileCabinetApp
             var result = fileCabinetService.Delete(inputValueArray);
             sw.Stop();
             ticksThisTime = sw.ElapsedTicks;
-            Console.WriteLine($"Delete method execution duration is {ticksThisTime} ticks.");
+            action($"Delete method execution duration is {ticksThisTime} ticks.");
             return result;
         }
 
@@ -184,14 +189,16 @@ namespace FileCabinetApp
         /// Implementation IFileCabinetService Restore in class StopWatch.
         /// </summary>
         /// <param name="fileCabinetServiceSnapshot">Input parametr fileCabinetServiceSnapshot <see cref="FileCabinetServiceSnapshot"/>.</param>
-        public void Restore(FileCabinetServiceSnapshot fileCabinetServiceSnapshot)
+        /// <returns>Counts add import record(s) <see cref="int"/>.</returns>
+        public int Restore(FileCabinetServiceSnapshot fileCabinetServiceSnapshot)
         {
             long ticksThisTime = 0;
             var sw = Stopwatch.StartNew();
-            fileCabinetService.Restore(fileCabinetServiceSnapshot);
+            var result = fileCabinetService.Restore(fileCabinetServiceSnapshot);
             sw.Stop();
             ticksThisTime = sw.ElapsedTicks;
-            Console.WriteLine($"Restore method execution duration is {ticksThisTime} ticks.");
+            action($"Restore method execution duration is {ticksThisTime} ticks.");
+            return result;
         }
     }
 }

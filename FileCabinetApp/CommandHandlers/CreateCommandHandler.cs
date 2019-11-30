@@ -8,16 +8,19 @@ namespace FileCabinetApp.CommandHandlers
     public class CreateCommandHandler : ServiceCommandHandlerBase
     {
         private static IValidatorOfParemetrs inputParamsValidator;
+        private static Action<string> action;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CreateCommandHandler"/> class.
         /// </summary>
         /// <param name="fileCabinetService">Input parametr start id.<see cref="IFileCabinetService"/>.</param>
+        /// <param name="printMethod">Input delegate Action for print messages.<see cref="Action"/>.</param>
         /// <param name="recordValidator">Input parametr amount of records.<see cref="IValidatorOfParemetrs"/>.</param>
-        public CreateCommandHandler(IFileCabinetService fileCabinetService, IValidatorOfParemetrs recordValidator)
+        public CreateCommandHandler(IFileCabinetService fileCabinetService, Action<string> printMethod, IValidatorOfParemetrs recordValidator)
              : base(fileCabinetService)
         {
             inputParamsValidator = recordValidator ?? throw new ArgumentNullException(nameof(recordValidator));
+            action = printMethod ?? throw new ArgumentNullException(nameof(printMethod));
         }
 
         /// <summary>
@@ -26,7 +29,7 @@ namespace FileCabinetApp.CommandHandlers
         /// <param name="appCommandRequest">Input parametr record <see cref="AppCommandRequest"/>.</param>
         public override void Handle(AppCommandRequest appCommandRequest)
         {
-            if (appCommandRequest == null)
+            if (appCommandRequest is null)
             {
                 throw new ArgumentNullException(nameof(appCommandRequest));
             }
@@ -64,28 +67,28 @@ namespace FileCabinetApp.CommandHandlers
                     int result = service.CreateRecord(fileCabinetRecord);
                     if (result > 0)
                     {
-                        Console.WriteLine($"Record #{result} is created.");
+                        action($"Record #{result} is created.");
                     }
                 }
                 catch (ArgumentNullException ex)
                 {
-                    Console.WriteLine($"{ex.Message} Enter the data again!");
+                    action($"{ex.Message} Enter the data again!");
                     Create(parameters);
                 }
                 catch (ArgumentException ex)
                 {
-                    Console.WriteLine($"{ex.Message} Enter the data again!");
+                    action($"{ex.Message} Enter the data again!");
                     Create(parameters);
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    action(ex.Message);
                     throw new ArgumentException("Input value in Create is incorrect! Select  command again.");
                 }
             }
             catch (ArgumentException ex)
             {
-                Console.WriteLine($"{ex.Message}");
+                action($"{ex.Message}");
             }
         }
     }

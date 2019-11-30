@@ -9,14 +9,17 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class InsertCommandHandler : ServiceCommandHandlerBase
     {
+        private static Action<string> action;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="InsertCommandHandler"/> class.
         /// </summary>
         /// <param name="fileCabinetService">Input parametr start id.<see cref="IFileCabinetService"/>.</param>
-        // /// <param name="recordValidator">Input parametr amount of records.<see cref="IValidatorOfParemetrs"/>.</param>
-        public InsertCommandHandler(IFileCabinetService fileCabinetService)
+        /// <param name="printMethod">Input delegate Action for print messages.<see cref="Action"/>.</param>
+        public InsertCommandHandler(IFileCabinetService fileCabinetService, Action<string> printMethod)
              : base(fileCabinetService)
         {
+            action = printMethod ?? throw new ArgumentNullException(nameof(printMethod));
         }
 
         /// <summary>
@@ -25,7 +28,7 @@ namespace FileCabinetApp.CommandHandlers
         /// <param name="appCommandRequest">Input parametr record <see cref="AppCommandRequest"/>.</param>
         public override void Handle(AppCommandRequest appCommandRequest)
         {
-            if (appCommandRequest == null)
+            if (appCommandRequest is null)
             {
                 throw new ArgumentNullException(nameof(appCommandRequest));
             }
@@ -101,16 +104,16 @@ namespace FileCabinetApp.CommandHandlers
                     }
 
                     service.Insert(fileCabinetRecord);
-                    Console.WriteLine($"Add record by insert with id - {fileCabinetRecord.Id}.");
+                    action($"Add record by insert with id - {fileCabinetRecord.Id}.");
                 }
                 catch (ArgumentException ex)
                 {
-                    Console.WriteLine($"{ex.Message}");
+                    action($"{ex.Message}");
                 }
             }
             catch (ArgumentException ex)
             {
-                Console.WriteLine($"{ex.Message}");
+                action($"{ex.Message}");
             }
         }
 

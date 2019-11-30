@@ -10,13 +10,17 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class DeleteCommandHandler : ServiceCommandHandlerBase
     {
+        private static Action<string> action;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DeleteCommandHandler"/> class.
         /// </summary>
         /// <param name="fileCabinetService">Input parametr start id.<see cref="IFileCabinetService"/>.</param>
-        public DeleteCommandHandler(IFileCabinetService fileCabinetService)
+        /// <param name="printMethod">Input delegate Action for print messages.<see cref="Action"/>.</param>
+        public DeleteCommandHandler(IFileCabinetService fileCabinetService, Action<string> printMethod)
             : base(fileCabinetService)
         {
+            action = printMethod ?? throw new ArgumentNullException(nameof(printMethod));
         }
 
         /// <summary>
@@ -25,7 +29,7 @@ namespace FileCabinetApp.CommandHandlers
         /// <param name="appCommandRequest">Input parametr record <see cref="AppCommandRequest"/>.</param>
         public override void Handle(AppCommandRequest appCommandRequest)
         {
-            if (appCommandRequest == null)
+            if (appCommandRequest is null)
             {
                 throw new ArgumentNullException(nameof(appCommandRequest));
             }
@@ -74,7 +78,7 @@ namespace FileCabinetApp.CommandHandlers
 
                     if (listTemp.Count == 0)
                     {
-                        Console.WriteLine("Record not found.");
+                        action("Record not found.");
                     }
                     else if (listTemp.Count > 1)
                     {
@@ -84,27 +88,27 @@ namespace FileCabinetApp.CommandHandlers
                             idstring.Append($"#{item},");
                         }
 
-                        Console.WriteLine($"Records {idstring} are deleted.");
+                        action($"Records {idstring} are deleted.");
                     }
                     else
                     {
-                        Console.WriteLine($"Record #{listTemp[0]} is deleted.");
+                        action($"Record #{listTemp[0]} is deleted.");
                     }
                 }
                 catch (ArgumentException ex)
                 {
-                    Console.WriteLine($"{ex.Message}");
+                    action($"{ex.Message}");
                 }
             }
             catch (ArgumentException ex)
             {
-                Console.WriteLine($"{ex.Message}");
+                action($"{ex.Message}");
             }
         }
 
         private static string[] GetStringArray(string inputString)
         {
-            if (inputString == null)
+            if (inputString is null)
             {
                 throw new ArgumentNullException(nameof(inputString));
             }

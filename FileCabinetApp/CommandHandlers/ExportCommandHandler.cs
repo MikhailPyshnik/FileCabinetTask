@@ -9,13 +9,17 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class ExportCommandHandler : ServiceCommandHandlerBase
     {
+        private static Action<string> action;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ExportCommandHandler"/> class.
         /// </summary>
         /// <param name="fileCabinetService">Input parametr start id.<see cref="IFileCabinetService"/>.</param>
-        public ExportCommandHandler(IFileCabinetService fileCabinetService)
+        /// <param name="printMethod">Input delegate Action for print messages.<see cref="Action"/>.</param>
+        public ExportCommandHandler(IFileCabinetService fileCabinetService, Action<string> printMethod)
             : base(fileCabinetService)
         {
+            action = printMethod ?? throw new ArgumentNullException(nameof(printMethod));
         }
 
         /// <summary>
@@ -24,7 +28,7 @@ namespace FileCabinetApp.CommandHandlers
         /// <param name="appCommandRequest">Input parametr record <see cref="AppCommandRequest"/>.</param>
         public override void Handle(AppCommandRequest appCommandRequest)
         {
-            if (appCommandRequest == null)
+            if (appCommandRequest is null)
             {
                 throw new ArgumentNullException(nameof(appCommandRequest));
             }
@@ -47,7 +51,7 @@ namespace FileCabinetApp.CommandHandlers
             var parametersArray = parameters.Split(' ', 2);
             if (parameters.Length == 0)
             {
-                Console.WriteLine($"export command is empty!");
+                action($"export command is empty!");
                 return;
             }
 
@@ -62,25 +66,25 @@ namespace FileCabinetApp.CommandHandlers
                     bool containsFile = File.Exists(thePathToTheFile);
                     if (containsFile)
                     {
-                        Console.Write($"File is exist - rewrite {thePathToTheFile}?[Y / n] ");
+                        action($"File is exist - rewrite {thePathToTheFile}?[Y / n] ");
                         var inputs = Console.ReadLine().ToLower(provider);
                         char charComnandYorN;
                         bool charComnandBool = char.TryParse(inputs, out charComnandYorN);
                         if (!'y'.Equals(charComnandYorN) & !'n'.Equals(charComnandYorN))
                         {
-                            Console.WriteLine($"Incorrcect command [Y / n] : {inputs}!");
+                            action($"Incorrcect command [Y / n] : {inputs}!");
                             return;
                         }
 
                         if (!charComnandBool)
                         {
-                            Console.WriteLine($"Incorrcect command [Y / n] : inputs not char - {inputs}");
+                            action($"Incorrcect command [Y / n] : inputs not char - {inputs}");
                             return;
                         }
 
                         if (charComnandYorN == 'n')
                         {
-                            Console.WriteLine($"Command - n.-Exit command export.");
+                            action($"Command - n.-Exit command export.");
                             return;
                         }
 
@@ -98,7 +102,7 @@ namespace FileCabinetApp.CommandHandlers
                         bool containsGetDirectoryName = Directory.Exists(inputDirectoryName);
                         if (!containsGetDirectoryName)
                         {
-                            Console.WriteLine($"Export failed: can't open file {thePathToTheFile}.-Exit command export.");
+                            action($"Export failed: can't open file {thePathToTheFile}.-Exit command export.");
                             return;
                         }
 
@@ -107,12 +111,12 @@ namespace FileCabinetApp.CommandHandlers
                 }
                 else
                 {
-                    Console.WriteLine($"The type of file {extension} does not match export type : {searchParametr}.-Exit command export.");
+                    action($"The type of file {extension} does not match export type : {searchParametr}.-Exit command export.");
                 }
             }
             else
             {
-                Console.WriteLine($"Incorrect  (is not csv or xml) type of file - {searchParametr}.-Exit command export.");
+                action($"Incorrect  (is not csv or xml) type of file - {searchParametr}.-Exit command export.");
             }
         }
 
@@ -136,11 +140,11 @@ namespace FileCabinetApp.CommandHandlers
                 streamWriterToCsv = new StreamWriter(thePathToTheFile, false, System.Text.Encoding.Default);
                 var snapshotFileCabinetService = service.MakeSnapshot();
                 snapshotFileCabinetService.SaveToCsv(streamWriterToCsv);
-                Console.WriteLine($"All records are exported to file {thePathToTheFile}.");
+                action($"All records are exported to file {thePathToTheFile}.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                action(ex.Message);
                 throw new ArgumentException($"{ex.Message}");
             }
             finally
@@ -163,7 +167,7 @@ namespace FileCabinetApp.CommandHandlers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                action(ex.Message);
                 throw new Exception(ex.Message);
             }
             finally
@@ -174,7 +178,7 @@ namespace FileCabinetApp.CommandHandlers
                 }
             }
 
-            Console.WriteLine($"All records are exported to file {thePathToTheFile}.");
+            action($"All records are exported to file {thePathToTheFile}.");
         }
     }
 }

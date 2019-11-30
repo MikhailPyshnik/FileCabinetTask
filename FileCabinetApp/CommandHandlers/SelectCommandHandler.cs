@@ -10,16 +10,19 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class SelectCommandHandler : ServiceCommandHandlerBase
     {
+        private static Action<string> action;
         private Action<IEnumerable<FileCabinetRecord>, string[]> printer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SelectCommandHandler"/> class.
         /// </summary>
         /// <param name="fileCabinetService">Input parametr start id.<see cref="IFileCabinetService"/>.</param>
+        /// <param name="printMethod">Input delegate Action for print messages.<see cref="Action"/>.</param>
         /// <param name="inputPrinter">Input parametr start id.<see cref="IRecordPrinter"/>.</param>
-        public SelectCommandHandler(IFileCabinetService fileCabinetService, Action<IEnumerable<FileCabinetRecord>, string[]> inputPrinter)
+        public SelectCommandHandler(IFileCabinetService fileCabinetService, Action<string> printMethod, Action<IEnumerable<FileCabinetRecord>, string[]> inputPrinter)
             : base(fileCabinetService)
         {
+            action = printMethod ?? throw new ArgumentNullException(nameof(printMethod));
             this.printer = inputPrinter ?? throw new ArgumentNullException(nameof(inputPrinter));
         }
 
@@ -29,7 +32,7 @@ namespace FileCabinetApp.CommandHandlers
         /// <param name="appCommandRequest">Input parametr record <see cref="AppCommandRequest"/>.</param>
         public override void Handle(AppCommandRequest appCommandRequest)
             {
-                if (appCommandRequest == null)
+                if (appCommandRequest is null)
                 {
                     throw new ArgumentNullException(nameof(appCommandRequest));
                 }
@@ -47,7 +50,7 @@ namespace FileCabinetApp.CommandHandlers
 
         private static string[] GetStringArray(string inputString)
         {
-            if (inputString == null)
+            if (inputString is null)
             {
                 throw new ArgumentNullException(nameof(inputString));
             }
@@ -65,7 +68,7 @@ namespace FileCabinetApp.CommandHandlers
 
         private static string[] GetStringArrayForAndAndOr(string inputString, out string logicalOperator)
         {
-            if (inputString == null)
+            if (inputString is null)
             {
                 throw new ArgumentNullException(nameof(inputString));
             }
@@ -129,26 +132,26 @@ namespace FileCabinetApp.CommandHandlers
 
                     this.PrintRecords(selectRecords, command);
 
-                    Console.WriteLine("The command Select finished correctly.");
+                    action("The command Select finished correctly.");
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    action(ex.Message);
                     throw new ArgumentException("Select command incorrect! Select command again.");
                 }
             }
             catch (ArgumentException ex)
             {
-                Console.WriteLine($"{ex.Message}");
+                action($"{ex.Message}");
             }
         }
 
         private void PrintRecords(IEnumerable<FileCabinetRecord> records, string[] searchparametr)
         {
-            if (records == null)
+            if (records is null)
             {
-                Console.WriteLine("No records are found!");
+                action("No records are found!");
             }
             else
             {

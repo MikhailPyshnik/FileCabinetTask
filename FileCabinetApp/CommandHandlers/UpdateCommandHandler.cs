@@ -9,13 +9,17 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class UpdateCommandHandler : ServiceCommandHandlerBase
     {
+            private static Action<string> action;
+
             /// <summary>
             /// Initializes a new instance of the <see cref="UpdateCommandHandler"/> class.
             /// </summary>
             /// <param name="fileCabinetService">Input parametr start id.<see cref="IFileCabinetService"/>.</param>
-            public UpdateCommandHandler(IFileCabinetService fileCabinetService)
-                : base(fileCabinetService)
+            /// <param name="printMethod">Input delegate Action for print messages.<see cref="Action"/>.</param>
+            public UpdateCommandHandler(IFileCabinetService fileCabinetService, Action<string> printMethod)
+                 : base(fileCabinetService)
             {
+             action = printMethod ?? throw new ArgumentNullException(nameof(printMethod));
             }
 
             /// <summary>
@@ -24,7 +28,7 @@ namespace FileCabinetApp.CommandHandlers
             /// <param name="appCommandRequest">Input parametr record <see cref="AppCommandRequest"/>.</param>
             public override void Handle(AppCommandRequest appCommandRequest)
             {
-                if (appCommandRequest == null)
+                if (appCommandRequest is null)
                 {
                     throw new ArgumentNullException(nameof(appCommandRequest));
                 }
@@ -64,27 +68,27 @@ namespace FileCabinetApp.CommandHandlers
 
                         service.Update(command, inputValue);
 
-                        Console.WriteLine("The command Update finished correctly.");
+                        action("The command Update finished correctly.");
                     }
                     catch (ArgumentException ex)
                     {
-                        Console.WriteLine(ex.Message);
+                        action(ex.Message);
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine(ex.Message);
+                        action(ex.Message);
                         throw new ArgumentException("Input value in Update is incorrect! Select command again.");
                     }
                 }
                 catch (ArgumentException ex)
                 {
-                    Console.WriteLine(ex.Message);
+                      action(ex.Message);
                 }
             }
 
             private static string[] GetStringArray(string inputString)
             {
-                if (inputString == null)
+                if (inputString is null)
                 {
                     throw new ArgumentNullException(nameof(inputString));
                 }
@@ -102,7 +106,7 @@ namespace FileCabinetApp.CommandHandlers
 
             private static string[] GetStringArrayForAnd(string inputString)
             {
-                if (inputString == null)
+                if (inputString is null)
                 {
                     throw new ArgumentNullException(nameof(inputString));
                 }
