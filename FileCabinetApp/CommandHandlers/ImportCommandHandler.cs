@@ -9,16 +9,19 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class ImportCommandHandler : ServiceCommandHandlerBase
     {
+        private static IValidatorOfParemetrs inputParamsValidator;
         private static Action<string> action;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ImportCommandHandler"/> class.
         /// </summary>
         /// <param name="fileCabinetService">Input parametr start id.<see cref="IFileCabinetService"/>.</param>
+        /// <param name="recordValidator">Input parametr amount of records.<see cref="IValidatorOfParemetrs"/>.</param>
         /// <param name="printMethod">Input delegate Action for print messages.<see cref="Action"/>.</param>
-        public ImportCommandHandler(IFileCabinetService fileCabinetService, Action<string> printMethod)
+        public ImportCommandHandler(IFileCabinetService fileCabinetService, IValidatorOfParemetrs recordValidator, Action<string> printMethod)
             : base(fileCabinetService)
         {
+            inputParamsValidator = recordValidator ?? throw new ArgumentNullException(nameof(recordValidator));
             action = printMethod ?? throw new ArgumentNullException(nameof(printMethod));
         }
 
@@ -116,6 +119,7 @@ namespace FileCabinetApp.CommandHandlers
             try
             {
                 streamReaderFromCSV = new StreamReader(thePathToTheFile, System.Text.Encoding.Default);
+                service.Validator = inputParamsValidator;
                 var snapshotFileCabinetService = service.MakeSnapshot();
                 snapshotFileCabinetService.LoadFromCsv(streamReaderFromCSV);
                 action($"{snapshotFileCabinetService.Records.Count} record(s) were imported from {thePathToTheFile}.");
@@ -146,6 +150,7 @@ namespace FileCabinetApp.CommandHandlers
             try
             {
                 streamReaderFromXML = new StreamReader(thePathToTheFile, System.Text.Encoding.Default);
+                service.Validator = inputParamsValidator;
                 var snapshotFileCabinetService = service.MakeSnapshot();
                 snapshotFileCabinetService.LoadFromXML(streamReaderFromXML);
                 action($"{snapshotFileCabinetService.Records.Count} record(s) were imported from {thePathToTheFile}.");

@@ -130,11 +130,12 @@
             Import command.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.ImportCommandHandler.#ctor(FileCabinetApp.IFileCabinetService,System.Action{System.String})">
+        <member name="M:FileCabinetApp.CommandHandlers.ImportCommandHandler.#ctor(FileCabinetApp.IFileCabinetService,FileCabinetApp.IValidatorOfParemetrs,System.Action{System.String})">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.ImportCommandHandler"/> class.
             </summary>
             <param name="fileCabinetService">Input parametr start id.<see cref="T:FileCabinetApp.IFileCabinetService"/>.</param>
+            <param name="recordValidator">Input parametr amount of records.<see cref="T:FileCabinetApp.IValidatorOfParemetrs"/>.</param>
             <param name="printMethod">Input delegate Action for print messages.<see cref="T:System.Action"/>.</param>
         </member>
         <member name="M:FileCabinetApp.CommandHandlers.ImportCommandHandler.Handle(FileCabinetApp.AppCommandRequest)">

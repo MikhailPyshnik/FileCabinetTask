@@ -178,7 +178,7 @@ namespace FileCabinetApp
             var helpHandler = new HelpCommandHandler();
             var createHandler = new CreateCommandHandler(fileCabinetService, ConsolePrinter, recorInputdValidator);
             var insertHandler = new InsertCommandHandler(fileCabinetService, ConsolePrinter);
-            var importHandler = new ImportCommandHandler(fileCabinetService, ConsolePrinter);
+            var importHandler = new ImportCommandHandler(fileCabinetService, recorInputdValidator, ConsolePrinter);
             var deleteHandler = new DeleteCommandHandler(fileCabinetService, ConsolePrinter);
             var statHandler = new StatCommandHandler(fileCabinetService, ConsolePrinter);
             var selectHandler = new SelectCommandHandler(fileCabinetService, ConsolePrinter, RecordPrinter);
