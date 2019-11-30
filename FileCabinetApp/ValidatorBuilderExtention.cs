@@ -16,7 +16,7 @@ namespace FileCabinetApp
         /// <returns>Return <see cref="IRecordValidator"/>.</returns>
         public static IRecordValidator CreateDefault(this ValidatorBuilder validator, ValidationConfiguration defaultValidatorConfiguration)
         {
-            if (defaultValidatorConfiguration == null)
+            if (defaultValidatorConfiguration is null)
             {
                 throw new ArgumentNullException(nameof(defaultValidatorConfiguration));
             }
@@ -41,7 +41,7 @@ namespace FileCabinetApp
         /// <returns>Return <see cref="IRecordValidator"/>.</returns>
         public static IRecordValidator CreateCustom(this ValidatorBuilder validator, ValidationConfiguration customValidatorConfiguration)
         {
-            if (customValidatorConfiguration == null)
+            if (customValidatorConfiguration is null)
             {
                 throw new ArgumentNullException(nameof(customValidatorConfiguration));
             }

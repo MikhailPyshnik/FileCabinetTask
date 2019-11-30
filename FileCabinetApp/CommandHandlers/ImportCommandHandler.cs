@@ -9,17 +9,17 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class ImportCommandHandler : ServiceCommandHandlerBase
     {
-        private static IValidatorOfParemetrs inputParamsValidator;
+        private static Action<string> action;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ImportCommandHandler"/> class.
         /// </summary>
         /// <param name="fileCabinetService">Input parametr start id.<see cref="IFileCabinetService"/>.</param>
-        /// <param name="recordValidator">Input parametr amount of records.<see cref="IValidatorOfParemetrs"/>.</param>
-        public ImportCommandHandler(IFileCabinetService fileCabinetService, IValidatorOfParemetrs recordValidator)
+        /// <param name="printMethod">Input delegate Action for print messages.<see cref="Action"/>.</param>
+        public ImportCommandHandler(IFileCabinetService fileCabinetService, Action<string> printMethod)
             : base(fileCabinetService)
         {
-            inputParamsValidator = recordValidator ?? throw new ArgumentNullException(nameof(recordValidator));
+            action = printMethod ?? throw new ArgumentNullException(nameof(printMethod));
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace FileCabinetApp.CommandHandlers
         /// <param name="appCommandRequest">Input parametr record <see cref="AppCommandRequest"/>.</param>
         public override void Handle(AppCommandRequest appCommandRequest)
         {
-            if (appCommandRequest == null)
+            if (appCommandRequest is null)
             {
                 throw new ArgumentNullException(nameof(appCommandRequest));
             }
@@ -51,7 +51,7 @@ namespace FileCabinetApp.CommandHandlers
             var parametersArray = parameters.Split(' ', 2);
             if (parameters.Length == 0)
             {
-                Console.WriteLine($"export command is empty!");
+                action($"export command is empty!");
                 return;
             }
 
@@ -80,7 +80,7 @@ namespace FileCabinetApp.CommandHandlers
                         bool containsGetDirectoryName = Directory.Exists(inputDirectoryName);
                         if (!containsGetDirectoryName)
                         {
-                            Console.WriteLine($"Import error: file {thePathToTheFile}. is not exist. -Exit command import.");
+                            action($"Import error: file {thePathToTheFile}. is not exist. -Exit command import.");
                             return;
                         }
 
@@ -89,12 +89,12 @@ namespace FileCabinetApp.CommandHandlers
                 }
                 else
                 {
-                    Console.WriteLine($"The type of file {extension} does not match import type : {searchParametr}.-Exit command import.");
+                    action($"The type of file {extension} does not match import type : {searchParametr}.-Exit command import.");
                 }
             }
             else
             {
-                Console.WriteLine($"Incorrect (is not csv or xml) type of file - {searchParametr}.-Exit command import.");
+                action($"Incorrect (is not csv or xml) type of file - {searchParametr}.-Exit command import.");
             }
         }
 
@@ -116,15 +116,19 @@ namespace FileCabinetApp.CommandHandlers
             try
             {
                 streamReaderFromCSV = new StreamReader(thePathToTheFile, System.Text.Encoding.Default);
-                service.Validator = inputParamsValidator;
                 var snapshotFileCabinetService = service.MakeSnapshot();
                 snapshotFileCabinetService.LoadFromCsv(streamReaderFromCSV);
-                Console.WriteLine($"{snapshotFileCabinetService.Records.Count} record(s) were imported from {thePathToTheFile}.");
-                service.Restore(snapshotFileCabinetService);
+                action($"{snapshotFileCabinetService.Records.Count} record(s) were imported from {thePathToTheFile}.");
+                var result = service.Restore(snapshotFileCabinetService);
+                action($"{result} records were add to {service.GetType()}.");
+            }
+            catch (ArgumentException ex)
+            {
+                action(ex.Message);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                action(ex.Message);
                 throw new ArgumentException($"{ex.Message}");
             }
             finally
@@ -142,15 +146,15 @@ namespace FileCabinetApp.CommandHandlers
             try
             {
                 streamReaderFromXML = new StreamReader(thePathToTheFile, System.Text.Encoding.Default);
-                service.Validator = inputParamsValidator;
                 var snapshotFileCabinetService = service.MakeSnapshot();
                 snapshotFileCabinetService.LoadFromXML(streamReaderFromXML);
-                Console.WriteLine($"{snapshotFileCabinetService.Records.Count} record(s) were imported from {thePathToTheFile}.");
-                service.Restore(snapshotFileCabinetService);
+                action($"{snapshotFileCabinetService.Records.Count} record(s) were imported from {thePathToTheFile}.");
+                var result = service.Restore(snapshotFileCabinetService);
+                action($"{result} records were add to {service.GetType()}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                action(ex.Message);
                 throw new ArgumentException($"{ex.Message}");
             }
             finally

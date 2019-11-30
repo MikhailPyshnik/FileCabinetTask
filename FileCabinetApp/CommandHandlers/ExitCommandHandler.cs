@@ -10,6 +10,7 @@ namespace FileCabinetApp.CommandHandlers
     {
         private static FileStream fileStream;
         private static Action<bool> action;
+        private static Action<string> printAction;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExitCommandHandler"/> class.
@@ -17,7 +18,8 @@ namespace FileCabinetApp.CommandHandlers
         /// <param name="fileCabinetService">Input parametr start id.<see cref="IFileCabinetService"/>.</param>
         /// <param name="filestream">Input parametr fileStream.<see cref="FileStream"/>.</param>
         /// <param name="exit">Input delegate Action.<see cref="Action"/>.</param>
-        public ExitCommandHandler(IFileCabinetService fileCabinetService, FileStream filestream, Action<bool> exit)
+        /// <param name="printMethod">Input delegate Action for print messages.<see cref="Action"/>.</param>
+        public ExitCommandHandler(IFileCabinetService fileCabinetService, FileStream filestream, Action<bool> exit, Action<string> printMethod)
              : base(fileCabinetService)
         {
             if (fileCabinetService is FileCabinetFilesystemService)
@@ -26,6 +28,7 @@ namespace FileCabinetApp.CommandHandlers
             }
 
             action = exit ?? throw new ArgumentNullException(nameof(exit));
+            printAction = printMethod ?? throw new ArgumentNullException(nameof(printMethod));
         }
 
         /// <summary>
@@ -34,7 +37,7 @@ namespace FileCabinetApp.CommandHandlers
         /// <param name="appCommandRequest">Input parametr record <see cref="AppCommandRequest"/>.</param>
         public override void Handle(AppCommandRequest appCommandRequest)
         {
-            if (appCommandRequest == null)
+            if (appCommandRequest is null)
             {
                 throw new ArgumentNullException(nameof(appCommandRequest));
             }
@@ -57,7 +60,7 @@ namespace FileCabinetApp.CommandHandlers
                 fileStream.Close();
             }
 
-            Console.WriteLine("Exiting an application...");
+            printAction("Exiting an application...");
             action(false);
         }
     }

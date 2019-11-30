@@ -41,7 +41,7 @@ namespace FileCabinetApp
         /// <returns>Id <see cref="int"/>.</returns>
         public int CreateRecord(FileCabinetRecord fileCabinetRecord)
         {
-            if (fileCabinetRecord == null)
+            if (fileCabinetRecord is null)
             {
                 throw new ArgumentNullException(nameof(fileCabinetRecord));
             }
@@ -63,7 +63,7 @@ namespace FileCabinetApp
         /// <param name="fileCabinetRecord">Input parametr record <see cref="FileCabinetRecord"/>.</param>
         public void Insert(FileCabinetRecord fileCabinetRecord)
         {
-            if (fileCabinetRecord == null)
+            if (fileCabinetRecord is null)
             {
                 throw new ArgumentNullException(nameof(fileCabinetRecord));
             }
@@ -83,12 +83,12 @@ namespace FileCabinetApp
         /// <param name="inputParamentArray">Input parametr array <see cref="string"/>.</param>
         public void Update(string[] inputValueArray, string[] inputParamentArray)
         {
-            if (inputValueArray == null)
+            if (inputValueArray is null)
             {
                 throw new ArgumentNullException($"{nameof(inputValueArray)} is null!");
             }
 
-            if (inputParamentArray == null)
+            if (inputParamentArray is null)
             {
                 throw new ArgumentNullException($"{nameof(inputParamentArray)} is null!");
             }
@@ -165,13 +165,16 @@ namespace FileCabinetApp
         /// <summary>
         /// Implementation IFileCabinetService Purge in class ServiceLogger.
         /// </summary>
-        public void Purge()
+        /// <returns>Count records for delete <see cref="Tuple"/>.</returns>
+        public Tuple<int, int> Purge()
         {
-            fileCabinetService.Purge();
+            var result = fileCabinetService.Purge();
             using (StreamWriter w = File.AppendText("log.txt"))
             {
-                Log($"Calling Purge() returned", w);
+                Log($"Calling Purge() returned - deleted {result.Item1} from {result.Item2} record(s).", w);
             }
+
+            return result;
         }
 
         /// <summary>
@@ -194,18 +197,21 @@ namespace FileCabinetApp
         /// Implementation IFileCabinetService Restore in class ServiceLogger.
         /// </summary>
         /// <param name="fileCabinetServiceSnapshot">Input parametr fileCabinetServiceSnapshot <see cref="FileCabinetServiceSnapshot"/>.</param>
-        public void Restore(FileCabinetServiceSnapshot fileCabinetServiceSnapshot)
+        /// <returns>Counts add import record(s) <see cref="int"/>.</returns>
+        public int Restore(FileCabinetServiceSnapshot fileCabinetServiceSnapshot)
         {
-            fileCabinetService.Restore(fileCabinetServiceSnapshot);
+            var result = fileCabinetService.Restore(fileCabinetServiceSnapshot);
             using (StreamWriter w = File.AppendText("log.txt"))
             {
                 Log($"Calling Restore() - revove", w);
             }
+
+            return result;
         }
 
         private static void Log(string logMessage, TextWriter w)
         {
-            w.Write($"\r\n {DateTime.Now.ToLongTimeString()} - {logMessage}.");
+            w.Write($"{Environment.NewLine} {DateTime.Now.ToLongTimeString()} - {logMessage}.");
         }
     }
 }

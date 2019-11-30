@@ -16,6 +16,7 @@ namespace FileCabinetApp
         private const int MAXSTRINGLENGTH = 120;
         private const int SETTHIRDBITTRUE = 4;
         private const int RECORDSIZE = 278;
+        private static readonly CultureInfo Provider = new CultureInfo("en-US");
         private readonly IRecordValidator validator;
 
         private FileStream fileStream;
@@ -56,7 +57,7 @@ namespace FileCabinetApp
         /// <returns>Id <see cref="int"/>.</returns>
         public int CreateRecord(FileCabinetRecord fileCabinetRecord)
         {
-            if (fileCabinetRecord == null)
+            if (fileCabinetRecord is null)
             {
                 throw new ArgumentNullException($"{nameof(fileCabinetRecord)} is null!");
             }
@@ -78,7 +79,7 @@ namespace FileCabinetApp
         /// <param name="fileCabinetRecord">Input parametr record <see cref="FileCabinetRecord"/>.</param>
         public void Insert(FileCabinetRecord fileCabinetRecord)
         {
-            if (fileCabinetRecord == null)
+            if (fileCabinetRecord is null)
             {
                 throw new ArgumentNullException($"{nameof(fileCabinetRecord)} is null!");
             }
@@ -164,12 +165,12 @@ namespace FileCabinetApp
         /// <param name="inputParamentArray">Input parametr array <see cref="string"/>.</param>
         public void Update(string[] inputValueArray, string[] inputParamentArray)
         {
-            if (inputValueArray == null)
+            if (inputValueArray is null)
             {
                 throw new ArgumentNullException($"{nameof(inputValueArray)} is null!");
             }
 
-            if (inputParamentArray == null)
+            if (inputParamentArray is null)
             {
                 throw new ArgumentNullException($"{nameof(inputParamentArray)} is null!");
             }
@@ -186,12 +187,12 @@ namespace FileCabinetApp
         /// <returns>IEnumerable by firstName <see cref="FileCabinetRecord"/>.</returns>
         public IEnumerable<FileCabinetRecord> SelectByCondition(string[] inputParamentArray, string logicalOperator)
         {
-            if (inputParamentArray == null)
+            if (inputParamentArray is null)
             {
                 throw new ArgumentNullException($"{nameof(inputParamentArray)} is null!");
             }
 
-            if (logicalOperator == null)
+            if (logicalOperator is null)
             {
                 throw new ArgumentNullException($"{nameof(logicalOperator)} is null!");
             }
@@ -217,9 +218,10 @@ namespace FileCabinetApp
         /// Implementation IFileCabinetService Restore.
         /// </summary>
         /// <param name="fileCabinetServiceSnapshot">Input parametr fileCabinetServiceSnapshot <see cref="FileCabinetServiceSnapshot"/>.</param>
-        public void Restore(FileCabinetServiceSnapshot fileCabinetServiceSnapshot)
+        /// <returns>Counts add import record(s) <see cref="int"/>.</returns>
+        public int Restore(FileCabinetServiceSnapshot fileCabinetServiceSnapshot)
         {
-            if (fileCabinetServiceSnapshot == null)
+            if (fileCabinetServiceSnapshot is null)
             {
                 throw new ArgumentNullException($"{nameof(fileCabinetServiceSnapshot)} is null");
             }
@@ -234,7 +236,7 @@ namespace FileCabinetApp
 
             this.UpdateListAfterImport(validatedList);
 
-            Console.WriteLine($"{countImportRecord} records were add to FileCabinetMemoryService");
+            return countImportRecord;
         }
 
         /// <summary>
@@ -244,19 +246,17 @@ namespace FileCabinetApp
         /// <returns>ReadOnlyCollection deleted id <see cref="int"/>.</returns>
         public ReadOnlyCollection<int> Delete(string[] inputValueArray)
         {
-            if (inputValueArray == null)
+            if (inputValueArray is null)
             {
                 throw new ArgumentNullException(nameof(inputValueArray));
             }
-
-            CultureInfo provider = new CultureInfo("en-US");
 
             List<int> listTemp;
 
             switch (inputValueArray[0])
             {
                 case "id":
-                    int id = int.Parse(inputValueArray[1], provider);
+                    int id = int.Parse(inputValueArray[1], Provider);
                     listTemp = this.RemoveById(id);
                     break;
                 case "firstname":
@@ -268,7 +268,7 @@ namespace FileCabinetApp
                     listTemp = this.RemoveByLastName(lastName);
                     break;
                 case "dateofbirth":
-                    DateTime dateOfBirth = DateTime.Parse(inputValueArray[1], provider);
+                    DateTime dateOfBirth = DateTime.Parse(inputValueArray[1], Provider);
                     listTemp = this.RemoveByDateOfBirth(dateOfBirth);
                     break;
                 case "sex":
@@ -276,15 +276,15 @@ namespace FileCabinetApp
                     listTemp = this.RemoveByGender(sex);
                     break;
                 case "height":
-                    short height = short.Parse(inputValueArray[1], provider);
+                    short height = short.Parse(inputValueArray[1], Provider);
                     listTemp = this.RemoveByHeight(height);
                     break;
                 case "salary":
-                    decimal salary = decimal.Parse(inputValueArray[1], provider);
+                    decimal salary = decimal.Parse(inputValueArray[1], Provider);
                     listTemp = this.RemoveBySalary(salary);
                     break;
                 default:
-                    throw new ArgumentException("Not correct value!!!!");
+                    throw new ArgumentException("Not correct value in remove(delete) !!!!");
             }
 
             return new ReadOnlyCollection<int>(listTemp);
@@ -293,19 +293,20 @@ namespace FileCabinetApp
         /// <summary>
         /// Implementation IFileCabinetService Purge.
         /// </summary>
-        public void Purge()
+        /// <returns>Count records for delete <see cref="Tuple"/>.</returns>
+        public Tuple<int, int> Purge()
         {
             int countDeletedRecords = this.GetDdeletedRecordList().Count;
             int countRecordsInFile = this.GetCountAllRecordssFromFile();
 
             this.WriteRecordsToFile(this.GetNotDeletedRecordsList());
 
-            Console.WriteLine($"Data file processing is completed: {countDeletedRecords} of {countRecordsInFile} records were purged.");
+            return new Tuple<int, int>(countDeletedRecords, countRecordsInFile);
         }
 
         private static byte[] FileCabinetRecordToBytes(FileCabinetRecord fileCabinetRecord)
         {
-            if (fileCabinetRecord == null)
+            if (fileCabinetRecord is null)
             {
                 throw new ArgumentNullException(nameof(fileCabinetRecord));
             }
@@ -346,7 +347,7 @@ namespace FileCabinetApp
 
         private static FileCabinetRecord BytesToFileCabinetRecord(byte[] bytes)
         {
-            if (bytes == null)
+            if (bytes is null)
             {
                 throw new ArgumentNullException(nameof(bytes));
             }
@@ -409,14 +410,12 @@ namespace FileCabinetApp
 
         private bool ValidateImportParametr(FileCabinetRecord fileCabinetRecord)
         {
-            CultureInfo provider = new CultureInfo("en-US");
-
             bool isFirstNameValid = this.ValidateInput(fileCabinetRecord.FirstName, this.Validator.FirstNameConverter, this.Validator.FirstNameValidator);
             bool isLastNameValid = this.ValidateInput(fileCabinetRecord.LastName, this.Validator.LastNameConverter, this.Validator.LastNameValidator);
-            bool isDateOfBirthValid = this.ValidateInput(fileCabinetRecord.DateOfBirth.ToString("dd/MM/yyyy", new CultureInfo("en-US")), this.Validator.DayOfBirthConverter, this.Validator.DayOfBirthValidator);
-            bool isSexValid = this.ValidateInput(fileCabinetRecord.Sex.ToString(provider), this.Validator.SexConverter, this.Validator.SexValidator);
-            bool isHeigthValid = this.ValidateInput(fileCabinetRecord.Height.ToString(provider), this.Validator.HeightConverter, this.Validator.HeightValidator);
-            bool isSalaryValid = this.ValidateInput(fileCabinetRecord.Salary.ToString(provider), this.Validator.SalaryConverter, this.Validator.SalaryValidator);
+            bool isDateOfBirthValid = this.ValidateInput(fileCabinetRecord.DateOfBirth.ToString("dd/MM/yyyy", Provider), this.Validator.DayOfBirthConverter, this.Validator.DayOfBirthValidator);
+            bool isSexValid = this.ValidateInput(fileCabinetRecord.Sex.ToString(Provider), this.Validator.SexConverter, this.Validator.SexValidator);
+            bool isHeigthValid = this.ValidateInput(fileCabinetRecord.Height.ToString(Provider), this.Validator.HeightConverter, this.Validator.HeightValidator);
+            bool isSalaryValid = this.ValidateInput(fileCabinetRecord.Salary.ToString(Provider), this.Validator.SalaryConverter, this.Validator.SalaryValidator);
 
             return isFirstNameValid && isLastNameValid && isDateOfBirthValid && isSexValid && isHeigthValid && isSalaryValid;
         }
@@ -433,7 +432,7 @@ namespace FileCabinetApp
                 }
                 else
                 {
-                    Console.WriteLine($"{item.Id} records has incorrect value.This record was skipped.");
+                    Console.WriteLine($"#{item.Id} records has incorrect value.This record was skipped.");
                 }
             }
 
@@ -509,7 +508,7 @@ namespace FileCabinetApp
             this.GetPositionOfRecordsList();
         }
 
-        private ReadOnlyCollection<FileCabinetRecord> GetAllRecordsFromFile()
+        private List<FileCabinetRecord> GetAllRecordsFromFile()
         {
             List<FileCabinetRecord> listRecord = new List<FileCabinetRecord>();
             var recordBuffer = new byte[RECORDSIZE];
@@ -522,7 +521,7 @@ namespace FileCabinetApp
                 listRecord.Add(record);
             }
 
-            return new ReadOnlyCollection<FileCabinetRecord>(listRecord);
+            return new List<FileCabinetRecord>(listRecord);
         }
 
         private List<FileCabinetRecord> GetNotDeletedRecordsList()
@@ -679,7 +678,7 @@ namespace FileCabinetApp
             foreach (var remove in recordToList)
             {
                 this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
-                if (remove.FirstName.ToLower(new CultureInfo("en-US")) == firstName)
+                if (remove.FirstName.ToLower(Provider) == firstName)
                 {
                     this.fileStream.Seek(curent * 278, SeekOrigin.Begin);
                     this.fileStream.Seek(0, SeekOrigin.Current);
@@ -709,7 +708,7 @@ namespace FileCabinetApp
             foreach (var remove in recordToList)
             {
                 this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
-                if (remove.LastName.ToLower(new CultureInfo("en-US")) == lastName)
+                if (remove.LastName.ToLower(Provider) == lastName)
                 {
                     this.fileStream.Seek(curent * 278, SeekOrigin.Begin);
                     this.fileStream.Seek(0, SeekOrigin.Current);
@@ -849,8 +848,6 @@ namespace FileCabinetApp
 
         private List<FileCabinetRecord> FindRecordsByParameters(string[] parameter)
         {
-            CultureInfo provider = new CultureInfo("en-US");
-
             List<FileCabinetRecord> listTemp = new List<FileCabinetRecord>(this.GetNotDeletedRecordsList());
 
             foreach (var item in parameter)
@@ -864,26 +861,24 @@ namespace FileCabinetApp
 
         private List<FileCabinetRecord> FindRecordsByParameterInList(List<FileCabinetRecord> list, string parameter, string value)
         {
-            CultureInfo provider = new CultureInfo("en-US");
-
             List<FileCabinetRecord> listTemp = new List<FileCabinetRecord>();
 
             switch (parameter)
             {
                 case "id":
-                    int id = int.Parse(value, provider);
+                    int id = int.Parse(value, Provider);
                     listTemp = list.FindAll(item1 => item1.Id == id);
                     break;
                 case "firstname":
                     string firstName = value;
-                    listTemp = list.FindAll(item1 => item1.FirstName.ToLower(provider) == firstName);
+                    listTemp = list.FindAll(item1 => item1.FirstName.Equals(firstName, StringComparison.InvariantCultureIgnoreCase));
                     break;
                 case "lastname":
                     string lastName = value;
-                    listTemp = list.FindAll(item1 => item1.LastName.ToLower(provider) == lastName);
+                    listTemp = list.FindAll(item1 => item1.LastName.Equals(lastName, StringComparison.InvariantCultureIgnoreCase));
                     break;
                 case "dateofbirth":
-                    DateTime dateOfBirth = DateTime.Parse(value, provider);
+                    DateTime dateOfBirth = DateTime.Parse(value, Provider);
                     listTemp = list.FindAll(item1 => item1.DateOfBirth == dateOfBirth);
                     break;
                 case "sex":
@@ -891,11 +886,11 @@ namespace FileCabinetApp
                     listTemp = list.FindAll(item1 => item1.Sex == sex);
                     break;
                 case "height":
-                    short height = short.Parse(value, provider);
+                    short height = short.Parse(value, Provider);
                     listTemp = list.FindAll(item1 => item1.Height == height);
                     break;
                 case "salary":
-                    decimal salary = decimal.Parse(value, provider);
+                    decimal salary = decimal.Parse(value, Provider);
                     listTemp = list.FindAll(item1 => item1.Salary == salary);
                     break;
                 default:
@@ -912,8 +907,6 @@ namespace FileCabinetApp
 
         private List<FileCabinetRecord> FindRecordsByParameters(string[] parameter, string logicParametr)
         {
-            CultureInfo provider = new CultureInfo("en-US");
-
             List<FileCabinetRecord> listTemp = new List<FileCabinetRecord>(this.GetNotDeletedRecordsList());
 
             if (logicParametr == "and")
@@ -942,26 +935,24 @@ namespace FileCabinetApp
 
         private List<FileCabinetRecord> FindRecordsByParameterInListAnd(List<FileCabinetRecord> list, string parameter, string value)
         {
-            CultureInfo provider = new CultureInfo("en-US");
-
             List<FileCabinetRecord> listTemp = new List<FileCabinetRecord>();
 
             switch (parameter)
             {
                 case "id":
-                    int id = int.Parse(value, provider);
+                    int id = int.Parse(value, Provider);
                     listTemp = list.FindAll(item1 => item1.Id == id);
                     break;
                 case "firstname":
                     string firstName = value;
-                    listTemp = list.FindAll(item1 => item1.FirstName.ToLower(provider) == firstName);
+                    listTemp = list.FindAll(item1 => item1.FirstName.Equals(firstName, StringComparison.InvariantCultureIgnoreCase));
                     break;
                 case "lastname":
                     string lastName = value;
-                    listTemp = list.FindAll(item1 => item1.LastName.ToLower(provider) == lastName);
+                    listTemp = list.FindAll(item1 => item1.LastName.Equals(lastName, StringComparison.InvariantCultureIgnoreCase));
                     break;
                 case "dateofbirth":
-                    DateTime dateOfBirth = DateTime.Parse(value, provider);
+                    DateTime dateOfBirth = DateTime.Parse(value, Provider);
                     listTemp = list.FindAll(item1 => item1.DateOfBirth == dateOfBirth);
                     break;
                 case "sex":
@@ -969,11 +960,11 @@ namespace FileCabinetApp
                     listTemp = list.FindAll(item1 => char.ToLowerInvariant(item1.Sex) == sex);
                     break;
                 case "height":
-                    short height = short.Parse(value, provider);
+                    short height = short.Parse(value, Provider);
                     listTemp = list.FindAll(item1 => item1.Height == height);
                     break;
                 case "salary":
-                    decimal salary = decimal.Parse(value, provider);
+                    decimal salary = decimal.Parse(value, Provider);
                     listTemp = list.FindAll(item1 => item1.Salary == salary);
                     break;
                 default:
@@ -990,25 +981,24 @@ namespace FileCabinetApp
 
         private HashSet<FileCabinetRecord> FindRecordsByParameterInListOr(HashSet<FileCabinetRecord> set, string parameter, string value)
         {
-            CultureInfo provider = new CultureInfo("en-US");
             List<FileCabinetRecord> listTemp = new List<FileCabinetRecord>(this.GetNotDeletedRecordsList());
 
             switch (parameter)
             {
                 case "id":
-                    int id = int.Parse(value, provider);
+                    int id = int.Parse(value, Provider);
                     set.UnionWith(listTemp.FindAll(item1 => item1.Id == id));
                     break;
                 case "firstname":
                     string firstName = value;
-                    set.UnionWith(listTemp.FindAll(item1 => item1.FirstName.ToLower(provider) == firstName));
+                    set.UnionWith(listTemp.FindAll(item1 => item1.FirstName.Equals(firstName, StringComparison.InvariantCultureIgnoreCase)));
                     break;
                 case "lastname":
                     string lastName = value;
-                    set.UnionWith(listTemp.FindAll(item1 => item1.LastName.ToLower(provider) == lastName));
+                    set.UnionWith(listTemp.FindAll(item1 => item1.LastName.Equals(lastName, StringComparison.InvariantCultureIgnoreCase)));
                     break;
                 case "dateofbirth":
-                    DateTime dateOfBirth = DateTime.Parse(value, provider);
+                    DateTime dateOfBirth = DateTime.Parse(value, Provider);
                     set.UnionWith(listTemp.FindAll(item1 => item1.DateOfBirth == dateOfBirth));
                     break;
                 case "sex":
@@ -1016,11 +1006,11 @@ namespace FileCabinetApp
                     set.UnionWith(listTemp.FindAll(item1 => char.ToLowerInvariant(item1.Sex) == sex));
                     break;
                 case "height":
-                    short height = short.Parse(value, provider);
+                    short height = short.Parse(value, Provider);
                     set.UnionWith(listTemp.FindAll(item1 => item1.Height == height));
                     break;
                 case "salary":
-                    decimal salary = decimal.Parse(value, provider);
+                    decimal salary = decimal.Parse(value, Provider);
                     set.UnionWith(listTemp.FindAll(item1 => item1.Salary == salary));
                     break;
                 default:
@@ -1032,8 +1022,6 @@ namespace FileCabinetApp
 
         private void UpdateRecords(List<FileCabinetRecord> listRecords, string[] inputValueArray)
         {
-            CultureInfo provider = new CultureInfo("en-US");
-
             foreach (var record in listRecords)
             {
                 FileCabinetRecord item = new FileCabinetRecord();
@@ -1053,7 +1041,7 @@ namespace FileCabinetApp
                     switch (parameter)
                     {
                         case "id":
-                            int id = int.Parse(value, provider);
+                            int id = int.Parse(value, Provider);
                             item.Id = id;
                             break;
                         case "firstname":
@@ -1065,7 +1053,7 @@ namespace FileCabinetApp
                             item.LastName = lastName;
                             break;
                         case "dateofbirth":
-                            DateTime dateOfBirth = DateTime.Parse(value, provider);
+                            DateTime dateOfBirth = DateTime.Parse(value, Provider);
                             item.DateOfBirth = dateOfBirth;
                             break;
                         case "sex":
@@ -1073,11 +1061,11 @@ namespace FileCabinetApp
                             item.Sex = sex;
                             break;
                         case "height":
-                            short height = short.Parse(value, provider);
+                            short height = short.Parse(value, Provider);
                             item.Height = height;
                             break;
                         case "salary":
-                            decimal salary = decimal.Parse(value, provider);
+                            decimal salary = decimal.Parse(value, Provider);
                             item.Salary = salary;
                             break;
                         default:
@@ -1091,7 +1079,7 @@ namespace FileCabinetApp
 
         private void EditRecord(FileCabinetRecord fileCabinetRecord)
         {
-            if (fileCabinetRecord == null)
+            if (fileCabinetRecord is null)
             {
                 throw new ArgumentNullException($"{nameof(fileCabinetRecord)} is null!");
             }
@@ -1115,7 +1103,7 @@ namespace FileCabinetApp
                     {
                         string oldFirstName = bytesToRecord.FirstName;
                         string oldLastName = bytesToRecord.LastName;
-                        string oldDateOfBirth = bytesToRecord.DateOfBirth.ToString("yyyy-MMM-dd", new CultureInfo("en-US"));
+                        string oldDateOfBirth = bytesToRecord.DateOfBirth.ToString("yyyy-MMM-dd", Provider);
 
                         this.fileStream.Seek(i * 278, SeekOrigin.Begin);
                         long seek = this.fileStream.Position;

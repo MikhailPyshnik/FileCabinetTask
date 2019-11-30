@@ -59,7 +59,8 @@ namespace FileCabinetApp
         /// Return make snapshot for restore.
         /// </summary>
         /// <param name="fileCabinetServiceSnapshot">Input parametr fileCabinetServiceSnapshot <see cref="FileCabinetServiceSnapshot"/>.</param>
-        void Restore(FileCabinetServiceSnapshot fileCabinetServiceSnapshot);
+        /// <returns>Counts add import record(s) <see cref="int"/>.</returns>
+        int Restore(FileCabinetServiceSnapshot fileCabinetServiceSnapshot);
 
         /// <summary>
         /// Delete record by predicate.
@@ -78,6 +79,7 @@ namespace FileCabinetApp
         /// <summary>
         /// Delete record by bit in file.
         /// </summary>
-        void Purge();
+        /// <returns>Count records for delete <see cref="Tuple"/>.</returns>
+        Tuple<int, int> Purge();
     }
 }

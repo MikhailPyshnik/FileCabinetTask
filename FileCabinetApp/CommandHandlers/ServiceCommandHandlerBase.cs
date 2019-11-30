@@ -22,7 +22,7 @@ namespace FileCabinetApp.CommandHandlers
         /// <param name="fileCabinetService">Input parametr start id.<see cref="IFileCabinetService"/>.</param>
         protected ServiceCommandHandlerBase(IFileCabinetService fileCabinetService)
         {
-            service = fileCabinetService;
+            service = fileCabinetService ?? throw new ArgumentNullException(nameof(fileCabinetService));
         }
     }
 }
