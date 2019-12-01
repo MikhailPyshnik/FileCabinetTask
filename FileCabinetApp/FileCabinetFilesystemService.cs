@@ -77,7 +77,8 @@ namespace FileCabinetApp
         /// Implementation IFileCabinetService СreateRecod.
         /// </summary>
         /// <param name="fileCabinetRecord">Input parametr record <see cref="FileCabinetRecord"/>.</param>
-        public void Insert(FileCabinetRecord fileCabinetRecord)
+        /// <returns>Id<see cref="int"/>.</returns>
+        public int Insert(FileCabinetRecord fileCabinetRecord)
         {
             if (fileCabinetRecord is null)
             {
@@ -88,7 +89,7 @@ namespace FileCabinetApp
             int editIdReord = fileCabinetRecord.Id;
             var recordBuffer = new byte[RECORDSIZE];
             int counteRecordInFile = this.GetCountAllRecordssFromFile();
-            List<FileCabinetRecord> listTempForInsert = new List<FileCabinetRecord>(this.GetAllRecordsFromFile());
+            List<FileCabinetRecord> listTempForInsert = new List<FileCabinetRecord>(this.GetNotDeletedRecordsList());
             this.fileStream.Seek(0, SeekOrigin.Begin);
             for (int i = 0; i < counteRecordInFile; i++)
             {
@@ -98,21 +99,9 @@ namespace FileCabinetApp
                     var bytesToRecord = BytesToFileCabinetRecord(recordBuffer);
                     var tempRecord = listTempForInsert.Find(item1 => item1.Id == bytesToRecord.Id);
 
-                    if (listTempForInsert.Contains(fileCabinetRecord))
+                    if (listTempForInsert.Exists(x => x.Id == fileCabinetRecord.Id))
                     {
-                        this.fileStream.Seek(i * 278, SeekOrigin.Begin);
-                        long seek = this.fileStream.Position;
-                        bytesToRecord.FirstName = fileCabinetRecord.FirstName;
-                        bytesToRecord.LastName = fileCabinetRecord.LastName;
-                        bytesToRecord.DateOfBirth = fileCabinetRecord.DateOfBirth;
-                        bytesToRecord.Sex = fileCabinetRecord.Sex;
-                        bytesToRecord.Height = fileCabinetRecord.Height;
-                        bytesToRecord.Salary = fileCabinetRecord.Salary;
-                        this.fileStream.Seek(0, SeekOrigin.Current);
-                        var recordToBytes = FileCabinetRecordToBytes(bytesToRecord);
-                        this.fileStream.Write(recordToBytes, 0, recordToBytes.Length);
-                        this.fileStream.Flush();
-                        return;
+                        return 0;
                     }
                     else
                     {
@@ -129,6 +118,8 @@ namespace FileCabinetApp
                     continue;
                 }
             }
+
+            return editIdReord;
         }
 
         /// <summary>

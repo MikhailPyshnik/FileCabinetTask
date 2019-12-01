@@ -60,12 +60,12 @@ namespace FileCabinetApp
         /// <param name="inputParamentArray">Input parametr array <see cref="string"/>.</param>
         public void Update(string[] inputValueArray, string[] inputParamentArray)
         {
-            if (inputValueArray == null)
+            if (inputValueArray is null)
             {
                 throw new ArgumentNullException($"{nameof(inputValueArray)} is null!");
             }
 
-            if (inputParamentArray == null)
+            if (inputParamentArray is null)
             {
                 throw new ArgumentNullException($"{nameof(inputParamentArray)} is null!");
             }
@@ -129,14 +129,16 @@ namespace FileCabinetApp
         /// Implementation IFileCabinetService СreateRecod.
         /// </summary>
         /// <param name="fileCabinetRecord">Input parametr record <see cref="FileCabinetRecord"/>.</param>
-        public void Insert(FileCabinetRecord fileCabinetRecord)
+        /// <returns>Id<see cref="int"/>.</returns>
+        public int Insert(FileCabinetRecord fileCabinetRecord)
         {
             long ticksThisTime = 0;
             var sw = Stopwatch.StartNew();
-            fileCabinetService.Insert(fileCabinetRecord);
+            var result = fileCabinetService.Insert(fileCabinetRecord);
             sw.Stop();
             ticksThisTime = sw.ElapsedTicks;
             action($"Insert method execution duration is {ticksThisTime} ticks.");
+            return result;
         }
 
         /// <summary>

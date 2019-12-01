@@ -49,55 +49,69 @@ namespace FileCabinetApp.CommandHandlers
 
         private static void Import(string parameters)
         {
-            CultureInfo provider = new CultureInfo("en-US");
-
-            var parametersArray = parameters.Split(' ', 2);
-            if (parameters.Length == 0)
+            try
             {
-                action($"export command is empty!");
-                return;
-            }
-
-            string searchParametr = parametersArray[0].ToLower(provider);
-            string thePathToTheFile = parametersArray[1];
-            var extension = Path.GetExtension(thePathToTheFile);
-            extension = extension.Remove(0, 1);
-            if (searchParametr == "csv" || searchParametr == "xml")
-            {
-                if ((searchParametr == "csv" && extension == "csv") || (searchParametr == "xml" && extension == "xml"))
+                try
                 {
-                    bool containsFile = File.Exists(thePathToTheFile);
-                    if (containsFile)
+                    CultureInfo provider = new CultureInfo("en-US");
+
+                    var parametersArray = parameters.Split(' ', 2);
+                    if (parameters.Length == 0)
                     {
-                        ReadRecocdFileCvsOrXml(searchParametr, thePathToTheFile);
+                        action($"export command is empty!");
+                        return;
+                    }
+
+                    string searchParametr = parametersArray[0].ToLower(provider);
+                    string thePathToTheFile = parametersArray[1];
+                    var extension = Path.GetExtension(thePathToTheFile);
+                    extension = extension.Remove(0, 1);
+                    if (searchParametr == "csv" || searchParametr == "xml")
+                    {
+                        if ((searchParametr == "csv" && extension == "csv") || (searchParametr == "xml" && extension == "xml"))
+                        {
+                            bool containsFile = File.Exists(thePathToTheFile);
+                            if (containsFile)
+                            {
+                                ReadRecocdFileCvsOrXml(searchParametr, thePathToTheFile);
+                            }
+                            else
+                            {
+                                var inputDirectoryName = Path.GetDirectoryName(thePathToTheFile);
+                                if (inputDirectoryName.Length == 0)
+                                {
+                                    ReadRecocdFileCvsOrXml(searchParametr, thePathToTheFile);
+                                    return;
+                                }
+
+                                bool containsGetDirectoryName = Directory.Exists(inputDirectoryName);
+                                if (!containsGetDirectoryName)
+                                {
+                                    action($"Import error: file {thePathToTheFile}. is not exist. -Exit command import.");
+                                    return;
+                                }
+
+                                ReadRecocdFileCvsOrXml(searchParametr, thePathToTheFile);
+                            }
+                        }
+                        else
+                        {
+                            action($"The type of file {extension} does not match import type : {searchParametr}.-Exit command import.");
+                        }
                     }
                     else
                     {
-                        var inputDirectoryName = Path.GetDirectoryName(thePathToTheFile);
-                        if (inputDirectoryName.Length == 0)
-                        {
-                            ReadRecocdFileCvsOrXml(searchParametr, thePathToTheFile);
-                            return;
-                        }
-
-                        bool containsGetDirectoryName = Directory.Exists(inputDirectoryName);
-                        if (!containsGetDirectoryName)
-                        {
-                            action($"Import error: file {thePathToTheFile}. is not exist. -Exit command import.");
-                            return;
-                        }
-
-                        ReadRecocdFileCvsOrXml(searchParametr, thePathToTheFile);
+                        action($"Incorrect (is not csv or xml) type of file - {searchParametr}.-Exit command import.");
                     }
                 }
-                else
+                catch (Exception)
                 {
-                    action($"The type of file {extension} does not match import type : {searchParametr}.-Exit command import.");
+                    throw new ArgumentException("Incorrect input data.- Exit command import.");
                 }
             }
-            else
+            catch (ArgumentException ex)
             {
-                action($"Incorrect (is not csv or xml) type of file - {searchParametr}.-Exit command import.");
+                action(ex.Message);
             }
         }
 
@@ -115,59 +129,73 @@ namespace FileCabinetApp.CommandHandlers
 
         private static void StreamReaderRecordFromCSV(string thePathToTheFile)
         {
-            StreamReader streamReaderFromCSV = null;
             try
             {
-                streamReaderFromCSV = new StreamReader(thePathToTheFile, System.Text.Encoding.Default);
-                service.Validator = inputParamsValidator;
-                var snapshotFileCabinetService = service.MakeSnapshot();
-                snapshotFileCabinetService.LoadFromCsv(streamReaderFromCSV);
-                action($"{snapshotFileCabinetService.Records.Count} record(s) were imported from {thePathToTheFile}.");
-                var result = service.Restore(snapshotFileCabinetService);
-                action($"{result} records were add to {service.GetType()}.");
+                StreamReader streamReaderFromCSV = null;
+                try
+                {
+                    streamReaderFromCSV = new StreamReader(thePathToTheFile, System.Text.Encoding.Default);
+                    service.Validator = inputParamsValidator;
+                    var snapshotFileCabinetService = service.MakeSnapshot();
+                    snapshotFileCabinetService.LoadFromCsv(streamReaderFromCSV);
+                    action($"{snapshotFileCabinetService.Records.Count} record(s) were imported from {thePathToTheFile}.");
+                    var result = service.Restore(snapshotFileCabinetService);
+                    action($"{result} records were add to {service.GetType()}.");
+                }
+                catch (ArgumentException ex)
+                {
+                    action(ex.Message);
+                }
+                catch (Exception ex)
+                {
+                    action(ex.Message);
+                    throw new ArgumentException("Incorrect data in CSV.- Exit command import.");
+                }
+                finally
+                {
+                    if (streamReaderFromCSV != null)
+                    {
+                        streamReaderFromCSV.Close();
+                    }
+                }
             }
             catch (ArgumentException ex)
             {
                 action(ex.Message);
             }
-            catch (Exception ex)
-            {
-                action(ex.Message);
-                throw new ArgumentException($"{ex.Message}");
-            }
-            finally
-            {
-                if (streamReaderFromCSV != null)
-                {
-                    streamReaderFromCSV.Close();
-                }
-            }
         }
 
         private static void StreamReaderRecordFromXML(string thePathToTheFile)
         {
-            StreamReader streamReaderFromXML = null;
             try
             {
-                streamReaderFromXML = new StreamReader(thePathToTheFile, System.Text.Encoding.Default);
-                service.Validator = inputParamsValidator;
-                var snapshotFileCabinetService = service.MakeSnapshot();
-                snapshotFileCabinetService.LoadFromXML(streamReaderFromXML);
-                action($"{snapshotFileCabinetService.Records.Count} record(s) were imported from {thePathToTheFile}.");
-                var result = service.Restore(snapshotFileCabinetService);
-                action($"{result} records were add to {service.GetType()}");
+                StreamReader streamReaderFromXML = null;
+                try
+                {
+                    streamReaderFromXML = new StreamReader(thePathToTheFile, System.Text.Encoding.Default);
+                    service.Validator = inputParamsValidator;
+                    var snapshotFileCabinetService = service.MakeSnapshot();
+                    snapshotFileCabinetService.LoadFromXML(streamReaderFromXML);
+                    action($"{snapshotFileCabinetService.Records.Count} record(s) were imported from {thePathToTheFile}.");
+                    var result = service.Restore(snapshotFileCabinetService);
+                    action($"{result} records were add to {service.GetType()}");
+                }
+                catch (Exception ex)
+                {
+                    action(ex.Message);
+                    throw new ArgumentException("Incorrect data in XML.- Exit command import.");
+                }
+                finally
+                {
+                    if (streamReaderFromXML != null)
+                    {
+                        streamReaderFromXML.Close();
+                    }
+                }
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 action(ex.Message);
-                throw new ArgumentException($"{ex.Message}");
-            }
-            finally
-            {
-                if (streamReaderFromXML != null)
-                {
-                    streamReaderFromXML.Close();
-                }
             }
         }
     }

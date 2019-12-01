@@ -601,6 +601,7 @@
             Implementation IFileCabinetService СreateRecod.
             </summary>
             <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
+            <returns>Id<see cref="T:System.Int32"/>.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.GetRecords">
             <summary>
@@ -682,6 +683,7 @@
             <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
             <exception cref="T:System.ArgumentNullException">Throws if <paramref name="fileCabinetRecord"/>, <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/> is null.</exception>
             <exception cref="T:System.ArgumentException">Throws if <paramref name="fileCabinetRecord.FirstName.FirstName"/>,<paramref name="fileCabinetRecord.LastName.LastName"/>,<paramref name="fileCabinetRecord.DateOfBirth.DateOfBirth"/>,<paramref name="fileCabinetRecord.Sex.Sex"/>,<paramref name="fileCabinetRecord.Height.Height"/>,<paramref name="fileCabinetRecord.Salary.Salary"/> is(are) incorrect value.</exception>
+            <returns>Id<see cref="T:System.Int32"/>.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.GetRecords">
             <summary>
@@ -874,6 +876,7 @@
             Inseert new record FileCabinetRecord.
             </summary>
             <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
+            <returns>Id <see cref="T:System.Int32"/>.</returns>
         </member>
         <member name="M:FileCabinetApp.IFileCabinetService.GetRecords">
             <summary>
@@ -1256,6 +1259,7 @@
             Implementation IFileCabinetService СreateRecod.
             </summary>
             <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
+            <returns>Id<see cref="T:System.Int32"/>.</returns>
         </member>
         <member name="M:FileCabinetApp.ServiceLogger.Update(System.String[],System.String[])">
             <summary>
@@ -1372,6 +1376,7 @@
             Implementation IFileCabinetService СreateRecod.
             </summary>
             <param name="fileCabinetRecord">Input parametr record <see cref="T:FileCabinetRecord"/>.</param>
+            <returns>Id<see cref="T:System.Int32"/>.</returns>
         </member>
         <member name="M:FileCabinetApp.ServiceMeter.MakeSnapshot">
             <summary>

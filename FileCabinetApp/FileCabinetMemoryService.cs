@@ -70,7 +70,8 @@ namespace FileCabinetApp
         /// <param name="fileCabinetRecord">Input parametr record <see cref="FileCabinetRecord"/>.</param>
         /// <exception cref="ArgumentNullException">Throws if <paramref name="fileCabinetRecord"/>, <paramref name="fileCabinetRecord.FirstName"/>,<paramref name="fileCabinetRecord.LastName"/> is null.</exception>
         /// <exception cref="ArgumentException">Throws if <paramref name="fileCabinetRecord.FirstName"/>,<paramref name="fileCabinetRecord.LastName"/>,<paramref name="fileCabinetRecord.DateOfBirth"/>,<paramref name="fileCabinetRecord.Sex"/>,<paramref name="fileCabinetRecord.Height"/>,<paramref name="fileCabinetRecord.Salary"/> is(are) incorrect value.</exception>
-        public void Insert(FileCabinetRecord fileCabinetRecord)
+        /// <returns>Id<see cref="int"/>.</returns>
+        public int Insert(FileCabinetRecord fileCabinetRecord)
         {
             if (fileCabinetRecord is null)
             {
@@ -79,13 +80,13 @@ namespace FileCabinetApp
 
             if (this.list.Exists(x => x.Id == fileCabinetRecord.Id))
             {
-                this.EditRecord(fileCabinetRecord);
-                return;
+                return 0;
             }
 
             this.validator.ValidateParametrs(fileCabinetRecord);
             this.list.Add(fileCabinetRecord);
             this.memoizationDictionary.Clear();
+            return fileCabinetRecord.Id;
         }
 
         /// <summary>

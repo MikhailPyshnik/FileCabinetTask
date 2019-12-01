@@ -61,19 +61,22 @@ namespace FileCabinetApp
         /// Implementation IFileCabinetService СreateRecod.
         /// </summary>
         /// <param name="fileCabinetRecord">Input parametr record <see cref="FileCabinetRecord"/>.</param>
-        public void Insert(FileCabinetRecord fileCabinetRecord)
+        /// <returns>Id<see cref="int"/>.</returns>
+        public int Insert(FileCabinetRecord fileCabinetRecord)
         {
             if (fileCabinetRecord is null)
             {
                 throw new ArgumentNullException(nameof(fileCabinetRecord));
             }
 
-            fileCabinetService.Insert(fileCabinetRecord);
+            var result = fileCabinetService.Insert(fileCabinetRecord);
 
             using (StreamWriter w = File.AppendText("log.txt"))
             {
                 Log($"Calling Insert() with  Id = '{fileCabinetRecord.Id}', FirstName = '{fileCabinetRecord.FirstName}', LastName = '{fileCabinetRecord.LastName}', DateOfBirth = '{fileCabinetRecord.DateOfBirth}' ", w);
             }
+
+            return result;
         }
 
         /// <summary>

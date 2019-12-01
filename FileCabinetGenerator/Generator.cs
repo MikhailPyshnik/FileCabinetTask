@@ -7,6 +7,8 @@ using System.Text;
 using System.Xml;
 using Bogus;
 using FileCabinetApp;
+using FileCabinetApp.Configuration;
+using Microsoft.Extensions.Configuration;
 
 namespace FileCabinetGenerator
 {
@@ -41,7 +43,13 @@ namespace FileCabinetGenerator
         {
             List<FileCabinetRecord> list = new List<FileCabinetRecord>((int)countId);
 
-            var recordValidator = new InputValidator();
+            IConfiguration config = new ConfigurationBuilder()
+                                     .AddJsonFile("validation-rules.json", true, true)
+                                     .Build();
+            var validationRulesFromJson = config.Get<ConfigurationFilecabinet>();
+            var defaultValidateRule = validationRulesFromJson.Default;
+
+            var recordValidator = new InputValidator(defaultValidateRule);
 
             for (uint i = startId; i < startId + countId; i++)
             {

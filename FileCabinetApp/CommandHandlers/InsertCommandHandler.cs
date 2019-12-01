@@ -103,8 +103,15 @@ namespace FileCabinetApp.CommandHandlers
                         }
                     }
 
-                    service.Insert(fileCabinetRecord);
-                    action($"Add record by insert with id - {fileCabinetRecord.Id}.");
+                    var result = service.Insert(fileCabinetRecord);
+                    if (result == 0)
+                    {
+                        action($"Not add record.This id contains!");
+                    }
+                    else
+                    {
+                        action($"Add record by insert with id - {fileCabinetRecord.Id}.");
+                    }
                 }
                 catch (ArgumentException ex)
                 {

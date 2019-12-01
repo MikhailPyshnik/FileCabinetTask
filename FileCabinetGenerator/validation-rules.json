@@ -1,4 +1,4 @@
-{
+﻿{
 	"default": {
 		"firstName": {
 			"min":2,
@@ -8,10 +8,10 @@
 			"min":2,
 			"max":60
 		},
-		"dateOfBirth": {
-			"from": "01/01/1950",
-			"to": "12/15/1960"
-		},
+    "dateOfBirth": {
+      "from": "01/01/1950",
+      "to": "12/15/1960"
+    },
 		"gender": {
 			"male": "m",
 			"female":"f"
