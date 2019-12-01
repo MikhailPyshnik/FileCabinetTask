@@ -89,33 +89,40 @@ namespace FileCabinetApp
             int editIdReord = fileCabinetRecord.Id;
             var recordBuffer = new byte[RECORDSIZE];
             int counteRecordInFile = this.GetCountAllRecordssFromFile();
-            List<FileCabinetRecord> listTempForInsert = new List<FileCabinetRecord>(this.GetNotDeletedRecordsList());
-            this.fileStream.Seek(0, SeekOrigin.Begin);
-            for (int i = 0; i < counteRecordInFile; i++)
+            if (counteRecordInFile == 0)
             {
-                this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
-                if (recordBuffer[0] != SETTHIRDBITTRUE)
+                this.CreateRecord(fileCabinetRecord);
+            }
+            else
+            {
+                List<FileCabinetRecord> listTempForInsert = new List<FileCabinetRecord>(this.GetNotDeletedRecordsList());
+                this.fileStream.Seek(0, SeekOrigin.Begin);
+                for (int i = 0; i < counteRecordInFile; i++)
                 {
-                    var bytesToRecord = BytesToFileCabinetRecord(recordBuffer);
-                    var tempRecord = listTempForInsert.Find(item1 => item1.Id == bytesToRecord.Id);
-
-                    if (listTempForInsert.Exists(x => x.Id == fileCabinetRecord.Id))
+                    this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
+                    if (recordBuffer[0] != SETTHIRDBITTRUE)
                     {
-                        return 0;
+                        var bytesToRecord = BytesToFileCabinetRecord(recordBuffer);
+                        var tempRecord = listTempForInsert.Find(item1 => item1.Id == bytesToRecord.Id);
+
+                        if (listTempForInsert.Exists(x => x.Id == fileCabinetRecord.Id))
+                        {
+                            return 0;
+                        }
+                        else
+                        {
+                            this.fileStream.Seek(0, SeekOrigin.End);
+                            long seek1 = this.fileStream.Position;
+                            var b2 = FileCabinetRecordToBytes(fileCabinetRecord);
+                            this.fileStream.Write(b2, 0, b2.Length);
+                            this.fileStream.Flush();
+                            break;
+                        }
                     }
                     else
                     {
-                        this.fileStream.Seek(0, SeekOrigin.End);
-                        long seek1 = this.fileStream.Position;
-                        var b2 = FileCabinetRecordToBytes(fileCabinetRecord);
-                        this.fileStream.Write(b2, 0, b2.Length);
-                        this.fileStream.Flush();
-                        break;
+                        continue;
                     }
-                }
-                else
-                {
-                    continue;
                 }
             }
 
