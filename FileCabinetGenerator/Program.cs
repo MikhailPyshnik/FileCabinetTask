@@ -118,25 +118,27 @@ namespace FileCabinetGenerator
 
                                 ExportFile(inputFileName, startIdToRecords, amountRecords);
                             }
-
-                            bool containsGetDirectoryName = Directory.Exists(inputDirectoryName);
-                            if (!containsGetDirectoryName)
+                            else
                             {
-                                PrintDefault();
-                                return;
-                            }
+                                bool containsGetDirectoryName = Directory.Exists(inputDirectoryName);
+                                if (!containsGetDirectoryName)
+                                {
+                                    PrintDefault();
+                                    return;
+                                }
 
-                            if (!uint.TryParse(inputIdAmount, out amountRecords))
-                            {
-                                Console.WriteLine($"The incorrect start id. Default value:{amountRecords}.");
-                            }
+                                if (!uint.TryParse(inputIdAmount, out amountRecords))
+                                {
+                                    Console.WriteLine($"The incorrect start id. Default value:{amountRecords}.");
+                                }
 
-                            if (!uint.TryParse(inputIdStart, out startIdToRecords))
-                            {
-                                Console.WriteLine($"The incorrect start id. Default value:{startIdToRecords}.");
-                            }
+                                if (!uint.TryParse(inputIdStart, out startIdToRecords))
+                                {
+                                    Console.WriteLine($"The incorrect start id. Default value:{startIdToRecords}.");
+                                }
 
-                            ExportFile(inputFileName, startIdToRecords, amountRecords);
+                                ExportFile(inputFileName, startIdToRecords, amountRecords);
+                            }
                         }
                     }
                     else
