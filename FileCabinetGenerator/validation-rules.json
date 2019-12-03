@@ -1,54 +1,54 @@
 ﻿{
-	"default": {
-		"firstName": {
-			"min":2,
-			"max":60
-		},
-		"lastName": {
-			"min":2,
-			"max":60
-		},
-    "dateOfBirth": {
-      "from": "01/01/1950",
-      "to": "12/15/1960"
+  "default": {
+    "firstName": {
+      "min": 2,
+      "max": 60
     },
-		"gender": {
-			"male": "m",
-			"female":"f"
-		},
-    "height": {
-			"min":60,
-			"max":220
-		},
-		"salary": {
-			"min":500,
-			"max":10000
-		}
-	},
-	"custom": {
-		"firstName": {
-			"min":2,
-			"max":20
-		},
-		"lastName": {
-			"min":2,
-			"max":20
-		},
+    "lastName": {
+      "min": 2,
+      "max": 60
+    },
     "dateOfBirth": {
       "from": "01/01/1939",
-      "to": "12/15/2019"
+      "to": "01/12/2019"
     },
-		"gender": {
-			"male": "m",
-			"female": "f"
-		},
+    "gender": {
+      "male": "m",
+      "female": "f"
+    },
     "height": {
-			"min":100,
-			"max":220
-		},
-		"salary": {
-			"min":500,
-			"max":5000
-		}
-	}
+      "min": 60,
+      "max": 220
+    },
+    "salary": {
+      "min": 500,
+      "max": 10000
+    }
+  },
+  "custom": {
+    "firstName": {
+      "min": 2,
+      "max": 20
+    },
+    "lastName": {
+      "min": 2,
+      "max": 20
+    },
+    "dateOfBirth": {
+      "from": "01/01/1950",
+      "to": "01/12/2019"
+    },
+    "gender": {
+      "male": "m",
+      "female": "f"
+    },
+    "height": {
+      "min": 100,
+      "max": 220
+    },
+    "salary": {
+      "min": 500,
+      "max": 5000
+    }
+  }
 }
