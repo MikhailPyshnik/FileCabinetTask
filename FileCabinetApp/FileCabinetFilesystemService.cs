@@ -40,6 +40,12 @@ namespace FileCabinetApp
         public IValidatorOfParemetrs Validator { get; set; }
 
         /// <summary>
+        /// Gets the type storage of filecabinet.
+        /// </summary>
+        /// <value>The Status of the record.</value>
+        public IFileCabinetService FileCabinetProperties { get => new FileCabinetFilesystemService(this.fileStream, this.validator); }
+
+        /// <summary>
         /// Implementation IFileCabinetService GetStat.
         /// </summary>
         /// <returns>Count records <see cref="int"/>.</returns>
@@ -89,33 +95,40 @@ namespace FileCabinetApp
             int editIdReord = fileCabinetRecord.Id;
             var recordBuffer = new byte[RECORDSIZE];
             int counteRecordInFile = this.GetCountAllRecordssFromFile();
-            List<FileCabinetRecord> listTempForInsert = new List<FileCabinetRecord>(this.GetNotDeletedRecordsList());
-            this.fileStream.Seek(0, SeekOrigin.Begin);
-            for (int i = 0; i < counteRecordInFile; i++)
+            if (counteRecordInFile == 0)
             {
-                this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
-                if (recordBuffer[0] != SETTHIRDBITTRUE)
+                this.CreateRecord(fileCabinetRecord);
+            }
+            else
+            {
+                List<FileCabinetRecord> listTempForInsert = new List<FileCabinetRecord>(this.GetNotDeletedRecordsList());
+                this.fileStream.Seek(0, SeekOrigin.Begin);
+                for (int i = 0; i < counteRecordInFile; i++)
                 {
-                    var bytesToRecord = BytesToFileCabinetRecord(recordBuffer);
-                    var tempRecord = listTempForInsert.Find(item1 => item1.Id == bytesToRecord.Id);
-
-                    if (listTempForInsert.Exists(x => x.Id == fileCabinetRecord.Id))
+                    this.fileStream.Read(recordBuffer, 0, RECORDSIZE);
+                    if (recordBuffer[0] != SETTHIRDBITTRUE)
                     {
-                        return 0;
+                        var bytesToRecord = BytesToFileCabinetRecord(recordBuffer);
+                        var tempRecord = listTempForInsert.Find(item1 => item1.Id == bytesToRecord.Id);
+
+                        if (listTempForInsert.Exists(x => x.Id == fileCabinetRecord.Id))
+                        {
+                            return 0;
+                        }
+                        else
+                        {
+                            this.fileStream.Seek(0, SeekOrigin.End);
+                            long seek1 = this.fileStream.Position;
+                            var b2 = FileCabinetRecordToBytes(fileCabinetRecord);
+                            this.fileStream.Write(b2, 0, b2.Length);
+                            this.fileStream.Flush();
+                            break;
+                        }
                     }
                     else
                     {
-                        this.fileStream.Seek(0, SeekOrigin.End);
-                        long seek1 = this.fileStream.Position;
-                        var b2 = FileCabinetRecordToBytes(fileCabinetRecord);
-                        this.fileStream.Write(b2, 0, b2.Length);
-                        this.fileStream.Flush();
-                        break;
+                        continue;
                     }
-                }
-                else
-                {
-                    continue;
                 }
             }
 
@@ -905,7 +918,7 @@ namespace FileCabinetApp
                 foreach (var item in parameter)
                 {
                     string[] split = item.Split("=");
-                    listTemp = this.FindRecordsByParameterInListAnd(listTemp, split[0], split[1]);
+                    listTemp = this.FindRecordsByParameterInList(listTemp, split[0], split[1]);
                 }
             }
 
@@ -919,52 +932,6 @@ namespace FileCabinetApp
                 }
 
                 listTemp = new List<FileCabinetRecord>(set);
-            }
-
-            return listTemp;
-        }
-
-        private List<FileCabinetRecord> FindRecordsByParameterInListAnd(List<FileCabinetRecord> list, string parameter, string value)
-        {
-            List<FileCabinetRecord> listTemp = new List<FileCabinetRecord>();
-
-            switch (parameter)
-            {
-                case "id":
-                    int id = int.Parse(value, Provider);
-                    listTemp = list.FindAll(item1 => item1.Id == id);
-                    break;
-                case "firstname":
-                    string firstName = value;
-                    listTemp = list.FindAll(item1 => item1.FirstName.Equals(firstName, StringComparison.InvariantCultureIgnoreCase));
-                    break;
-                case "lastname":
-                    string lastName = value;
-                    listTemp = list.FindAll(item1 => item1.LastName.Equals(lastName, StringComparison.InvariantCultureIgnoreCase));
-                    break;
-                case "dateofbirth":
-                    DateTime dateOfBirth = DateTime.Parse(value, Provider);
-                    listTemp = list.FindAll(item1 => item1.DateOfBirth == dateOfBirth);
-                    break;
-                case "sex":
-                    char sex = char.Parse(value);
-                    listTemp = list.FindAll(item1 => char.ToLowerInvariant(item1.Sex) == sex);
-                    break;
-                case "height":
-                    short height = short.Parse(value, Provider);
-                    listTemp = list.FindAll(item1 => item1.Height == height);
-                    break;
-                case "salary":
-                    decimal salary = decimal.Parse(value, Provider);
-                    listTemp = list.FindAll(item1 => item1.Salary == salary);
-                    break;
-                default:
-                    throw new ArgumentException("Not correct value!!!!");
-            }
-
-            if (listTemp.Count == 0)
-            {
-                throw new ArgumentException("Don't find records for update by conditional!");
             }
 
             return listTemp;

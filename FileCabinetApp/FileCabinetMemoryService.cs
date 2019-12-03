@@ -35,6 +35,12 @@ namespace FileCabinetApp
         public IValidatorOfParemetrs Validator { get; set; }
 
         /// <summary>
+        /// Gets the type storage of filecabinet.
+        /// </summary>
+        /// <value>The Status of the record.</value>
+        public IFileCabinetService FileCabinetProperties { get => new FileCabinetMemoryService(this.validator); }
+
+        /// <summary>
         /// Implementation IFileCabinetService СreateRecod.
         /// </summary>
         /// <param name="fileCabinetRecord">Input parametr record <see cref="FileCabinetRecord"/>.</param>
@@ -536,7 +542,7 @@ namespace FileCabinetApp
                     listTemp = list.FindAll(item1 => item1.Salary == salary);
                     break;
                 default:
-                    throw new ArgumentException("Not correct value!!!!");
+                    throw new ArgumentException("Not correct value in update!");
             }
 
             if (listTemp.Count == 0)

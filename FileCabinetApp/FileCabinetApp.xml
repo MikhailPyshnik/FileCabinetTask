@@ -583,6 +583,12 @@
             </summary>
             <value>The Validator of the Program.</value>
         </member>
+        <member name="P:FileCabinetApp.FileCabinetFilesystemService.FileCabinetProperties">
+            <summary>
+            Gets the type storage of filecabinet.
+            </summary>
+            <value>The Status of the record.</value>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetFilesystemService.GetStat">
             <summary>
             Implementation IFileCabinetService GetStat.
@@ -666,6 +672,12 @@
             Gets or sets the Validator of the Program.
             </summary>
             <value>The Validator of the Program.</value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetMemoryService.FileCabinetProperties">
+            <summary>
+            Gets the type storage of filecabinet.
+            </summary>
+            <value>The Status of the record.</value>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.CreateRecord(FileCabinetRecord)">
             <summary>
@@ -863,6 +875,12 @@
             Gets or sets the Validator of the Program.
             </summary>
             <value>The Validator of the Program.</value>
+        </member>
+        <member name="P:FileCabinetApp.IFileCabinetService.FileCabinetProperties">
+            <summary>
+            Gets the type storage of filecabinet.
+            </summary>
+            <value>The Status of the record.</value>
         </member>
         <member name="M:FileCabinetApp.IFileCabinetService.CreateRecord(FileCabinetRecord)">
             <summary>
@@ -1247,6 +1265,12 @@
             </summary>
             <value>The Validator of the Program.</value>
         </member>
+        <member name="P:FileCabinetApp.ServiceLogger.FileCabinetProperties">
+            <summary>
+            Gets the type storage of filecabinet.
+            </summary>
+            <value>The Status of the record.</value>
+        </member>
         <member name="M:FileCabinetApp.ServiceLogger.CreateRecord(FileCabinetRecord)">
             <summary>
             Implementation IFileCabinetService СreateRecod in class ServiceLogger.
@@ -1330,6 +1354,12 @@
             </summary>
             <param name="fileCabinet">Input parametr in constructor <see cref="T:FileCabinetApp.IFileCabinetService"/>.</param>
             <param name="printMethod">Input delegate Action for print messages.<see cref="T:System.Action"/>.</param>
+        </member>
+        <member name="P:FileCabinetApp.ServiceMeter.FileCabinetProperties">
+            <summary>
+            Gets the type storage of filecabinet.
+            </summary>
+            <value>The Status of the record.</value>
         </member>
         <member name="P:FileCabinetApp.ServiceMeter.Validator">
             <summary>

@@ -99,40 +99,48 @@ namespace FileCabinetApp.CommandHandlers
             {
                 try
                 {
-                CultureInfo provider = new CultureInfo("en-US");
+                    string[] fieldsRecord = new string[] { "id", "firstname", "lastname", "dateofbirth", "sex", "height", "salary" };
 
-                string[] value1 = new string[] { "id", "firstname", "lastname", "dateofbirth", "sex", "height", "salary" };
-
-                Regex regex = new Regex(@"(.*)where(.*)", RegexOptions.IgnoreCase);
-
-                MatchCollection matches = regex.Matches(parameters);
-
-                if (matches.Count == 0)
+                    if (string.IsNullOrWhiteSpace(parameters))
                     {
-                    Regex regexList = new Regex(@"(.*)", RegexOptions.IgnoreCase);
-                    MatchCollection matchesList = regexList.Matches(parameters);
-                    var nameParametrList = matchesList[0].Groups[1].Value.ToLower(provider);
-                    var command = GetStringArray(nameParametrList);
-                    var selectList = service.GetRecords();
-                    this.PrintRecords(selectList, command);
+                        var selectList = service.GetRecords();
+                        this.PrintRecords(selectList, fieldsRecord);
                     }
                     else
                     {
-                    string nameParametr = matches[0].Groups[1].Value.ToLower(provider);
+                        CultureInfo provider = new CultureInfo("en-US");
 
-                    string inputParametr = matches[0].Groups[2].Value.ToLower(provider);
+                        Regex regex = new Regex(@"(.*)where(.*)", RegexOptions.IgnoreCase);
 
-                    var command = GetStringArray(nameParametr);
+                        MatchCollection matches = regex.Matches(parameters);
 
-                    string logicalOperator;
+                        if (matches.Count == 0)
+                        {
+                            Regex regexList = new Regex(@"(.*)", RegexOptions.IgnoreCase);
+                            MatchCollection matchesList = regexList.Matches(parameters);
+                            var nameParametrList = matchesList[0].Groups[1].Value.ToLower(provider);
+                            var command = GetStringArray(nameParametrList);
+                            var selectList = service.GetRecords();
+                            this.PrintRecords(selectList, command);
+                        }
+                        else
+                        {
+                            string nameParametr = matches[0].Groups[1].Value.ToLower(provider);
 
-                    var inputValue = GetStringArrayForAndAndOr(inputParametr, out logicalOperator);
+                            string inputParametr = matches[0].Groups[2].Value.ToLower(provider);
 
-                    var selectRecords = service.SelectByCondition(inputValue, logicalOperator);
+                            var command = GetStringArray(nameParametr);
 
-                    this.PrintRecords(selectRecords, command);
+                            string logicalOperator;
 
-                    action("The command Select finished correctly.");
+                            var inputValue = GetStringArrayForAndAndOr(inputParametr, out logicalOperator);
+
+                            var selectRecords = service.SelectByCondition(inputValue, logicalOperator);
+
+                            this.PrintRecords(selectRecords, command);
+
+                            action("The command Select finished correctly.");
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -151,7 +159,7 @@ namespace FileCabinetApp.CommandHandlers
         {
             if (records is null)
             {
-                action("No records are found!");
+                action("No records are found by conditional in select command!");
             }
             else
             {

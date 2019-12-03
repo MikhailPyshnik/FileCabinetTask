@@ -103,17 +103,19 @@ namespace FileCabinetApp
                     }
                 }
 
+                var fileCabinetSrorage = fileCabinetService;
+
                 if (options.InputStopwatch)
                 {
                     fileCabinetService.Validator = recorInputdValidator;
-                    fileCabinetService = new ServiceMeter(fileCabinetService, ConsolePrinter);
+                    fileCabinetService = new ServiceMeter(fileCabinetSrorage, ConsolePrinter);
                     stopWatchRules = "Use stopwatch";
                 }
 
                 if (options.InputLogger)
                 {
                     fileCabinetService.Validator = recorInputdValidator;
-                    fileCabinetService = new ServiceLogger(fileCabinetService);
+                    fileCabinetService = new ServiceLogger(fileCabinetSrorage);
                     loggerRules = "Use logger";
                 }
 
@@ -167,12 +169,6 @@ namespace FileCabinetApp
             }
         }
 
-        private static void PrintMissedCommandInfo(string command)
-        {
-            Console.WriteLine($"There is no '{command}' command.");
-            Console.WriteLine();
-        }
-
         private static ICommandHandler CreateCommandHandlers()
         {
             var helpHandler = new HelpCommandHandler();
@@ -217,27 +213,6 @@ namespace FileCabinetApp
             Console.WriteLine(textMessage);
         }
 
-        private static void DefaultRecordPrinter(IEnumerable<FileCabinetRecord> records)
-        {
-            if (records is null)
-            {
-                throw new ArgumentNullException(nameof(records));
-            }
-
-            if (!records.GetEnumerator().MoveNext())
-            {
-                Console.WriteLine("Don't find records!");
-            }
-            else
-            {
-                CultureInfo provider = new CultureInfo("en-US");
-                foreach (var record in records)
-                {
-                    Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd", provider)}, {record.Sex}, {record.Height}, {record.Salary}");
-                }
-            }
-        }
-
         private static void RecordPrinter(IEnumerable<FileCabinetRecord> records, string[] fields)
         {
             if (records is null)
@@ -247,7 +222,7 @@ namespace FileCabinetApp
 
             if (!records.GetEnumerator().MoveNext())
             {
-                Console.WriteLine("Don't find records!");
+                Console.WriteLine($"Don't find records! {fileCabinetService.GetType()} is empty!");
             }
             else
             {

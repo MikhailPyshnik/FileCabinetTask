@@ -178,7 +178,7 @@ namespace FileCabinetApp.CommandHandlers
                     snapshotFileCabinetService.LoadFromXML(streamReaderFromXML);
                     action($"{snapshotFileCabinetService.Records.Count} record(s) were imported from {thePathToTheFile}.");
                     var result = service.Restore(snapshotFileCabinetService);
-                    action($"{result} records were add to {service.GetType()}");
+                    action($"{result} records were add to {service.FileCabinetProperties}");
                 }
                 catch (Exception ex)
                 {

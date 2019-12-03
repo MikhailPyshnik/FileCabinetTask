@@ -35,6 +35,12 @@ namespace FileCabinetApp
         public IValidatorOfParemetrs Validator { get; set; }
 
         /// <summary>
+        /// Gets the type storage of filecabinet.
+        /// </summary>
+        /// <value>The Status of the record.</value>
+        public IFileCabinetService FileCabinetProperties { get => fileCabinetService; }
+
+        /// <summary>
         /// Implementation IFileCabinetService СreateRecod in class ServiceLogger.
         /// </summary>
         /// <param name="fileCabinetRecord">Input parametr record <see cref="FileCabinetRecord"/>.</param>

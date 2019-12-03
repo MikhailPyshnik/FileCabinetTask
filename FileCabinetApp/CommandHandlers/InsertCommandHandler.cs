@@ -78,7 +78,14 @@ namespace FileCabinetApp.CommandHandlers
                         switch (command[i])
                         {
                             case "id":
-                                fileCabinetRecord.Id = int.Parse(inputValue[i], provider);
+                                int parsedId = 0;
+                                var boolId = int.TryParse(inputValue[i], out parsedId);
+                                fileCabinetRecord.Id = parsedId;
+                                if (!boolId)
+                                {
+                                    throw new ArgumentException("Not parsed id.Not correct value!Exit insert command.");
+                                }
+
                                 break;
                             case "firstname":
                                 fileCabinetRecord.FirstName = inputValue[i];
@@ -87,19 +94,47 @@ namespace FileCabinetApp.CommandHandlers
                                 fileCabinetRecord.LastName = inputValue[i];
                                 break;
                             case "dateofbirth":
-                                fileCabinetRecord.DateOfBirth = DateTime.Parse(inputValue[i], provider);
+                                DateTime parsedDate = DateTime.MinValue;
+                                var boolDate = DateTime.TryParse(inputValue[i], out parsedDate);
+                                fileCabinetRecord.DateOfBirth = parsedDate;
+                                if (!boolDate)
+                                {
+                                    throw new ArgumentException("Not parsed date of birth.Not correct value!Exit insert command.");
+                                }
+
                                 break;
                             case "sex":
-                                fileCabinetRecord.Sex = char.Parse(inputValue[i]);
+                                char parsedGender = char.MaxValue;
+                                var boolGender = char.TryParse(inputValue[i], out parsedGender);
+                                fileCabinetRecord.Sex = parsedGender;
+                                if (!boolGender)
+                                {
+                                    throw new ArgumentException("Not parsed gender.Not correct value!Exit insert command.");
+                                }
+
                                 break;
                             case "height":
-                                fileCabinetRecord.Height = short.Parse(inputValue[i], provider);
+                                short parsedHeigth = 0;
+                                var boolHeigth = short.TryParse(inputValue[i], out parsedHeigth);
+                                fileCabinetRecord.Height = parsedHeigth;
+                                if (!boolHeigth)
+                                {
+                                    throw new ArgumentException("Not parsed height.Not correct value!Exit insert command.");
+                                }
+
                                 break;
                             case "salary":
-                                fileCabinetRecord.Salary = decimal.Parse(inputValue[i], provider);
+                                decimal parsedSalary = 0;
+                                var boolSalary = decimal.TryParse(inputValue[i], out parsedSalary);
+                                fileCabinetRecord.Salary = parsedSalary;
+                                if (!boolSalary)
+                                {
+                                    throw new ArgumentException("Not parsed salary.Not correct value!Exit insert command.");
+                                }
+
                                 break;
                             default:
-                                throw new ArgumentException("Not correct valuee!!!!");
+                                throw new ArgumentException("Not correct value!!!!");
                         }
                     }
 
