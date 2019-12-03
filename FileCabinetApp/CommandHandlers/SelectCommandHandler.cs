@@ -159,7 +159,7 @@ namespace FileCabinetApp.CommandHandlers
         {
             if (records is null)
             {
-                action("No records are found!");
+                action("No records are found by conditional in select command!");
             }
             else
             {

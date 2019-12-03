@@ -44,10 +44,10 @@ namespace FileCabinetApp.CommandHandlers
 
         private static void Purge(string parameters)
         {
-            if (service is FileCabinetFilesystemService)
+            if (service.FileCabinetProperties is FileCabinetFilesystemService)
             {
-               var result = service.Purge();
-               action($"Data file processing is completed: {result.Item1} of {result.Item2} records were purged.");
+                var result = service.Purge();
+                action($"Data file processing is completed: {result.Item1} of {result.Item2} records were purged.");
             }
             else
             {

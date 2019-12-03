@@ -32,6 +32,12 @@ namespace FileCabinetApp
         }
 
         /// <summary>
+        /// Gets the type storage of filecabinet.
+        /// </summary>
+        /// <value>The Status of the record.</value>
+        public IFileCabinetService FileCabinetProperties { get => fileCabinetService; }
+
+        /// <summary>
         /// Gets or sets the Validator of the Program.
         /// </summary>
         /// <value>The Validator of the Program.</value>

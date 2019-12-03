@@ -40,6 +40,12 @@ namespace FileCabinetApp
         public IValidatorOfParemetrs Validator { get; set; }
 
         /// <summary>
+        /// Gets the type storage of filecabinet.
+        /// </summary>
+        /// <value>The Status of the record.</value>
+        public IFileCabinetService FileCabinetProperties { get => new FileCabinetFilesystemService(this.fileStream, this.validator); }
+
+        /// <summary>
         /// Implementation IFileCabinetService GetStat.
         /// </summary>
         /// <returns>Count records <see cref="int"/>.</returns>
@@ -912,7 +918,7 @@ namespace FileCabinetApp
                 foreach (var item in parameter)
                 {
                     string[] split = item.Split("=");
-                    listTemp = this.FindRecordsByParameterInListAnd(listTemp, split[0], split[1]);
+                    listTemp = this.FindRecordsByParameterInList(listTemp, split[0], split[1]);
                 }
             }
 
@@ -926,52 +932,6 @@ namespace FileCabinetApp
                 }
 
                 listTemp = new List<FileCabinetRecord>(set);
-            }
-
-            return listTemp;
-        }
-
-        private List<FileCabinetRecord> FindRecordsByParameterInListAnd(List<FileCabinetRecord> list, string parameter, string value)
-        {
-            List<FileCabinetRecord> listTemp = new List<FileCabinetRecord>();
-
-            switch (parameter)
-            {
-                case "id":
-                    int id = int.Parse(value, Provider);
-                    listTemp = list.FindAll(item1 => item1.Id == id);
-                    break;
-                case "firstname":
-                    string firstName = value;
-                    listTemp = list.FindAll(item1 => item1.FirstName.Equals(firstName, StringComparison.InvariantCultureIgnoreCase));
-                    break;
-                case "lastname":
-                    string lastName = value;
-                    listTemp = list.FindAll(item1 => item1.LastName.Equals(lastName, StringComparison.InvariantCultureIgnoreCase));
-                    break;
-                case "dateofbirth":
-                    DateTime dateOfBirth = DateTime.Parse(value, Provider);
-                    listTemp = list.FindAll(item1 => item1.DateOfBirth == dateOfBirth);
-                    break;
-                case "sex":
-                    char sex = char.Parse(value);
-                    listTemp = list.FindAll(item1 => char.ToLowerInvariant(item1.Sex) == sex);
-                    break;
-                case "height":
-                    short height = short.Parse(value, Provider);
-                    listTemp = list.FindAll(item1 => item1.Height == height);
-                    break;
-                case "salary":
-                    decimal salary = decimal.Parse(value, Provider);
-                    listTemp = list.FindAll(item1 => item1.Salary == salary);
-                    break;
-                default:
-                    throw new ArgumentException("Not correct value!!!!");
-            }
-
-            if (listTemp.Count == 0)
-            {
-                throw new ArgumentException("Don't find records for update by conditional!");
             }
 
             return listTemp;
