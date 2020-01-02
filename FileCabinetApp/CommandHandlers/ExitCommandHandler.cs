@@ -55,13 +55,9 @@ namespace FileCabinetApp.CommandHandlers
 
         private static void Exit(string parameters)
         {
-            if (service is FileCabinetFilesystemService)
-            {
-                fileStream.Close();
-            }
-
             printAction("Exiting an application...");
             action(false);
+            Console.ReadLine();
         }
     }
 }

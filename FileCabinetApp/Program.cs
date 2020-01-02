@@ -115,7 +115,16 @@ namespace FileCabinetApp
                 if (options.InputLogger)
                 {
                     fileCabinetService.Validator = recorInputdValidator;
-                    fileCabinetService = new ServiceLogger(fileCabinetSrorage);
+                    if (fileCabinetService is ServiceMeter)
+                    {
+                        var fileCabinetServiceLogMet = fileCabinetService;
+                        fileCabinetService = new ServiceLogger(fileCabinetServiceLogMet);
+                    }
+                    else
+                    {
+                        fileCabinetService = new ServiceLogger(fileCabinetSrorage);
+                    }
+
                     loggerRules = "Use logger";
                 }
 
@@ -166,6 +175,11 @@ namespace FileCabinetApp
                     }
                 }
                 while (isRunning);
+
+                if (fileCabinetService.FileCabinetProperties.FileCabinetProperties is FileCabinetFilesystemService)
+                {
+                    filestream.Close();
+                }
             }
         }
 

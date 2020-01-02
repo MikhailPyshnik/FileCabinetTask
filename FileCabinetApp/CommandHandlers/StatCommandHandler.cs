@@ -44,7 +44,7 @@ namespace FileCabinetApp.CommandHandlers
 
         private static void Stat(string parameters)
         {
-            if (service.FileCabinetProperties is FileCabinetFilesystemService)
+            if (service.FileCabinetProperties.FileCabinetProperties is FileCabinetFilesystemService)
             {
                 var recordsCount = service.GetStat().Item1;
                 var deleteRecords = service.GetStat().Item2;
